@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Reply to {{ thread.title }} - Forum{% endblock %}
+
+{% block content %}
+<h1>Reply to Thread: {{ thread.title }}</h1>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Post Reply</button>
+</form>
+
+<a href="{% url 'forum_thread' thread.slug %}" class="btn btn-secondary mt-3">Back to Thread</a>
+{% endblock %}

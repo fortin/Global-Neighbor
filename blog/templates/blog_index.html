@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}Blog{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="page-title">Blog Posts</h1>
+
+    <div class="blog-grid">
+        {% for post in posts %}
+            <div class="blog-card">
+                <h2><a href="{% url 'blog:blog_post_detail' post.slug %}">{{ post.title }}</a></h2>
+                <p class="blog-meta">By {{ post.author.username }} at {{ post.created|date:"H:i" }} on {{ post.created|date:"Y-m-d" }}</p>
+                <p class="blog-preview">{{ post.content|truncatewords:20 }}</p>
+                <a href="{% url 'blog:blog_post_detail' post.slug %}" class="btn">Read More</a>
+            </div>
+        {% empty %}
+            <p>No posts found.</p>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+.container {
+    padding: 20px;
+}
+
+.page-title {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.blog-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.blog-card {
+    width: 300px;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.blog-card h2 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+
+.blog-meta {
+    font-size: 0.85rem;
+    color: #777;
+    margin-bottom: 10px;
+}
+
+.blog-preview {
+    flex-grow: 1;
+    margin-bottom: 15px;
+}
+
+.btn {
+    display: inline-block;
+    text-decoration: none;
+    background-color: #007BFF;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 5px;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
+</style>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}New Thread - Forum{% endblock %}
+
+{% block content %}
+<h1>Create a New Thread</h1>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Create</button>
+</form>
+
+<a href="{% url 'forum_home' %}" class="btn btn-secondary mt-3">Back to Forum</a>
+{% endblock %}
