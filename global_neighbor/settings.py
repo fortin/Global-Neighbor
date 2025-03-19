@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 
-from decouple import config
+from decouple import Csv, config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -91,7 +91,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "global_neighbor.wsgi.application"
-
+ALLOWED_HOSTS = config("ALLOWED_HOSTS", cast=Csv())
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
@@ -103,7 +103,7 @@ DATABASES = {
         "USER": config("DATABASE_USER"),
         "PASSWORD": config("DATABASE_PASSWORD"),
         "HOST": config("DATABASE_HOST"),
-        "PORT": config("DATABASE_PORT"),
+        # "PORT": config("DATABASE_PORT"),
         "CONN_MAX_AGE": 60,  # Reuse connections for 60 seconds
         "OPTIONS": {
             "passfile": ".pgpass",

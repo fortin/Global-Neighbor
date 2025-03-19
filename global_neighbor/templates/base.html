@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Global Neighbor{% endblock %}</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="{% static '/css/style.css' %}">
     <link rel="icon" type="image/png" href="{% static 'images/favicon.png' %}">
     <style>
         body {
@@ -63,7 +64,10 @@
 <body>
 
 <nav class="navbar">
-    <a class="navbar-brand" href="{% url 'home' %}">Global Neighbor</a>
+    <a class="navbar-brand" href="{% url 'home' %}">
+        <img src="{% static 'images/favicon.png' %}" alt="Global Neighbor Logo" class="logo">
+        Global Neighbor
+    </a>
     <ul class="nav-links">
         <li><a href="{% url 'blog:blog_index' %}"><i class="fa-solid fa-blog"></i> Blog</a></li>
         {% if request.user.is_authenticated and request.user.is_creator or request.user.is_superuser %}
