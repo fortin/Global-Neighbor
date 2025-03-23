@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Global Neighbor{% endblock %}</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="{% static '/css/style.css' %}">
+    <link rel="stylesheet" href="{% static '/css/styles.css' %}">
     <link rel="icon" type="image/png" href="{% static 'images/favicon.png' %}">
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <style>
@@ -79,10 +79,17 @@
         <li><a href="{% url 'admin:index' %}"><i class="fa-solid fa-user-cog"></i> Admin</a></li>
         {% endif %}
         {% if request.user.is_authenticated %}
+<<<<<<< Updated upstream
 		<form method="post" action="{% url 'logout' %}" class="logout-form">
 		    {% csrf_token %}
 		    <button type="submit" class="logout-link">Logout</button>
 		</form>
+=======
+        <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit">Logout</button>
+          </form>
+>>>>>>> Stashed changes
         {% else %}
             <li><a href="{% url 'login' %}"> Login</a></li>
             <li><a href="{% url 'register' %}"> Register</a></li>

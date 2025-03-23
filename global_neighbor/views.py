@@ -16,6 +16,12 @@ def home(request):
     return render(request, "home.html")
 
 
+def generate_otp(self):
+    self.otp = str(random.randint(100000, 999999))
+    self.verification_token = uuid.uuid4()  # Ensure a valid UUID
+    self.save()
+
+
 def register(request):
     """Handles user registration and sends verification email."""
     if request.method == "POST":
