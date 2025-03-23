@@ -92,7 +92,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "global_neighbor.wsgi.application"
-ALLOWED_HOSTS = config("ALLOWED_HOSTS", cast=Csv())
+# ALLOWED_HOSTS = config("ALLOWED_HOSTS", cast=Csv())
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
