@@ -1,0 +1,47 @@
+.forum-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 10px;
+}
+
+.forum-actions .btn {
+    margin-left: 10px;
+    text-decoration: none;
+}
+
+.categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.category-card {
+    flex: 1 1 calc(50% - 20px);
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    transition: box-shadow 0.3s ease;
+}
+
+.category-card:hover {
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.category-card h3 a {
+    color: #333;
+    text-decoration: none;
+}
+
+.category-card h3 a:hover {
+    color: #007bff;
+}
+
+.no-categories {
+    padding: 20px;
+    text-align: center;
+    color: #999;
+}

@@ -1,0 +1,20 @@
+.logout-link {
+    background: none;
+    border: none;
+    color: white;  /* Match surrounding text */
+    font-size: inherit;
+    font-family: inherit;
+    cursor: pointer;
+    text-decoration: none;  /* Remove underline */
+    padding: 0;
+    display: inline;
+}
+
+.logout-link:hover {
+    text-decoration: underline; /* Match normal hover effect for links */
+}
+
+.logout-form {
+    display: inline;
+    margin-left: 10px;  /* Adjust as needed */
+}

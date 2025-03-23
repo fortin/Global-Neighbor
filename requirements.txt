@@ -22,7 +22,7 @@ easy-thumbnails==2.10
 exceptiongroup==1.2.2
 executing==2.1.0
 html5lib==1.1
-ipython==9.0.2
+ipython
 ipython_pygments_lexers==1.1.1
 jedi==0.19.2
 lxml==5.3.1

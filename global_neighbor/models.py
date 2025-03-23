@@ -16,12 +16,12 @@ class User(AbstractUser):
         default=True
     )  # Allows easy blocking of posting privileges
     is_verified = models.BooleanField(default=False)  # Prevent login until confirmed
-    verification_token = models.UUIDField(
-        unique=True, null=True, blank=True
-    )  # Temporarily allow null
-    otp_code = models.CharField(
-        max_length=6, blank=True, null=True
-    )  # For OTP verification
+    verification_token = models.CharField(
+        max_length=64,
+        unique=True,
+        default=uuid.uuid4,  # Ensures a valid default
+    )
+    otp = models.CharField(max_length=6, blank=True, null=True)
 
     groups = models.ManyToManyField(
         Group,
@@ -41,6 +41,13 @@ class User(AbstractUser):
         return self.role == "creator"
 
     def generate_otp(self):
-        """Generate a 6-digit OTP."""
-        self.otp_code = str(random.randint(100000, 999999))
+        """Generates OTP and ensures the user has a valid UUID verification token."""
+        import random
+
+        self.otp = str(random.randint(100000, 999999))
+
+        # Ensure verification token is set correctly
+        if not self.verification_token:
+            self.verification_token = uuid.uuid4()  # ✅ Proper UUID
+
         self.save()
