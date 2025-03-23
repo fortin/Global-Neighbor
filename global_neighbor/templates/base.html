@@ -79,17 +79,10 @@
         <li><a href="{% url 'admin:index' %}"><i class="fa-solid fa-user-cog"></i> Admin</a></li>
         {% endif %}
         {% if request.user.is_authenticated %}
-<<<<<<< Updated upstream
 		<form method="post" action="{% url 'logout' %}" class="logout-form">
 		    {% csrf_token %}
 		    <button type="submit" class="logout-link">Logout</button>
 		</form>
-=======
-        <form method="post" action="{% url 'logout' %}">
-            {% csrf_token %}
-            <button type="submit">Logout</button>
-          </form>
->>>>>>> Stashed changes
         {% else %}
             <li><a href="{% url 'login' %}"> Login</a></li>
             <li><a href="{% url 'register' %}"> Register</a></li>

@@ -18,7 +18,8 @@ SITE_ID = 1
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*"]  # config("ALLOWED_HOSTS", cast=Csv())
+# ALLOWED_HOSTS = ["*"]  # config("ALLOWED_HOSTS", cast=Csv())
+ALLOWED_HOSTS = ['globalneighbor.pythonanywhere.com','globalneighbor.mysql.pythonanywhere-services.com']
 LOGIN_REDIRECT_URL = "home"
 LOGOUT_REDIRECT_URL = "home"
 EMAIL_FILE_PATH = config("EMAIL_FILE_PATH")
@@ -28,7 +29,6 @@ EMAIL_PORT = config("EMAIL_PORT")
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = config("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
-EMAIL_FILE_PATH = config("EMAIL_FILE_PATH")
 DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL")
 
 # Application definition
