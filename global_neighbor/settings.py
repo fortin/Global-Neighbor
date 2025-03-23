@@ -92,6 +92,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "global_neighbor.wsgi.application"
+ALLOWED_HOSTS = config("ALLOWED_HOSTS", cast=Csv())
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
@@ -104,6 +105,7 @@ DATABASES = {
         "PASSWORD": config("DATABASE_PASSWORD"),
         "HOST": config("DATABASE_HOST"),
         "PORT": config("DATABASE_PORT"),
+        "CONN_MAX_AGE": 60,  # Reuse connections for 60 seconds
         "OPTIONS": {
             "charset": "utf8mb4",
         },
