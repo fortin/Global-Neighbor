@@ -57,12 +57,48 @@
     background-color: #fff;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    text-align: left;
+    align-items: center;         /* center headings, icons, button */
+    text-align: center;          /* center headings, icons, button */
 }
 
 .card:hover {
     transform: translateY(-10px);
+}
+
+.card .post-list {
+    width: 100%;
+    text-align: left;            /* left-align just the posts */
+    margin-top: 1rem;
+}
+
+.card .post-item {
+    padding: 0.5rem 0;
+    border-top: 1px solid #eee;
+}
+
+.card .post-item:first-child {
+    border-top: none;
+}
+
+.card .timestamp-link {
+    display: block;
+    font-size: 0.8rem;
+    color: #666;
+    text-decoration: none;
+    margin-bottom: 0.2rem;
+}
+
+.card .timestamp-link:hover {
+    text-decoration: underline;
+    color: #333;
+}
+
+.card .post-text {
+    font-size: 0.95rem;
+    line-height: 1.4;
+    color: #222;
+    word-break: break-word;
+    text-align: left;
 }
 
 .card-icon {
@@ -84,39 +120,6 @@
 
 .card a.button-link:hover {
     background-color: #0056b3;
-}
-
-.post-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    text-align: left;
-}
-
-.post-item {
-    border-top: 1px solid #eee;
-    padding: 0.75rem 0;
-}
-
-.post-item:first-child {
-    border-top: none;
-}
-
-.timestamp-link {
-    display: block;
-    font-size: 0.8rem;
-    color: #666;
-    text-decoration: none;
-    background: none;
-    border: none;
-    padding: 0;
-    margin-bottom: 0.2rem;
-    font-weight: normal;
-}
-
-.timestamp-link:hover {
-    text-decoration: underline;
-    color: #333;
 }
 
 .post-text {
