@@ -103,11 +103,9 @@ if DEBUG is True:
     options = {}
 else:
     db_engine = "django.db.backends.mysql"
-    options = (
-        {
-            "charset": "utf8mb4",
-        },
-    )
+    options = {
+        "charset": "utf8mb4",
+    }
 
 
 DATABASES = {
