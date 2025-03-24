@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block title %}Community Forum{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="forum-header">
+        <h1><i class="fas fa-comments"></i> Community Forum</h1>
+        <div class="forum-actions">
+            {% if request.user.is_authenticated %}
+                <a href="{% url 'neighborhood:create_thread' %}" class="btn btn-primary"><i class="fas fa-plus"></i> New Thread</a>
+            {% endif %}
+
+            {% if request.user.is_superuser %}
+                <a href="{% url 'neighborhood:create_category' %}" class="btn btn-secondary"><i class="fas fa-folder-plus"></i> New Category</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="categories">
+        {% for category in categories %}
+            <div class="category-card">
+                <h3>
+                    <a href="{% url 'neighborhood:forum_category' category.slug %}">
+                        <i class="fas fa-folder-open"></i> {{ category.title }}
+                    </a>
+                </h3>
+                <p>{{ category.description }}</p>
+            </div>
+        {% empty %}
+            <div class="no-categories">
+                <p>No categories available.</p>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+    .forum-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        border-bottom: 2px solid #eee;
+        padding-bottom: 10px;
+    }
+
+    .forum-actions .btn {
+        margin-left: 10px;
+        text-decoration: none;
+    }
+
+    .categories {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .category-card {
+        flex: 1 1 calc(50% - 20px);
+        border: 1px solid #ddd;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        transition: box-shadow 0.3s ease;
+    }
+
+    .category-card:hover {
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .category-card h3 a {
+        color: #333;
+        text-decoration: none;
+    }
+
+    .category-card h3 a:hover {
+        color: #007bff;
+    }
+
+    .no-categories {
+        padding: 20px;
+        text-align: center;
+        color: #999;
+    }
+</style>
+{% endblock %}

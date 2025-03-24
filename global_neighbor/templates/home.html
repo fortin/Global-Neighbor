@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Welcome to Global Neighbor{% endblock %}
+
+{% block content %}
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"
+/>
+<link rel="stylesheet" href="{% static 'css/styles.css' %}">
+
+<div class="home-container">
+    <div class="intro">
+        <h1 class="display-4">Welcome to Global Neighbor</h1>
+        <p class="lead">A place to resist, rebuild, and grow.</p>
+    </div>
+
+    <div class="card-container">
+        <div class="card">
+            <div class="card-icon">
+                <i class="fas fa-blog"></i>
+            </div>
+            <h3>Community Blog</h3>
+            <a class="button-link" href="{% url 'blog:blog_index' %}">Explore Blog</a>
+            <div class="post-list">
+                {% for post in latest_blog_posts %}
+                <div class="post-item">
+                    <a href="{{ post.url }}" class="timestamp-link" target="_blank" rel="noopener noreferrer">
+                        {{ post.timestamp }}
+                    </a>
+                    <div class="post-text">{{ post.text }}</div>
+                </div>
+                {% endfor %}
+            </div>
+            <p>Read the latest stories from the community.</p>
+        </div>
+
+        <div class="card">
+            <div class="card-icon">
+                <i class="fas fa-comments"></i>
+            </div>
+            <h3>Community Forum</h3>
+            <a class="button-link" href="{% url 'neighborhood:forum_home' %}">Visit Forum</a>
+            <div class="post-list">
+                {% for post in latest_forum_posts %}
+                <div class="post-item">
+                    <a href="{{ post.url }}" class="timestamp-link" target="_blank" rel="noopener noreferrer">
+                        {{ post.timestamp }}
+                    </a>
+                    <div class="post-text">{{ post.text }}</div>
+                </div>
+                {% endfor %}
+            </div>
+            <p>Engage in discussions and share knowledge.</p>
+        </div>
+    </div>
+
+    <div class="bluesky-ticker-container">
+        <a href="https://bsky.app/profile/{{ bsky_handle }}" class="bsky-handle"><img src="{% static 'images/bluesky-logo.svg' %}" alt="Bluesky" class="bluesky-logo" />
+        <div class="bluesky-ticker-wrapper">
+            <div class="bluesky-ticker-track">
+                {% for post in bluesky_posts %}
+                  <a href="{{ post.url }}" class="ticker-item" target="_blank">
+                    <div class="ticker-text">{{ post.text }}</div>
+                    <div class="ticker-timestamp">{{ post.created|date:"M d, Y H:i" }}</div>
+                  </a>
+                {% endfor %}
+            </div>
+          <div class="bluesky-ticker-fade left"></div>
+          <div class="bluesky-ticker-fade right"></div>
+        </div>
+    </div>
+</div>
+{% endblock %}

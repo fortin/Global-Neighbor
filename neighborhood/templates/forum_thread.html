@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}{{ thread.title }} - Forum{% endblock %}
+
+{% block content %}
+<h1>{{ thread.title }}</h1>
+<p><strong>Category:</strong> <a href="{% url 'forum_category' thread.category.slug %}">{{ thread.category.name }}</a></p>
+<p><strong>Author:</strong> {{ thread.author }}</p>
+
+{% for post in posts %}
+    <div class="card mb-3">
+        <div class="card-body">
+            <p>{{ post.content }}</p>
+            <p><small class="text-muted">Posted by {{ post.author }} on {{ post.created_at|date:"F j, Y" }}</small></p>
+        </div>
+    </div>
+{% empty %}
+    <p>No posts yet.</p>
+{% endfor %}
+{% endblock %}

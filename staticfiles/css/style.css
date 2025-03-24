@@ -1,0 +1,7 @@
+.logo {
+    height: 30px;  /* Adjust size as needed */
+    width: auto;
+    margin-right: 10px;
+    vertical-align: middle;
+    border-radius: 50%; /* Makes the image circular */
+}
