@@ -143,14 +143,6 @@ STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
 ]
 
-STATIC_URL = "/static/"
-
-STATICFILES_DIRS = [
-    BASE_DIR / "global_neighbor" / "static",
-    BASE_DIR / "blog" / "static",
-    BASE_DIR / "neighborhood" / "static",
-]
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 

@@ -198,6 +198,10 @@
     color: #000;
 }
 
+.ticker-item:hover .ticker-timestamp {
+    color: #555;
+  }
+
 @keyframes ticker-scroll {
     0% {
       transform: translateX(100%);

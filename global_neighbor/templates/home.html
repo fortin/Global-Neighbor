@@ -57,7 +57,7 @@
     </div>
 
     <div class="bluesky-ticker-container">
-        <img src="{% static 'images/bluesky-logo.svg' %}" alt="Bluesky" class="bluesky-logo" />
+        <a href="https://bsky.app/profile/{{ bsky_handle }}" class="bsky-handle"><img src="{% static 'images/bluesky-logo.svg' %}" alt="Bluesky" class="bluesky-logo" />
         <div class="bluesky-ticker-wrapper">
             <div class="bluesky-ticker-track">
                 {% for post in bluesky_posts %}
