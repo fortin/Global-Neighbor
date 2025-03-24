@@ -1,30 +1,31 @@
+
 .logout-link {
     background: none;
     border: none;
-    color: white;  /* Match surrounding text */
+    color: white;
     font-size: inherit;
     font-family: inherit;
     cursor: pointer;
-    text-decoration: none;  /* Remove underline */
+    text-decoration: none;
     padding: 0;
     display: inline;
 }
 
 .logout-link:hover {
-    text-decoration: underline; /* Match normal hover effect for links */
+    text-decoration: underline;
 }
 
 .logout-form {
     display: inline;
-    margin-left: 10px;  /* Adjust as needed */
+    margin-left: 10px;
 }
 
 .logo {
-    height: 30px;  /* Adjust size as needed */
+    height: 30px;
     width: auto;
     margin-right: 10px;
     vertical-align: middle;
-    border-radius: 50%; /* Makes the image circular */
+    border-radius: 50%;
 }
 
 .home-container {
@@ -58,6 +59,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    text-align: left;
 }
 
 .card:hover {
@@ -83,63 +85,6 @@
 
 .card a.button-link:hover {
     background-color: #0056b3;
-}
-
-.bluesky-feed {
-    text-align: left;
-    padding: 0;
-    margin-top: 1rem;
-}
-
-.bluesky-feed h3 {
-    font-size: 1.25rem;
-    margin-bottom: 1rem;
-}
-
-.post-card {
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    padding: 1rem;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-    background: #fff;
-    display: flex;
-    flex-direction: column;
-}
-
-.post-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 0.9rem;
-    color: #555;
-    margin-bottom: 0.5rem;
-}
-
-.post-title {
-    text-decoration: none;
-    color: #0077cc;
-    font-weight: bold;
-}
-
-.post-title i {
-    margin-right: 4px;
-}
-
-.bluesky-posts {
-    padding: 0;
-    border: none;
-    border-radius: 0;
-    background: none;
-    text-align: left;
-}
-
-.bluesky-posts h2 {
-    font-size: 1rem;
-    margin-bottom: 1rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-weight: 600;
 }
 
 .post-list {
@@ -182,18 +127,6 @@
     word-break: break-word;
 }
 
-/* Override any global button/link styles */
-.bluesky-posts a.timestamp-link:link,
-.bluesky-posts a.timestamp-link:visited {
-    color: #666;
-    text-decoration: none;
-}
-
-.bluesky-posts a.timestamp-link:hover {
-    color: #333;
-    text-decoration: underline;
-}
-
 .bsky-handle {
     color: inherit;
     font-weight: normal;
@@ -202,4 +135,89 @@
 
 .bsky-handle:hover {
     text-decoration: underline;
+}
+
+.bluesky-ticker-wrapper {
+    position: relative;
+    overflow: hidden;
+    height: 2.25rem;
+    background: #f9f9f9;
+    border-top: 1px solid #eee;
+    margin-top: 2rem;
+    width: 640px;
+    max-width: 90%;
+}
+
+.bluesky-ticker-track {
+    display: flex;
+    animation: ticker-scroll 30s linear infinite;
+    gap: 3rem;
+    padding-left: 100%;
+}
+
+.ticker-item {
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    font-size: 0.9rem;
+    color: #333;
+}
+
+.ticker-item:hover {
+    text-decoration: underline;
+    color: #000;
+}
+
+.ticker-link {
+    color: inherit;
+    text-decoration: none;
+}
+
+.ticker-icon {
+    font-size: 1rem;
+    margin-right: 0.5rem;
+    line-height: 1;
+    vertical-align: middle;
+}
+
+/* Animation */
+@keyframes ticker-scroll {
+    0% {
+        transform: translateX(0%);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
+/* Fades */
+.bluesky-ticker-fade {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 3rem;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.bluesky-ticker-fade.left {
+    left: 0;
+    background: linear-gradient(to right, #f9f9f9, rgba(249, 249, 249, 0));
+}
+
+.bluesky-ticker-fade.right {
+    right: 0;
+    background: linear-gradient(to left, #f9f9f9, rgba(249, 249, 249, 0));
+}
+
+.bluesky-icon {
+    font-size: 1rem;
+    margin-right: 0.5rem;
+    line-height: 1;
+    vertical-align: middle;
+    color: #3a88fe;
+}
+
+.bluesky-ticker-track:hover {
+    animation-play-state: paused;
 }

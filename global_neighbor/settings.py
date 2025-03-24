@@ -18,7 +18,6 @@ BLUESKY_PASSWORD = config("BLUESKY_PASSWORD")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config("DEBUG", cast=bool)
-print("DEBUG is", DEBUG)
 
 ALLOWED_HOSTS = config("ALLOWED_HOSTS", cast=Csv())
 LOGIN_REDIRECT_URL = "home"
@@ -103,7 +102,7 @@ if DEBUG is True:
     options = {}
 else:
     db_engine = "django.db.backends.mysql"
-    options = {
+    options: dict[str, str] = {
         "charset": "utf8mb4",
     }
 
