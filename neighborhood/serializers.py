@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import ForumCategory, Post, Thread
+from .models import ForumCategory, ForumPost, Thread
 
 
 class ForumCategorySerializer(serializers.ModelSerializer):
@@ -17,5 +17,5 @@ class ThreadSerializer(serializers.ModelSerializer):
 
 class PostSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Post
+        model = ForumPost
         fields = "__all__"

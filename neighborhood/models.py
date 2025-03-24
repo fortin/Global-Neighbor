@@ -40,7 +40,7 @@ class Thread(TimeStampedModel):
         return self.title
 
 
-class Post(TimeStampedModel):
+class ForumPost(TimeStampedModel):
     thread = models.ForeignKey(Thread, on_delete=models.CASCADE, related_name="posts")
     author = models.ForeignKey(
         User, on_delete=models.SET_NULL, null=True, related_name="posts"

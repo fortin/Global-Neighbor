@@ -1,63 +1,11 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}Welcome to Global Neighbor{% endblock %}
 
 {% block content %}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-<style>
-    .home-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        padding: 2rem;
-    }
-
-    .intro {
-        margin-bottom: 3rem;
-    }
-
-    .card-container {
-        display: flex;
-        gap: 2rem;
-        flex-wrap: wrap;
-        justify-content: center;
-    }
-
-    .card {
-        flex: 1 1 300px;
-        padding: 1.5rem;
-        border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        transition: transform 0.3s;
-    }
-
-    .card:hover {
-        transform: translateY(-10px);
-    }
-
-    .card-icon {
-        font-size: 2.5rem;
-        margin-bottom: 1rem;
-        color: #007bff;
-    }
-
-    .card a {
-        display: inline-block;
-        margin-top: 1rem;
-        padding: 0.5rem 1rem;
-        border-radius: 5px;
-        text-decoration: none;
-        background-color: #007bff;
-        color: white;
-        transition: background-color 0.3s;
-    }
-
-    .card a:hover {
-        background-color: #0056b3;
-    }
-</style>
+<link rel="stylesheet" href="{% static 'css/styles.css' %}">
 
 <div class="home-container">
     <div class="intro">
@@ -68,20 +16,67 @@
     <div class="card-container">
         <div class="card">
             <div class="card-icon">
-                <i class="fas fa-blog"></i>
+                <i class="fas fa-rss"></i>
             </div>
-            <h3>Community Blog</h3>
-            <p>Read the latest stories from the community.</p>
-            <a href="{% url 'blog:blog_index' %}">Explore Blog</a>
+            <h3>Latest Posts from <a href="https://bsky.app/profile/{{ bsky_handle }}" target=_blank class="bsky-handle">{{ bsky_display_name }}</a></h3>
+            <div class="bluesky-posts">
+                {% if bluesky_posts %}
+                  <ul class="post-list">
+                    {% for post in bluesky_posts %}
+                      <li class="post-item">
+                        <a href="{{ post.url }}" target="_blank" class="timestamp-link">
+                          {{ post.created|date:"M d, Y H:i" }}
+                        </a>
+                        <div class="post-text">{{ post.text }}</div>
+                      </li>
+                    {% endfor %}
+                  </ul>
+                {% else %}
+                  <p>No top-level posts found.</p>
+                {% endif %}
+            </div>
         </div>
 
         <div class="card">
-            <div class="card-icon">
-                <i class="fas fa-comments"></i>
-            </div>
-            <h3>Community Forum</h3>
+            <span>
+                <div class="card-icon">
+                    <i class="fas fa-blog"></i>
+                </div>
+                <h3>Community Blog</h3>
+                <a class="button-link" href="{% url 'blog:blog_index' %}">Explore Blog</a>
+                <div class="post-list">
+                    {% for post in latest_blog_posts %}
+                    <div class="post-item">
+                        <a href="{{ post.url }}" class="timestamp-link" target="_blank" rel="noopener noreferrer">
+                            {{ post.timestamp }}
+                        </a>
+                        <div class="post-text">{{ post.text }}</div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </span>
+            <p>Read the latest stories from the community.</p>
+        </div>
+
+        <div class="card">
+            <span>
+                <div class="card-icon">
+                    <i class="fas fa-comments"></i>
+                </div>
+                <h3>Community Forum</h3>
+                <a class="button-link" href="{% url 'neighborhood:forum_home' %}">Visit Forum</a>
+                <div class="post-list">
+                    {% for post in latest_forum_posts %}
+                    <div class="post-item">
+                        <a href="{{ post.url }}" class="timestamp-link" target="_blank" rel="noopener noreferrer">
+                            {{ post.timestamp }}
+                        </a>
+                        <div class="post-text">{{ post.text }}</div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </span>
             <p>Engage in discussions and share knowledge.</p>
-            <a href="{% url 'neighborhood:forum_home' %}">Visit Forum</a>
         </div>
     </div>
 </div>

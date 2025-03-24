@@ -6,7 +6,6 @@ from decouple import Csv, config
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
@@ -14,12 +13,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config("SECRET_KEY")
 CMS_CONFIRM_VERSION4 = True
 SITE_ID = 1
+BLUESKY_USERNAME = config("BLUESKY_USERNAME")
+BLUESKY_PASSWORD = config("BLUESKY_PASSWORD")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config("DEBUG", cast=bool)
+print("DEBUG is", DEBUG)
 
-# ALLOWED_HOSTS = ["*"]  # config("ALLOWED_HOSTS", cast=Csv())
-ALLOWED_HOSTS = ['globalneighbor.pythonanywhere.com','globalneighbor.mysql.pythonanywhere-services.com']
+ALLOWED_HOSTS = config("ALLOWED_HOSTS", cast=Csv())
 LOGIN_REDIRECT_URL = "home"
 LOGOUT_REDIRECT_URL = "home"
 EMAIL_FILE_PATH = config("EMAIL_FILE_PATH")
@@ -97,19 +98,28 @@ WSGI_APPLICATION = "global_neighbor.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
+if DEBUG is True:
+    db_engine = "django.db.backends.postgresql"
+    options = {}
+else:
+    db_engine = "django.db.backends.mysql"
+    options = (
+        {
+            "charset": "utf8mb4",
+        },
+    )
+
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.mysql",
+        "ENGINE": db_engine,
         "NAME": config("DATABASE_NAME"),
         "USER": config("DATABASE_USER"),
         "PASSWORD": config("DATABASE_PASSWORD"),
         "HOST": config("DATABASE_HOST"),
         "PORT": config("DATABASE_PORT"),
         "CONN_MAX_AGE": 60,  # Reuse connections for 60 seconds
-        "OPTIONS": {
-            "charset": "utf8mb4",
-        },
+        "OPTIONS": options,
     }
 }
 
@@ -136,6 +146,14 @@ STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
 ]
 
+STATIC_URL = "/static/"
+
+STATICFILES_DIRS = [
+    BASE_DIR / "global_neighbor" / "static",
+    BASE_DIR / "blog" / "static",
+    BASE_DIR / "neighborhood" / "static",
+]
+
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
@@ -159,7 +177,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 # For PythonAnywhere
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "global_neighbor/static"),  # If you have a local static folder
+    os.path.join(
+        BASE_DIR, "global_neighbor/static"
+    ),  # If you have a local static folder
 ]
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field

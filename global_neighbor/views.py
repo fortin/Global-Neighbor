@@ -1,19 +1,57 @@
 import random
 import uuid
 
+from decouple import config
 from django.conf import settings
 from django.contrib.auth import login
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
+from django.utils.timezone import localtime
 
+from blog.models import BlogPost
+from global_neighbor.bluesky import get_latest_bluesky_posts
+from neighborhood.models import ForumPost
+
+from .bluesky_utils import get_latest_top_level_posts
 from .forms import RegistrationForm
 from .models import User
 
+
 def home(request):
-    """Render the portal home page."""
-    return render(request, "home.html")
+    bluesky_posts, bsky_display_name = get_latest_top_level_posts()
+    latest_blog_posts = BlogPost.objects.order_by("-created")[:5]
+    latest_forum_posts = ForumPost.objects.order_by("-created")[:5]
+    bsky_handle = config("BLUESKY_USERNAME")
+
+    blog_digest = [
+        {
+            "timestamp": localtime(post.created).strftime("%b %d, %Y %H:%M"),
+            "text": post.title,
+            "url": f"/blog/{post.slug}/",
+        }
+        for post in latest_blog_posts
+    ]
+
+    forum_digest = [
+        {
+            "timestamp": localtime(post.created).strftime("%b %d, %Y %H:%M"),
+            "text": post.topic,
+            "url": f"/forum/thread/{post.thread.id}/",
+        }
+        for post in latest_forum_posts
+    ]
+
+    context = {
+        "bluesky_posts": bluesky_posts,
+        "latest_blog_posts": blog_digest,
+        "latest_forum_posts": forum_digest,
+        "bsky_handle": bsky_handle,
+        "bsky_name": bsky_display_name,
+    }
+
+    return render(request, "home.html", context)
 
 
 def generate_otp(self):
@@ -34,7 +72,9 @@ def register(request):
             if not user.verification_token:  # Debugging step
                 print("Error: verification_token is missing!")
 
-            send_verification_email(request, user)  # Ensure the token is set before this
+            send_verification_email(
+                request, user
+            )  # Ensure the token is set before this
 
             return redirect("confirm_registration")  # Redirect to OTP input page
     else:

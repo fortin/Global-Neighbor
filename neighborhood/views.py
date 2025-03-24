@@ -3,7 +3,7 @@ from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import CategoryForm, PostForm, ThreadForm
-from .models import ForumCategory, Post, Thread
+from .models import ForumCategory, ForumPost, Thread
 
 
 def forum_home(request):
@@ -22,7 +22,11 @@ def forum_category(request, slug):
 def forum_thread(request, slug):
     thread = get_object_or_404(Thread, slug=slug)
     posts = thread.posts.all()
-    return render(request, "forum_thread.html", {"thread": thread, "posts": posts})
+    return render(
+        request,
+        "forum_thread.html",
+        {"thread": thread, "posts": posts},
+    )
 
 
 @login_required

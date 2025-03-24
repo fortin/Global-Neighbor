@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import ForumCategory, Post, Thread
+from .models import ForumCategory, ForumPost, Thread
 
 
 class CategoryForm(forms.ModelForm):
@@ -17,5 +17,5 @@ class ThreadForm(forms.ModelForm):
 
 class PostForm(forms.ModelForm):
     class Meta:
-        model = Post
+        model = ForumPost
         fields = ["content"]
