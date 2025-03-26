@@ -1,6 +1,9 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %}Confirm Registration{% endblock %}
 {% block content %}
+<link rel="stylesheet" href="{% static 'css/styles.css' %}">
+
 <h2>Enter OTP</h2>
 <p>A verification email has been sent to your email. Enter the OTP below:</p>
 <form method="post">

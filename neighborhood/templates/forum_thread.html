@@ -1,9 +1,10 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %}{{ thread.title }} - Forum{% endblock %}
 
 {% block content %}
 <h1>{{ thread.title }}</h1>
-<p><strong>Category:</strong> <a href="{% url 'forum_category' thread.category.slug %}">{{ thread.category.name }}</a></p>
+<p><strong>Category:</strong> <a href="{% url 'neighborhood:forum_category' thread.category.slug %}">{{ thread.category.title }}</a></p>
 <p><strong>Author:</strong> {{ thread.author }}</p>
 
 {% for post in posts %}

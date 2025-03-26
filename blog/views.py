@@ -22,7 +22,7 @@ class BlogCategoryViewSet(viewsets.ModelViewSet):
 
 
 def is_creator(user):
-    return user.is_authenticated and user.is_creator
+    return user.is_authenticated and (user.is_creator or user.is_superuser)
 
 
 @login_required
@@ -39,7 +39,7 @@ def create_blog_post(request):
     else:
         form = BlogPostForm()
 
-    return render(request, "create_post.html", {"form": form})
+    return render(request, "create_blog_post.html", {"form": form})
 
 
 def blog_index(request):

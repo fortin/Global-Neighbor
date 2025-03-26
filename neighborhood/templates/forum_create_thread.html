@@ -1,14 +1,38 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %}New Thread - Forum{% endblock %}
 
 {% block content %}
-<h1>Create a New Thread</h1>
+<link rel="stylesheet" href="{% static 'css/forum.css' %}">
 
-<form method="post">
+<div class="form-page-container">
+  <h1 class="form-title">Create a New Thread</h1>
+
+  <form method="post" class="styled-form">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Create</button>
-</form>
-
-<a href="{% url 'forum_home' %}" class="btn btn-secondary mt-3">Back to Forum</a>
+  
+    <div class="form-group">
+      {{ thread_form.title.label_tag }}
+      {{ thread_form.title }}
+    </div>
+  
+    <div class="form-group">
+      {{ thread_form.category.label_tag }}
+      {{ thread_form.category }}
+    </div>
+  
+    <div class="form-group">
+      {{ post_form.content.label_tag }}
+      {{ post_form.content }}
+    </div>
+  
+    <div class="form-group">
+      {{ post_form.tags.label_tag }}
+      {{ post_form.tags }}
+    </div>
+  
+    <button type="submit" class="btn btn-primary">Create Thread</button>
+    <a href="{% url 'neighborhood:forum_home' %}" class="btn btn-secondary">Cancel</a>
+  </form>
+</div>
 {% endblock %}

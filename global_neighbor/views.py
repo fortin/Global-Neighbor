@@ -37,7 +37,7 @@ def home(request):
     forum_digest = [
         {
             "timestamp": localtime(post.created).strftime("%b %d, %Y %H:%M"),
-            "text": post.topic,
+            "text": post.thread.title,
             "url": f"/forum/thread/{post.thread.id}/",
         }
         for post in latest_forum_posts

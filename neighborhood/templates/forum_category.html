@@ -1,8 +1,8 @@
 {% extends "base.html" %}
-{% block title %}{{ category.name }} - Forum{% endblock %}
+{% block title %}{{ category.title }} - Forum{% endblock %}
 
 {% block content %}
-<h1>{{ category.name }}</h1>
+<h1>{{ category.title }}</h1>
 <p>Threads:</p>
 
 {% for thread in threads %}

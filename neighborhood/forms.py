@@ -1,4 +1,5 @@
 from django import forms
+from taggit.forms import TagWidget
 
 from .models import ForumCategory, ForumPost, Thread
 
@@ -12,10 +13,13 @@ class CategoryForm(forms.ModelForm):
 class ThreadForm(forms.ModelForm):
     class Meta:
         model = Thread
-        fields = ["title", "category", "content"]
+        fields = ["title", "category"]
 
 
-class PostForm(forms.ModelForm):
+class ForumPostForm(forms.ModelForm):
     class Meta:
         model = ForumPost
-        fields = ["content"]
+        fields = ["content", "tags"]  # ✅ Only valid ForumPost fields
+        widgets = {
+            "tags": TagWidget(attrs={"placeholder": "Add tags separated by commas"}),
+        }
