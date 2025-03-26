@@ -29,7 +29,7 @@ def home(request):
         {
             "timestamp": localtime(post.created).strftime("%b %d, %Y %H:%M"),
             "text": post.title,
-            "url": f"/blog/{post.slug}/",
+            "url": reverse("blog:blog_post_detail", kwargs={"slug": post.slug}),
         }
         for post in latest_blog_posts
     ]
@@ -38,7 +38,9 @@ def home(request):
         {
             "timestamp": localtime(post.created).strftime("%b %d, %Y %H:%M"),
             "text": post.thread.title,
-            "url": f"/forum/thread/{post.thread.id}/",
+            "url": reverse(
+                "neighborhood:forum_thread", kwargs={"slug": post.thread.slug}
+            ),
         }
         for post in latest_forum_posts
     ]
