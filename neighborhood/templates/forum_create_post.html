@@ -20,5 +20,5 @@
     <button type="submit" class="btn btn-primary">Post Reply</button>
 </form>
 
-<a href="{% url 'forum_thread' thread.slug %}" class="btn btn-secondary mt-3">Back to Thread</a>
+<a href="{% url 'neighborhood:forum_thread' thread.slug %}" class="btn btn-secondary mt-3">Back to Thread</a>
 {% endblock %}

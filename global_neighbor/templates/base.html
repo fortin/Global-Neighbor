@@ -6,9 +6,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Global Neighbor{% endblock %}</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+	<link rel="stylesheet" href="{% static 'css/search.css' %}">
     <link rel="icon" type="image/png" href="{% static 'images/favicon.png' %}">
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-</head>
+	<script>
+		document.addEventListener("DOMContentLoaded", function () {
+		  const icon = document.getElementById("search-icon");
+		  const dropdown = document.getElementById("search-dropdown");
+
+		  icon?.addEventListener("click", function (event) {
+			event.stopPropagation();
+			dropdown.classList.toggle("show");
+		  });
+
+		  document.addEventListener("click", function (e) {
+			if (!dropdown.contains(e.target)) {
+			  dropdown.classList.remove("show");
+			}
+		  });
+		});
+	</script></head>
 <body>
 
 <nav class="navbar">
@@ -25,6 +42,16 @@
         {% if request.user.is_authenticated and request.user.is_superuser %}
         <li><a href="{% url 'admin:index' %}"><i class="fa-solid fa-user-cog"></i> Admin</a></li>
         {% endif %}
+        <li class="search-toggle">
+          <i id="search-icon" class="fas fa-search" title="Search"></i>
+          <div id="search-dropdown" class="search-dropdown">
+            <form method="get" action="{% url 'search' %}" class="search-form">
+              <input type="text" name="q" placeholder="Search..." value="{{ request.GET.q }}">
+              <button type="submit"><i class="fas fa-search"></i></button>
+              <a href="{% url 'advanced_search' %}" class="advanced-search-link">Advanced</a>
+            </form>
+          </div>
+        </li>
 		{% if request.user.is_authenticated %}
 		<li>
 			<form method="post" action="{% url 'logout' %}" class="logout-form">

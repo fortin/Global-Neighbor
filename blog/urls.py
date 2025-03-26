@@ -7,6 +7,7 @@ from .views import (
     blog_index,
     blog_post_detail,
     create_blog_post,
+    edit_blog_post,
 )
 
 app_name = "blog"
@@ -20,4 +21,5 @@ urlpatterns = [
     path("", blog_index, name="blog_index"),
     path("create/", create_blog_post, name="create_blog_post"),
     path("<slug:slug>/", blog_post_detail, name="blog_post_detail"),
+    path("post/<slug:slug>/edit/", edit_blog_post, name="edit_blog_post"),
 ]

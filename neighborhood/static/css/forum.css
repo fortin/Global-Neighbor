@@ -117,6 +117,29 @@ input[name="tags"] {
     font-size: 1rem;
 }
 
+.form-actions {
+    display: flex;
+    justify-content: flex-start;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.post-tags {
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+    color: #555;
+}
+
+.post-tags .tag {
+    display: inline-block;
+    background: #eee;
+    color: #333;
+    border-radius: 4px;
+    padding: 2px 6px;
+    font-size: 0.75rem;
+    margin-right: 5px;
+}
+
 /* --- Form Buttons --- */
 
 .button,

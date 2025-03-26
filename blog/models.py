@@ -5,6 +5,8 @@ from django.utils.timezone import now
 from models_extensions.models import ActivatorModel, TimeStampedModel
 from taggit.managers import TaggableManager
 
+from global_neighbor.scripts.utils import generate_unique_slug
+
 User = get_user_model()
 
 
@@ -28,7 +30,7 @@ class BlogPost(TimeStampedModel):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.title)
+            self.slug = generate_unique_slug(BlogPost, self.title)
         super().save(*args, **kwargs)
 
     def __str__(self):

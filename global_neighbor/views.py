@@ -4,15 +4,18 @@ import uuid
 from decouple import config
 from django.conf import settings
 from django.contrib.auth import login
+from django.contrib.auth.decorators import login_required
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import send_mail
+from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.timezone import localtime
+from taggit.models import Tag
 
 from blog.models import BlogPost
 from global_neighbor.bluesky import get_latest_bluesky_posts
-from neighborhood.models import ForumPost
+from neighborhood.models import ForumPost, Thread
 
 from .bluesky_utils import get_latest_top_level_posts
 from .forms import RegistrationForm
@@ -145,3 +148,94 @@ def verify_email(request, token):
     user.save()
     login(request, user)
     return redirect("home")
+
+
+def search(request):
+    query = request.GET.get("q", "")
+    blog_results = BlogPost.objects.filter(content__icontains=query)
+    forum_posts = ForumPost.objects.filter(content__icontains=query)
+    forum_threads = Thread.objects.filter(title__icontains=query)
+    return render(
+        request,
+        "search/search_results.html",
+        {
+            "query": query,
+            "blog_results": blog_results,
+            "forum_posts": forum_posts,
+            "forum_threads": forum_threads,
+        },
+    )
+
+
+def advanced_search(request):
+    categories = BlogPost.objects.values_list("categories__title", flat=True).distinct()
+    tags = Tag.objects.all()
+    selected_tag = request.GET.get("tag")
+    selected_category = request.GET.get("category")
+    scope = request.GET.get("scope")
+
+    blog_results = BlogPost.objects.all()
+    forum_posts = ForumPost.objects.all()
+    forum_threads = Thread.objects.all()
+
+    if selected_tag:
+        blog_results = blog_results.filter(tags__name__iexact=selected_tag)
+        forum_posts = forum_posts.filter(tags__name__iexact=selected_tag)
+    if selected_category:
+        blog_results = blog_results.filter(categories__title__iexact=selected_category)
+    if scope == "blog":
+        forum_posts = []
+        forum_threads = []
+    elif scope == "forum":
+        blog_results = []
+
+    return render(
+        request,
+        "advanced_search.html",
+        {
+            "categories": categories,
+            "tags": tags,
+            "blog_results": blog_results,
+            "forum_posts": forum_posts,
+            "forum_threads": forum_threads,
+            "selected_tag": selected_tag,
+            "selected_category": selected_category,
+            "scope": scope,
+        },
+    )
+
+
+@login_required()
+def search_results(request):
+    query = request.GET.get("q", "").strip()
+    blog_results = []
+    forum_threads = []
+    forum_posts = []
+
+    if query:
+        blog_results = BlogPost.objects.filter(
+            Q(title__icontains=query)
+            | Q(content__icontains=query)
+            | Q(tags__name__icontains=query)
+        ).distinct()
+
+        forum_threads = Thread.objects.filter(
+            Q(title__icontains=query)
+            | Q(content__icontains=query)
+            | Q(tags__name__icontains=query)
+        ).distinct()
+
+        forum_posts = ForumPost.objects.filter(
+            Q(content__icontains=query) | Q(tags__name__icontains=query)
+        ).distinct()
+
+    return render(
+        request,
+        "search/search_results.html",
+        {
+            "query": query,
+            "blog_results": blog_results,
+            "forum_threads": forum_threads,
+            "forum_posts": forum_posts,
+        },
+    )

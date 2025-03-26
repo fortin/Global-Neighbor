@@ -102,3 +102,54 @@ def create_category(request):
         form = CategoryForm()
 
     return render(request, "forum_create_category.html", {"form": form})
+
+
+@login_required
+def edit_thread(request, slug):
+    thread = get_object_or_404(Thread, slug=slug)
+
+    if request.user != thread.author and not request.user.is_superuser:
+        raise PermissionDenied("You are not allowed to edit this thread.")
+
+    initial_post = thread.posts.first()
+    if not initial_post:
+        raise Http404("Initial post not found.")
+
+    if request.method == "POST":
+        thread_form = ThreadForm(request.POST, instance=thread)
+        post_form = ForumPostForm(request.POST, instance=initial_post)
+        if thread_form.is_valid() and post_form.is_valid():
+            thread_form.save()
+            post_form.save()
+            return redirect("neighborhood:forum_thread", slug=thread.slug)
+    else:
+        thread_form = ThreadForm(instance=thread)
+        post_form = ForumPostForm(instance=initial_post)
+
+    return render(
+        request,
+        "forum_edit_post.html",
+        {
+            "thread_form": thread_form,
+            "post_form": post_form,
+            "thread": thread,
+        },
+    )
+
+
+@login_required
+def edit_post(request, pk):
+    post = get_object_or_404(ForumPost, pk=pk)
+
+    if request.user != post.author and not request.user.is_superuser:
+        raise PermissionDenied()
+
+    if request.method == "POST":
+        form = ForumPostForm(request.POST, instance=post)
+        if form.is_valid():
+            form.save()
+            return redirect("neighborhood:forum_thread", slug=post.thread.slug)
+    else:
+        form = ForumPostForm(instance=post)
+
+    return render(request, "forum_edit_post.html", {"form": form, "post": post})

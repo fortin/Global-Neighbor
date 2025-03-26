@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Search Results{% endblock %}
+
+{% block content %}
+
+<h1 class="form-title">Search Results for "{{ query }}"</h1>
+
+{% if blog_results or forum_posts or forum_threads %}
+  <div class="search-results">
+    {% if blog_results %}
+      <h3>Blog Posts</h3>
+      <ul class="post-list">
+        {% for post in blog_results %}
+          <li class="post-item">
+            <a href="{% url 'blog:blog_post_detail' slug=post.slug %}">{{ post.title }}</a>
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+    {% if forum_threads %}
+      <h3>Forum Threads</h3>
+      <ul class="post-list">
+        {% for thread in forum_threads %}
+          <li class="post-item">
+            <a href="{% url 'neighborhood:forum_thread' slug=thread.slug %}">{{ thread.title }}</a>
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+    {% if forum_posts %}
+      <h3>Forum Posts</h3>
+      <ul class="post-list">
+        {% for post in forum_posts %}
+          <li class="post-item">
+            <a href="{% url 'neighborhood:forum_thread' slug=post.thread.slug %}">
+              {{ post.content|truncatewords:10 }}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </div>
+{% else %}
+  <p>No results found.</p>
+{% endif %}
+{% endblock %}

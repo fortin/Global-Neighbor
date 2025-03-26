@@ -4,6 +4,8 @@ from django.utils.text import slugify
 from models_extensions.models import ActivatorModel, TimeStampedModel
 from taggit.managers import TaggableManager
 
+from global_neighbor.scripts.utils import generate_unique_slug
+
 User = get_user_model()
 
 
@@ -34,7 +36,7 @@ class Thread(TimeStampedModel):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.title)
+            self.slug = generate_unique_slug(Thread, self.title)
         super().save(*args, **kwargs)
 
     def __str__(self):

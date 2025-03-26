@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block title %}Advanced Search{% endblock %}
+
+{% block content %}
+
+<h1 class="form-title">Advanced Search</h1>
+
+<form method="get" class="styled-form">
+  <div class="form-group">
+    <label>Scope</label>
+    <select name="scope">
+      <option value="">All</option>
+      <option value="blog" {% if scope == "blog" %}selected{% endif %}>Blog</option>
+      <option value="forum" {% if scope == "forum" %}selected{% endif %}>Forum</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label>Tag</label>
+    <select name="tag">
+      <option value="">All</option>
+      {% for tag in tags %}
+        <option value="{{ tag.name }}" {% if tag.name == selected_tag %}selected{% endif %}>
+          {{ tag.name }}
+        </option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label>Category</label>
+    <select name="category">
+      <option value="">All</option>
+      {% for cat in categories %}
+        <option value="{{ cat }}" {% if cat == selected_category %}selected{% endif %}>
+          {{ cat }}
+        </option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <button type="submit" class="btn btn-primary">Search</button>
+</form>
+
+<hr>
+
+{% if blog_results or forum_posts or forum_threads %}
+  <div class="search-results">
+    {% if blog_results %}
+      <h3>Blog Posts</h3>
+      <ul class="post-list">
+        {% for post in blog_results %}
+          <li class="post-item">
+            <a href="{% url 'blog:blog_post_detail' slug=post.slug %}">{{ post.title }}</a>
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+    {% if forum_threads %}
+      <h3>Forum Threads</h3>
+      <ul class="post-list">
+        {% for thread in forum_threads %}
+          <li class="post-item">
+            <a href="{% url 'neighborhood:forum_thread' slug=thread.slug %}">{{ thread.title }}</a>
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+    {% if forum_posts %}
+      <h3>Forum Posts</h3>
+      <ul class="post-list">
+        {% for post in forum_posts %}
+          <li class="post-item">
+            <a href="{% url 'neighborhood:forum_thread' slug=post.thread.slug %}">
+              {{ post.content|truncatewords:10 }}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </div>
+{% else %}
+  <p>No results.</p>
+{% endif %}
+{% endblock %}
