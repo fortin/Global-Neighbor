@@ -13,7 +13,7 @@ from django.urls import reverse
 from django.utils.timezone import localtime
 from taggit.models import Tag
 
-from blog.models import BlogPost
+from blog.models import BlogCategory, BlogPost
 from global_neighbor.bluesky import get_latest_bluesky_posts
 from neighborhood.models import ForumPost, Thread
 
@@ -168,39 +168,66 @@ def search(request):
 
 
 def advanced_search(request):
-    categories = BlogPost.objects.values_list("categories__name", flat=True).distinct()
-    tags = Tag.objects.all()
-    selected_tag = request.GET.get("tag")
-    selected_category = request.GET.get("category")
-    scope = request.GET.get("scope")
+    query = request.GET.get("q", "").strip()
+    scope = request.GET.get("scope", "")
+    selected_tag = request.GET.get("tag", "")
+    selected_category = request.GET.get("category", "")
 
     blog_results = BlogPost.objects.all()
-    forum_posts = ForumPost.objects.all()
     forum_threads = Thread.objects.all()
+    forum_posts = ForumPost.objects.all()
+    tags = Tag.objects.all()
+    categories = BlogCategory.objects.all().values_list("name", flat=True)
 
-    if selected_tag:
-        blog_results = blog_results.filter(tags__name__iexact=selected_tag)
-        forum_posts = forum_posts.filter(tags__name__iexact=selected_tag)
-    if selected_category:
-        blog_results = blog_results.filter(categories__name__iexact=selected_category)
-    if scope == "blog":
-        forum_posts = []
-        forum_threads = []
-    elif scope == "forum":
-        blog_results = []
+    def parse_query(text):
+        terms = text.split()
+        q = Q()
+        current_op = Q.__or__
+
+        for term in terms:
+            if term.upper() == "AND":
+                current_op = Q.__and__
+            elif term.upper() == "OR":
+                current_op = Q.__or__
+            elif term.upper() == "NOT" or term.startswith("-"):
+                term = (
+                    term[1:]
+                    if term.startswith("-")
+                    else terms.pop(terms.index(term) + 1)
+                )
+                q &= ~Q(name__icontains=term) & ~Q(content__icontains=term)
+            else:
+                term = term[1:] if term.startswith("+") else term
+                q = current_op(q, Q(name__icontains=term) | Q(content__icontains=term))
+        return q
+
+    if query:
+        q_filter = parse_query(query)
+
+        tag_string = request.GET.get("tags", "").strip()
+        if tag_string:
+            tag_list = [tag.strip() for tag in tag_string.split(",") if tag.strip()]
+            if tag_list:
+                if scope in ("", "blog"):
+                    blog_results = blog_results.filter(
+                        tags__name__in=tag_list
+                    ).distinct()
+                if scope in ("", "forum"):
+                    forum_posts = forum_posts.filter(tags__name__in=tag_list).distinct()
 
     return render(
         request,
         "search/advanced_search.html",
         {
-            "categories": categories,
-            "tags": tags,
-            "blog_results": blog_results,
-            "forum_posts": forum_posts,
-            "forum_threads": forum_threads,
+            "query": query,
+            "scope": scope,
             "selected_tag": selected_tag,
             "selected_category": selected_category,
-            "scope": scope,
+            "tags": tags,
+            "categories": categories,
+            "blog_results": blog_results,
+            "forum_threads": forum_threads,
+            "forum_posts": forum_posts,
         },
     )
 

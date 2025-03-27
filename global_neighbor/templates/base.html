@@ -47,10 +47,10 @@
 <body>
 
 <nav class="navbar">
-    <a class="navbar-brand" href="{% url 'home' %}">
-        <img src="{% static 'images/favicon.png' %}" alt="Global Neighbor Logo" class="logo">
-        Global Neighbor
-    </a>
+	<a class="navbar-brand" href="{% url 'home' %}">
+		<img src="{% static 'images/favicon.png' %}" alt="Global Neighbor Logo" class="logo">
+		<span class="brand-title">Global Neighbor</span>
+	</a>
     <ul class="nav-links">
         <li><a href="{% url 'blog:blog_index' %}"><i class="fa-solid fa-blog"></i> Blog</a></li>
         {% if request.user.is_authenticated and request.user.is_creator or request.user.is_superuser %}

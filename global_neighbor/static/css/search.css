@@ -1,5 +1,4 @@
-
-/* --- Search --- */
+/* --- Search Icon Dropdown --- */
 
 .search-dropdown {
   position: relative;
@@ -25,7 +24,8 @@
   padding: 1rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   z-index: 1000;
-  min-width: 300px;
+  min-width: 320px;
+  max-width: 400px;
   width: max-content;
 }
 
@@ -75,6 +75,62 @@
 .advanced-search-link:hover {
   text-decoration: underline;
   color: #0056b3;
+}
+
+/* --- Advanced Search Page --- */
+
+.advanced-search-container {
+  max-width: 720px;
+  margin: 3rem auto;
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
+}
+
+.advanced-search-container h1 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.advanced-search-container .styled-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.advanced-search-container .form-group label {
+  font-weight: 500;
+  margin-bottom: 0.4rem;
+  color: #333;
+}
+
+.advanced-search-container .form-group select,
+.advanced-search-container .form-group input[type="text"] {
+  padding: 0.6rem 0.8rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  width: 100%;
+  font-family: inherit;
+}
+
+.advanced-search-container .btn {
+  width: fit-content;
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  background-color: #007bff;
+  color: white;
+  border: none;
+}
+
+.advanced-search-container .btn:hover {
+  background-color: #0056b3;
 }
 
 /* --- Results --- */
