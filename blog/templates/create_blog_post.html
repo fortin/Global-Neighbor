@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Create New Post{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/blog.css' %}">
+
+<div class="form-page-container">
+  <h1 class="form-title">Create a New Blog Post</h1>
+
+  {% if form.errors %}
+    <p style="color: red;">Please fix the errors below.</p>
+  {% endif %}
+
+  <form method="post" enctype="multipart/form-data" class="styled-form">
+    {% csrf_token %}
+
+    <div class="form-group">
+      {{ form.title.label_tag }}
+      {{ form.title }}
+    </div>
+
+    <div class="form-group">
+      {{ form.image.label_tag }}
+      {{ form.image }}
+    </div>
+
+    <div class="form-group">
+      {{ form.content.label_tag }}
+      {{ form.content }}
+    </div>
+
+    <div class="form-group">
+      {{ form.tags.label_tag }}
+      {{ form.tags }}
+    </div>
+
+    <button type="submit" class="btn btn-primary">Publish</button>
+    <a href="{% url 'blog:blog_index' %}" class="btn btn-secondary">Cancel</a>
+  </form>
+</div>
+{% endblock %}

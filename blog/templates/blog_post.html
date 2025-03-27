@@ -1,9 +1,40 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %}{{ post.title }}{% endblock %}
 
 {% block content %}
-<h1>{{ post.title }}</h1>
-<p><strong>By:</strong> {{ post.author }}</p>
-<p><strong>Published:</strong> {{ post.created_at|date:"F j, Y" }}</p>
-<p>{{ post.content }}</p>
+<link rel="stylesheet" href="{% static 'css/blog.css' %}">
+
+<div class="form-page-container">
+  <h1 class="form-title">{{ post.title }}</h1>
+
+  <p class="timestamp-link">By {{ post.author }} on {{ post.created|date:"F j, Y" }}</p>
+
+  {% if post.categories.exists %}
+    <p><strong>Categories:</strong>
+      {% for category in post.categories.all %}
+        <a href="{% url 'blog:blog_index' %}?category={{ category.slug }}">{{ category.title }}</a>{% if not forloop.last %}, {% endif %}
+      {% endfor %}
+    </p>
+  {% endif %}
+
+  {% if post.tags.exists %}
+    <p><strong>Tags:</strong>
+      {% for tag in post.tags.all %}
+        <a href="{% url 'blog:blog_index' %}?tag={{ tag.slug }}">{{ tag.name }}</a>{% if not forloop.last %}, {% endif %}
+      {% endfor %}
+    </p>
+  {% endif %}
+
+  <div class="post-text">
+    {{ post.content|linebreaksbr }}
+  </div>
+
+  {% if request.user == post.author or request.user.is_superuser %}
+    <div style="margin-top: 1.5rem;">
+      <a href="{% url 'blog:edit_blog_post' slug=post.slug %}" class="btn btn-secondary">Edit</a>
+      <a href="{% url 'blog:blog_index' %}" class="btn btn-secondary">Back to Blog</a>
+    </div>
+  {% endif %}
+</div>
 {% endblock %}

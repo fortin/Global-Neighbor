@@ -1,0 +1,169 @@
+/* --- Search Icon Dropdown --- */
+
+.search-dropdown {
+  position: relative;
+}
+
+.search-toggle {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.25rem;
+  cursor: pointer;
+  padding: 0.25rem;
+}
+
+.search-bar {
+  display: none;
+  position: absolute;
+  top: 2.8rem;
+  right: 0;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  z-index: 1000;
+  min-width: 320px;
+  max-width: 400px;
+  width: max-content;
+}
+
+.search-bar.show {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.search-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.search-form input[type="text"] {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-family: inherit;
+  color: #222;
+}
+
+.search-form button {
+  align-self: flex-start;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.search-form button:hover {
+  background-color: #0056b3;
+}
+
+.advanced-search-link {
+  align-self: flex-end;
+  font-size: 0.85rem;
+  color: #007bff;
+  text-decoration: none;
+  margin-top: -0.25rem;
+}
+
+.advanced-search-link:hover {
+  text-decoration: underline;
+  color: #0056b3;
+}
+
+/* --- Advanced Search Page --- */
+
+.advanced-search-container {
+  max-width: 720px;
+  margin: 3rem auto;
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
+}
+
+.advanced-search-container h1 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.advanced-search-container .styled-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.advanced-search-container .form-group label {
+  font-weight: 500;
+  margin-bottom: 0.4rem;
+  color: #333;
+}
+
+.advanced-search-container .form-group select,
+.advanced-search-container .form-group input[type="text"] {
+  padding: 0.6rem 0.8rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  width: 100%;
+  font-family: inherit;
+}
+
+.advanced-search-container .btn {
+  width: fit-content;
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  background-color: #007bff;
+  color: white;
+  border: none;
+}
+
+.advanced-search-container .btn:hover {
+  background-color: #0056b3;
+}
+
+/* --- Results --- */
+
+.search-results {
+  margin-top: 2rem;
+}
+
+.search-results h3 {
+  font-size: 1.2rem;
+  margin-top: 2rem;
+}
+
+.post-list {
+  list-style: none;
+  padding: 0;
+}
+
+.post-item {
+  padding: 0.5rem 0;
+  border-top: 1px solid #eee;
+}
+
+.post-item:first-child {
+  border-top: none;
+}
+
+.post-item a {
+  color: #333;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.post-item a:hover {
+  color: #007bff;
+}

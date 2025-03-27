@@ -4,6 +4,8 @@ from .views import (
     create_category,
     create_post,
     create_thread,
+    edit_post,
+    edit_thread,
     forum_category,
     forum_home,
     forum_thread,
@@ -18,4 +20,6 @@ urlpatterns = [
     path("category/<slug:slug>/", forum_category, name="forum_category"),
     path("thread/<slug:slug>/", forum_thread, name="forum_thread"),
     path("thread/<slug:thread_slug>/reply/", create_post, name="create_post"),
+    path("thread/<slug:slug>/edit/", edit_thread, name="edit_thread"),
+    path("post/<int:pk>/edit/", edit_post, name="edit_post"),
 ]

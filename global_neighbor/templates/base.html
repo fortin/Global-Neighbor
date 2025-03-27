@@ -6,68 +6,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Global Neighbor{% endblock %}</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+	<link rel="stylesheet" href="{% static 'css/search.css' %}">
     <link rel="icon" type="image/png" href="{% static 'images/favicon.png' %}">
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-    <style>
-    		body {
-		    display: flex;
-		    flex-direction: column;
-		    min-height: 100vh;
-		    margin: 0;
-		    font-family: Arial, sans-serif;
-		}
+	<script>
+		document.addEventListener("DOMContentLoaded", function () {
+		  const icon = document.getElementById("search-icon");
+		  const dropdown = document.getElementById("search-dropdown");
 
-		.navbar {
-		    display: flex;
-		    justify-content: space-between;
-		    align-items: center;
-		    background-color: #333;
-		    padding: 1rem;
-		}
+		  icon?.addEventListener("click", function (event) {
+			event.stopPropagation();
+			dropdown.classList.toggle("show");
+		  });
 
-		.navbar a {
-		    color: #fff;
-		    text-decoration: none;
-		    margin-left: 1rem;
-		}
+		  document.addEventListener("click", function (e) {
+			if (!dropdown.contains(e.target)) {
+			  dropdown.classList.remove("show");
+			}
+		  });
+		});
+	</script>
+	<script>
+		document.addEventListener("DOMContentLoaded", function () {
+		  const icon = document.getElementById("search-icon");
+		  const dropdown = document.getElementById("search-dropdown-container");
 
-		.navbar a:hover {
-		    color: #ddd;
-		}
+		  icon?.addEventListener("click", function (event) {
+			event.stopPropagation();
+			dropdown.classList.toggle("show");
+		  });
 
-		.navbar-brand {
-		    font-size: 1.5rem;
-		    font-weight: bold;
-		    margin-left: 0;
-		}
-
-		.nav-links {
-		    display: flex;
-		    list-style: none;
-		    margin: 0;
-		    padding: 0;
-		}
-
-		.container {
-		    flex: 1;
-		    padding: 2rem;
-		}
-
-		footer {
-		    background-color: #333;
-		    color: #fff;
-		    text-align: center;
-		    padding: 1rem;
-		}
-    </style>
+		  document.addEventListener("click", function (e) {
+			if (!dropdown.contains(e.target)) {
+			  dropdown.classList.remove("show");
+			}
+		  });
+		});
+	</script>
 </head>
 <body>
 
 <nav class="navbar">
-    <a class="navbar-brand" href="{% url 'home' %}">
-        <img src="{% static 'images/favicon.png' %}" alt="Global Neighbor Logo" class="logo">
-        Global Neighbor
-    </a>
+	<a class="navbar-brand" href="{% url 'home' %}">
+		<img src="{% static 'images/favicon.png' %}" alt="Global Neighbor Logo" class="logo">
+		<span class="brand-title">Global Neighbor</span>
+	</a>
     <ul class="nav-links">
         <li><a href="{% url 'blog:blog_index' %}"><i class="fa-solid fa-blog"></i> Blog</a></li>
         {% if request.user.is_authenticated and request.user.is_creator or request.user.is_superuser %}
@@ -77,15 +60,27 @@
         {% if request.user.is_authenticated and request.user.is_superuser %}
         <li><a href="{% url 'admin:index' %}"><i class="fa-solid fa-user-cog"></i> Admin</a></li>
         {% endif %}
-        {% if request.user.is_authenticated %}
-		<form method="post" action="{% url 'logout' %}" class="logout-form">
-		    {% csrf_token %}
-		    <button type="submit" class="logout-link">Logout</button>
-		</form>
-        {% else %}
-            <li><a href="{% url 'login' %}"> Login</a></li>
-            <li><a href="{% url 'register' %}"> Register</a></li>
-        {% endif %}
+		<li class="search-toggle">
+			<i id="search-icon" class="fas fa-search" title="Search"></i>
+			<div id="search-dropdown-container" class="search-bar">
+			  <form method="get" action="{% url 'search' %}" class="search-form">
+				<input type="text" name="q" placeholder="Search..." value="{{ request.GET.q }}">
+				<button type="submit"><i class="fas fa-search"></i></button>
+				<a href="{% url 'advanced_search' %}" class="advanced-search-link">Advanced</a>
+			  </form>
+			</div>
+		</li>
+		{% if request.user.is_authenticated %}
+		<li>
+			<form method="post" action="{% url 'logout' %}" class="logout-form">
+				{% csrf_token %}
+				<button type="submit" class="logout-link">Logout</button>
+			</form>
+		</li>
+		{% else %}
+			<li><a href="{% url 'login' %}"> Login</a></li>
+			<li><a href="{% url 'register' %}"> Register</a></li>
+		{% endif %}
     </ul>
 </nav>
 

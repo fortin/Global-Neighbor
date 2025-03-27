@@ -2,6 +2,9 @@ from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils.text import slugify
 from models_extensions.models import ActivatorModel, TimeStampedModel
+from taggit.managers import TaggableManager
+
+from global_neighbor.scripts.utils import generate_unique_slug
 
 User = get_user_model()
 
@@ -13,11 +16,11 @@ class ForumCategory(TimeStampedModel):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.name)
+            self.slug = slugify(self.title)
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return self.name
+        return self.title
 
 
 class Thread(TimeStampedModel):
@@ -33,7 +36,7 @@ class Thread(TimeStampedModel):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.title)
+            self.slug = generate_unique_slug(Thread, self.title)
         super().save(*args, **kwargs)
 
     def __str__(self):
@@ -46,6 +49,7 @@ class ForumPost(TimeStampedModel):
         User, on_delete=models.SET_NULL, null=True, related_name="posts"
     )
     content = models.TextField()
+    tags = TaggableManager(blank=True)
 
     def __str__(self):
-        return f"Post by {self.author} on {self.created_at}"
+        return f"Post by {self.author} on {self.created}"

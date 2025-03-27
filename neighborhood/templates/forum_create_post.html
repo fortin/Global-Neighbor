@@ -1,14 +1,24 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %}Reply to {{ thread.title }} - Forum{% endblock %}
 
 {% block content %}
+<link rel="stylesheet" href="{% static 'css/forum.css' %}">
+
 <h1>Reply to Thread: {{ thread.title }}</h1>
 
-<form method="post">
+<form method="post" class="styled-form">
     {% csrf_token %}
-    {{ form.as_p }}
+    <div class="form-group">
+        {{ form.content.label_tag }}
+        {{ form.content }}
+    </div>
+    <div class="form-group">
+        {{ form.tags.label_tag }}
+        {{ form.tags }}
+    </div>
     <button type="submit" class="btn btn-primary">Post Reply</button>
 </form>
 
-<a href="{% url 'forum_thread' thread.slug %}" class="btn btn-secondary mt-3">Back to Thread</a>
+<a href="{% url 'neighborhood:forum_thread' thread.slug %}" class="btn btn-secondary mt-3">Back to Thread</a>
 {% endblock %}

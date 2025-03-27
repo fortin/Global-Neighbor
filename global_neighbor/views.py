@@ -4,15 +4,18 @@ import uuid
 from decouple import config
 from django.conf import settings
 from django.contrib.auth import login
+from django.contrib.auth.decorators import login_required
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import send_mail
+from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.timezone import localtime
+from taggit.models import Tag
 
-from blog.models import BlogPost
+from blog.models import BlogCategory, BlogPost
 from global_neighbor.bluesky import get_latest_bluesky_posts
-from neighborhood.models import ForumPost
+from neighborhood.models import ForumPost, Thread
 
 from .bluesky_utils import get_latest_top_level_posts
 from .forms import RegistrationForm
@@ -29,7 +32,7 @@ def home(request):
         {
             "timestamp": localtime(post.created).strftime("%b %d, %Y %H:%M"),
             "text": post.title,
-            "url": f"/blog/{post.slug}/",
+            "url": reverse("blog:blog_post_detail", kwargs={"slug": post.slug}),
         }
         for post in latest_blog_posts
     ]
@@ -37,8 +40,10 @@ def home(request):
     forum_digest = [
         {
             "timestamp": localtime(post.created).strftime("%b %d, %Y %H:%M"),
-            "text": post.topic,
-            "url": f"/forum/thread/{post.thread.id}/",
+            "text": post.thread.title,
+            "url": reverse(
+                "neighborhood:forum_thread", kwargs={"slug": post.thread.slug}
+            ),
         }
         for post in latest_forum_posts
     ]
@@ -143,3 +148,121 @@ def verify_email(request, token):
     user.save()
     login(request, user)
     return redirect("home")
+
+
+def search(request):
+    query = request.GET.get("q", "")
+    blog_results = BlogPost.objects.filter(content__icontains=query)
+    forum_posts = ForumPost.objects.filter(content__icontains=query)
+    forum_threads = Thread.objects.filter(title__icontains=query)
+    return render(
+        request,
+        "search/search_results.html",
+        {
+            "query": query,
+            "blog_results": blog_results,
+            "forum_posts": forum_posts,
+            "forum_threads": forum_threads,
+        },
+    )
+
+
+def advanced_search(request):
+    query = request.GET.get("q", "").strip()
+    scope = request.GET.get("scope", "")
+    selected_tag = request.GET.get("tag", "")
+    selected_category = request.GET.get("category", "")
+
+    blog_results = BlogPost.objects.all()
+    forum_threads = Thread.objects.all()
+    forum_posts = ForumPost.objects.all()
+    tags = Tag.objects.all()
+    categories = BlogCategory.objects.all().values_list("name", flat=True)
+
+    def parse_query(text):
+        terms = text.split()
+        q = Q()
+        current_op = Q.__or__
+
+        for term in terms:
+            if term.upper() == "AND":
+                current_op = Q.__and__
+            elif term.upper() == "OR":
+                current_op = Q.__or__
+            elif term.upper() == "NOT" or term.startswith("-"):
+                term = (
+                    term[1:]
+                    if term.startswith("-")
+                    else terms.pop(terms.index(term) + 1)
+                )
+                q &= ~Q(name__icontains=term) & ~Q(content__icontains=term)
+            else:
+                term = term[1:] if term.startswith("+") else term
+                q = current_op(q, Q(name__icontains=term) | Q(content__icontains=term))
+        return q
+
+    if query:
+        q_filter = parse_query(query)
+
+        tag_string = request.GET.get("tags", "").strip()
+        if tag_string:
+            tag_list = [tag.strip() for tag in tag_string.split(",") if tag.strip()]
+            if tag_list:
+                if scope in ("", "blog"):
+                    blog_results = blog_results.filter(
+                        tags__name__in=tag_list
+                    ).distinct()
+                if scope in ("", "forum"):
+                    forum_posts = forum_posts.filter(tags__name__in=tag_list).distinct()
+
+    return render(
+        request,
+        "search/advanced_search.html",
+        {
+            "query": query,
+            "scope": scope,
+            "selected_tag": selected_tag,
+            "selected_category": selected_category,
+            "tags": tags,
+            "categories": categories,
+            "blog_results": blog_results,
+            "forum_threads": forum_threads,
+            "forum_posts": forum_posts,
+        },
+    )
+
+
+@login_required()
+def search_results(request):
+    query = request.GET.get("q", "").strip()
+    blog_results = []
+    forum_threads = []
+    forum_posts = []
+
+    if query:
+        blog_results = BlogPost.objects.filter(
+            Q(title__icontains=query)
+            | Q(content__icontains=query)
+            | Q(tags__name__icontains=query)
+        ).distinct()
+
+        forum_threads = Thread.objects.filter(
+            Q(title__icontains=query)
+            | Q(content__icontains=query)
+            | Q(tags__name__icontains=query)
+        ).distinct()
+
+        forum_posts = ForumPost.objects.filter(
+            Q(content__icontains=query) | Q(tags__name__icontains=query)
+        ).distinct()
+
+    return render(
+        request,
+        "search/search_results.html",
+        {
+            "query": query,
+            "blog_results": blog_results,
+            "forum_threads": forum_threads,
+            "forum_posts": forum_posts,
+        },
+    )
