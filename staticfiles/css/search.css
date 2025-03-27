@@ -9,9 +9,8 @@
   background: none;
   border: none;
   color: white;
-  font-size: 1.25rem;
+  font-size: 1.2rem;
   cursor: pointer;
-  padding: 0.25rem;
 }
 
 .search-bar {
@@ -21,27 +20,31 @@
   right: 0;
   background-color: white;
   border: 1px solid #ddd;
-  border-radius: 10px;
   padding: 1rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   z-index: 1000;
-  min-width: 300px;
-  width: max-content;
+  border-radius: 10px;
+  width: 100%;                  /* allows full width inside parent */
+  max-width: 320px;             /* prevents it from being too wide */
+  min-width: 300px;             /* fixes the narrow box issue */
+  animation: fadeIn 0.2s ease-in-out;
 }
 
 .search-bar.show {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 0.5rem;
 }
 
 .search-form {
   display: flex;
   flex-direction: column;
+  gap: 0.5rem;
 }
 
 .search-form input[type="text"] {
-  padding: 0.5rem 0.75rem;
+  width: 100%;
+  padding: 0.6rem 0.8rem;
   border: 1px solid #ccc;
   border-radius: 6px;
   font-size: 1rem;
@@ -50,14 +53,15 @@
 }
 
 .search-form button {
-  align-self: flex-start;
   background-color: #007bff;
   color: white;
   border: none;
   padding: 0.4rem 0.8rem;
   border-radius: 4px;
-  font-size: 0.95rem;
   cursor: pointer;
+  margin-top: 0.3rem;
+  align-self: flex-start;
+  font-size: 0.95rem;
 }
 
 .search-form button:hover {
@@ -65,16 +69,17 @@
 }
 
 .advanced-search-link {
-  align-self: flex-end;
-  font-size: 0.85rem;
-  color: #007bff;
+  font-size: 0.9rem;
+  color: #007bff !important; /* Force it to show */
   text-decoration: none;
-  margin-top: -0.25rem;
+  align-self: flex-end;
+  display: inline-block;
+  margin-top: 0.2rem;
 }
 
 .advanced-search-link:hover {
   text-decoration: underline;
-  color: #0056b3;
+  color: #0056b3 !important;
 }
 
 /* --- Results --- */

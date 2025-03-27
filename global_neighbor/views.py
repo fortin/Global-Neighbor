@@ -168,7 +168,7 @@ def search(request):
 
 
 def advanced_search(request):
-    categories = BlogPost.objects.values_list("categories__title", flat=True).distinct()
+    categories = BlogPost.objects.values_list("categories__name", flat=True).distinct()
     tags = Tag.objects.all()
     selected_tag = request.GET.get("tag")
     selected_category = request.GET.get("category")
@@ -182,7 +182,7 @@ def advanced_search(request):
         blog_results = blog_results.filter(tags__name__iexact=selected_tag)
         forum_posts = forum_posts.filter(tags__name__iexact=selected_tag)
     if selected_category:
-        blog_results = blog_results.filter(categories__title__iexact=selected_category)
+        blog_results = blog_results.filter(categories__name__iexact=selected_category)
     if scope == "blog":
         forum_posts = []
         forum_threads = []
@@ -191,7 +191,7 @@ def advanced_search(request):
 
     return render(
         request,
-        "advanced_search.html",
+        "search/advanced_search.html",
         {
             "categories": categories,
             "tags": tags,
