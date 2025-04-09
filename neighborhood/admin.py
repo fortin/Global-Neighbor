@@ -1,3 +1,11 @@
 from django.contrib import admin
 
-# Register your models here.
+from neighborhood.models import ForumCategory
+
+
+@admin.register(ForumCategory)
+class ForumCategoryAdmin(admin.ModelAdmin):
+    list_display = (
+        "title",
+        "description",
+    )
