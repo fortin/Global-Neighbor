@@ -28,6 +28,7 @@ class BlogPost(TimeStampedModel):
     )
     content = models.TextField()
     categories = models.ManyToManyField(BlogCategory, blank=True, related_name="posts")
+    likes = models.ManyToManyField(User, related_name="liked_posts", blank=True)
     tags = TaggableManager(blank=True)
 
     def save(self, *args, **kwargs):

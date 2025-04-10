@@ -209,3 +209,22 @@ h2 i {
     max-width: 400px;
     text-align: center;
 }
+
+#like-section {
+    display: inline-block;
+}
+
+.like-button {
+    background: none;
+    border: none;
+    color: #007bff;
+    cursor: pointer;
+    font-size: 0.95rem;
+    padding: 0.4rem 0.6rem;
+    border-radius: 4px;
+}
+
+.like-button:hover {
+    text-decoration: underline;
+    background-color: #f0f8ff;
+}

@@ -1,7 +1,12 @@
+import json
+
+from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.exceptions import PermissionDenied
-from django.http import Http404
+from django.http import Http404, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
 
 from .forms import CategoryForm, ForumPostForm, ThreadForm
 from .models import ForumCategory, ForumPost, Thread
@@ -160,3 +165,26 @@ def edit_post(request, pk):
         form = ForumPostForm(instance=post)
 
     return render(request, "forum_edit_post.html", {"form": form, "post": post})
+
+
+@csrf_exempt
+def reorder_categories(request):
+    if request.method == "POST":
+        data = json.loads(request.POST.get("order", "[]"))
+
+        for item in data:
+            cat_id = item.get("id")
+            parent_id = item.get("parent_id")
+            order = item.get("left")  # or another sort field
+
+            try:
+                category = ForumCategory.objects.get(id=cat_id)
+                category.parent_id = parent_id or None
+                category.order = order
+                category.save()
+            except ForumCategory.DoesNotExist:
+                continue
+
+        return JsonResponse({"success": True})
+
+    return JsonResponse({"error": "Invalid method"}, status=400)

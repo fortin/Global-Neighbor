@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Edit Comment{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/comments.css' %}">
+
+<div class="form-page-container">
+  <h1 class="form-title">Edit Your Comment</h1>
+
+  <form method="post" class="styled-form">
+    {% csrf_token %}
+
+    <div class="form-group">
+      {{ form.content.label_tag }}
+      {{ form.content }}
+      {% if form.content.errors %}
+        <div class="form-errors">
+          {{ form.content.errors }}
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Update</button>
+      <a href="{% url 'blog:blog_post_detail' slug=comment.post.slug %}" class="btn btn-secondary">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

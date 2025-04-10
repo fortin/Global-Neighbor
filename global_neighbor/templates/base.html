@@ -11,19 +11,21 @@
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 	<script>
 		document.addEventListener("DOMContentLoaded", function () {
-		  const icon = document.getElementById("search-icon");
-		  const dropdown = document.getElementById("search-dropdown");
+			const icon = document.getElementById("search-icon");
+			const dropdown = document.getElementById("search-dropdown");
 
-		  icon?.addEventListener("click", function (event) {
-			event.stopPropagation();
-			dropdown.classList.toggle("show");
-		  });
+			if (icon && dropdown) {
+				icon.addEventListener("click", function (event) {
+					event.stopPropagation();
+					dropdown.classList.toggle("show");
+			});
 
-		  document.addEventListener("click", function (e) {
-			if (!dropdown.contains(e.target)) {
-			  dropdown.classList.remove("show");
+			  document.addEventListener("click", function (e) {
+					if (!dropdown.contains(e.target)) {
+						dropdown.classList.remove("show");
+					}
+				});
 			}
-		  });
 		});
 	</script>
 	<script>
