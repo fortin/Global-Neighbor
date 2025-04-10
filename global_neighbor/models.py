@@ -9,6 +9,7 @@ class User(AbstractUser):
     ROLE_CHOICES = [
         ("neighbor", "Neighbor"),
         ("creator", "Creator"),
+        ("moderator", "Moderator"),
     ]
 
     role = models.CharField(max_length=10, choices=ROLE_CHOICES, default="neighbor")
@@ -40,9 +41,11 @@ class User(AbstractUser):
     def is_creator(self):
         return self.role == "creator"
 
+    def is_moderator(self):
+        return self.role == "moderator"
+
     def generate_otp(self):
         """Generates OTP and ensures the user has a valid UUID verification token."""
-        import random
 
         self.otp = str(random.randint(100000, 999999))
 

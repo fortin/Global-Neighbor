@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.exceptions import PermissionDenied
+from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import CategoryForm, ForumPostForm, ThreadForm
@@ -32,7 +33,9 @@ def forum_thread(request, slug):
 @login_required
 def create_thread(request):
     if not request.user.is_authenticated or not (
-        request.user.is_creator or request.user.is_superuser
+        request.user.is_creator
+        or request.user.is_superuser
+        or request.user.is_moderator
     ):
         raise PermissionDenied("Only creators can create new threads.")
 
@@ -108,7 +111,9 @@ def create_category(request):
 def edit_thread(request, slug):
     thread = get_object_or_404(Thread, slug=slug)
 
-    if request.user != thread.author and not request.user.is_superuser:
+    if request.user != thread.author and not (
+        request.user.is_superuser or request.user.is_moderator
+    ):
         raise PermissionDenied("You are not allowed to edit this thread.")
 
     initial_post = thread.posts.first()
@@ -141,7 +146,9 @@ def edit_thread(request, slug):
 def edit_post(request, pk):
     post = get_object_or_404(ForumPost, pk=pk)
 
-    if request.user != post.author and not request.user.is_superuser:
+    if request.user != post.author and not (
+        request.user.is_superuser or request.user.is_moderator
+    ):
         raise PermissionDenied()
 
     if request.method == "POST":

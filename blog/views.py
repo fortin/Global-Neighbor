@@ -1,14 +1,17 @@
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.exceptions import PermissionDenied
-from django.http import HttpResponseForbidden
+from django.core.mail import send_mail
+from django.http import HttpResponseForbidden, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.text import slugify
+from django.views.decorators.http import require_POST
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 from .forms import BlogPostForm  # You'll need to create this form
-from .models import BlogCategory, BlogPost
+from .forms import BlogCommentForm
+from .models import BlogCategory, BlogComment, BlogPost
 from .serializers import BlogCategorySerializer, BlogPostSerializer
 
 
@@ -52,14 +55,57 @@ def blog_index(request):
 
 def blog_post_detail(request, slug):
     post = get_object_or_404(BlogPost, slug=slug)
-    return render(request, "blog_post.html", {"post": post})
+    comments = (
+        post.comments.filter(parent__isnull=True)
+        .select_related("author")
+        .prefetch_related("replies", "likes")
+    )
+
+    if request.method == "POST" and request.user.is_authenticated:
+        form = BlogCommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.post = post
+            comment.author = request.user
+
+            parent_id = request.POST.get("parent_id")
+            if parent_id:
+                comment.parent_id = int(parent_id)
+
+            comment.save()
+
+            # Send notification to parent comment author (if not self)
+            if comment.parent and comment.parent.author != request.user:
+                send_mail(
+                    subject="New reply to your comment",
+                    message=f"{request.user} replied to your comment on '{post.title}'",
+                    from_email="no-reply@globalneighbor.com",
+                    recipient_list=[comment.parent.author.email],
+                    fail_silently=True,
+                )
+
+            return redirect("blog:blog_post_detail", slug=slug)
+    else:
+        form = BlogCommentForm()
+
+    return render(
+        request,
+        "blog_post.html",
+        {
+            "post": post,
+            "comments": comments,
+            "comment_form": form,
+        },
+    )
 
 
 @login_required
 def edit_blog_post(request, slug):
     post = get_object_or_404(BlogPost, slug=slug)
 
-    if request.user != post.author and not request.user.is_superuser:
+    if request.user != post.author and not (
+        request.user.is_superuser or request.user.is_moderator
+    ):
         raise PermissionDenied()
 
     if request.method == "POST":
@@ -74,3 +120,68 @@ def edit_blog_post(request, slug):
         form = BlogPostForm(instance=post)
 
     return render(request, "edit_blog_post.html", {"form": form, "post": post})
+
+
+@login_required(login_url="login")
+def post_comment(request, slug):
+    post = get_object_or_404(BlogPost, slug=slug)
+
+    if request.method == "POST":
+        form = BlogCommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.post = post
+            comment.author = request.user
+            comment.save()
+            return redirect("blog:blog_post_detail", slug=slug)
+    return redirect("blog:blog_post_detail", slug=slug)
+
+
+@require_POST
+@login_required
+def like_comment(request, comment_id):
+    comment = get_object_or_404(BlogComment, id=comment_id)
+    if request.user in comment.likes.all():
+        comment.likes.remove(request.user)
+    else:
+        comment.likes.add(request.user)
+    return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
+
+
+@login_required
+def edit_comment(request, comment_id):
+    comment = get_object_or_404(BlogComment, id=comment_id)
+
+    if request.user != comment.author and not (
+        request.user.is_superuser or request.user.is_moderator
+    ):
+        raise PermissionDenied()
+
+    if request.method == "POST":
+        form = BlogCommentForm(request.POST, instance=comment)
+        if form.is_valid():
+            form.save()
+            return redirect("blog:blog_post_detail", slug=comment.post.slug)
+    else:
+        form = BlogCommentForm(instance=comment)
+
+    return render(request, "edit_comment.html", {"form": form, "comment": comment})
+
+
+@login_required
+def delete_blog_post(request, slug):
+    post = get_object_or_404(BlogPost, slug=slug)
+
+    if request.user != post.author and not (
+        request.user.is_superuser or request.user.is_moderator()
+    ):
+        raise PermissionDenied()
+
+    if request.method == "POST":
+        post.delete()
+        return redirect(
+            "blog:blog_index"
+        )  # Or wherever you want to redirect after deletion
+
+    # Optional: if you want a confirmation page
+    return redirect("blog:blog_post_detail", slug=slug)

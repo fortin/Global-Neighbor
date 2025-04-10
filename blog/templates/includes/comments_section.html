@@ -1,0 +1,73 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/comments.css' %}">
+
+<div class="comments-container">
+  <h2 class="comments-title">Comments ({{ post.comments.count }})</h2>
+
+  {% for comment in post.comments.all %}
+    {% if not comment.parent %}
+      <div class="comment-block">
+        <div class="comment-meta">
+          <strong>{{ comment.author }}</strong> • {{ comment.created|date:"F j, Y H:i" }}
+        </div>
+        <div class="comment-body">{{ comment.content }}</div>
+
+        <div class="comment-actions">
+          <form method="post" action="{% url 'blog:like_comment' comment.id %}" class="inline-form">
+            {% csrf_token %}
+            <button type="submit" class="like-button">👍 {{ comment.likes.count }}</button>
+          </form>
+          <button class="reply-toggle" data-target="reply-{{ comment.id }}">Reply</button>
+        </div>
+
+        <div id="reply-{{ comment.id }}" class="reply-form" style="display: none;">
+          <form method="post" action="{% url 'blog:add_comment' post.slug %}">
+            {% csrf_token %}
+            <input type="hidden" name="parent_id" value="{{ comment.id }}">
+            <textarea name="content" rows="2" placeholder="Write a reply..." required></textarea>
+            <button type="submit" class="btn-reply">Post Reply</button>
+          </form>
+        </div>
+
+        {% for reply in comment.replies.all %}
+          <div class="reply-block">
+            <div class="comment-meta">
+              <strong>{{ reply.author }}</strong> • {{ reply.created|date:"F j, Y H:i" }}
+            </div>
+            <div class="comment-body">{{ reply.content }}</div>
+            <div class="comment-actions">
+              <form method="post" action="{% url 'blog:like_comment' reply.id %}" class="inline-form">
+                {% csrf_token %}
+                <button type="submit" class="like-button">👍 {{ reply.likes.count }}</button>
+              </form>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% empty %}
+    <p class="no-comments">No comments yet. Be the first to comment!</p>
+  {% endfor %}
+
+  {% if request.user.is_authenticated %}
+    <div class="new-comment">
+      <h3>Leave a Comment</h3>
+      <form method="post" action="{% url 'blog:add_comment' post.slug %}" class="styled-form">
+        {% csrf_token %}
+        <textarea name="content" rows="3" placeholder="Add your comment..." required></textarea>
+        <button type="submit" class="btn-primary">Submit</button>
+      </form>
+    </div>
+  {% else %}
+    <p><a href="{% url 'login' %}">Sign in</a> to leave a comment.</p>
+  {% endif %}
+</div>
+
+<script>
+  document.querySelectorAll('.reply-toggle').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = document.getElementById(btn.dataset.target);
+      target.style.display = target.style.display === 'none' ? 'block' : 'none';
+    });
+  });
+</script>

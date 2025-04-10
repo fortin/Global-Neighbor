@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Edit Comment{% endblock %}
+
+{% block content %}
+<h1 class="form-title">Edit Your Comment</h1>
+
+<form method="post" class="styled-form">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit" class="btn btn-primary">Update Comment</button>
+  <a href="{% url 'blog:blog_post_detail' slug=comment.post.slug %}" class="btn btn-secondary">Cancel</a>
+</form>
+{% endblock %}
