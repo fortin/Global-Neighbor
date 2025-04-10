@@ -170,3 +170,61 @@ h2 i {
     margin-right: 10px;
     color: #007BFF;
 }
+
+.comment, .reply {
+    border-left: 3px solid #eee;
+    margin: 1rem 0 1rem 1rem;
+    padding-left: 1rem;
+  }
+  .reply {
+    margin-left: 2rem;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn-danger:hover {
+    background-color: #bb2d3b;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: 10% auto;
+    padding: 2rem;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    max-width: 400px;
+    text-align: center;
+}
+
+#like-section {
+    display: inline-block;
+}
+
+.like-button {
+    background: none;
+    border: none;
+    color: #007bff;
+    cursor: pointer;
+    font-size: 0.95rem;
+    padding: 0.4rem 0.6rem;
+    border-radius: 4px;
+}
+
+.like-button:hover {
+    text-decoration: underline;
+    background-color: #f0f8ff;
+}

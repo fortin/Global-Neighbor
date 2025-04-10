@@ -11,19 +11,21 @@
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 	<script>
 		document.addEventListener("DOMContentLoaded", function () {
-		  const icon = document.getElementById("search-icon");
-		  const dropdown = document.getElementById("search-dropdown");
+			const icon = document.getElementById("search-icon");
+			const dropdown = document.getElementById("search-dropdown");
 
-		  icon?.addEventListener("click", function (event) {
-			event.stopPropagation();
-			dropdown.classList.toggle("show");
-		  });
+			if (icon && dropdown) {
+				icon.addEventListener("click", function (event) {
+					event.stopPropagation();
+					dropdown.classList.toggle("show");
+			});
 
-		  document.addEventListener("click", function (e) {
-			if (!dropdown.contains(e.target)) {
-			  dropdown.classList.remove("show");
+			  document.addEventListener("click", function (e) {
+					if (!dropdown.contains(e.target)) {
+						dropdown.classList.remove("show");
+					}
+				});
 			}
-		  });
 		});
 	</script>
 	<script>
@@ -53,7 +55,7 @@
 	</a>
     <ul class="nav-links">
         <li><a href="{% url 'blog:blog_index' %}"><i class="fa-solid fa-blog"></i> Blog</a></li>
-        {% if request.user.is_authenticated and request.user.is_creator or request.user.is_superuser %}
+        {% if request.user.is_authenticated and request.user.is_creator or request.user.is_superuser or request.user.is_moderator %}
             <li><a href="{% url 'blog:create_blog_post' %}"><i class="fa-solid fa-plus"></i> New Post</a></li>
         {% endif %}
         <li><a href="{% url 'neighborhood:forum_home' %}"><i class="fa-solid fa-comments"></i> Forum</a></li>
@@ -94,3 +96,15 @@
 
 </body>
 </html>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+      document.querySelectorAll(".reply-toggle").forEach(btn => {
+        btn.addEventListener("click", function (e) {
+          e.preventDefault();
+          const form = document.getElementById(`reply-form-${this.dataset.replyId}`);
+          form.style.display = form.style.display === "none" ? "block" : "none";
+        });
+      });
+    });
+</script>

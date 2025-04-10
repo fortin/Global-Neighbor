@@ -14,7 +14,7 @@
     </a> by {{ thread.author }}
   </p>
 
-  {% if request.user == thread.author or request.user.is_superuser %}
+  {% if request.user == thread.author or request.user.is_superuser  or request.user.is_moderator %}
     <a href="{% url 'neighborhood:edit_thread' slug=thread.slug %}" class="btn btn-secondary mt-3">
       Edit Thread
     </a>

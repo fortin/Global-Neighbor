@@ -9,6 +9,7 @@ from .views import (
     forum_category,
     forum_home,
     forum_thread,
+    reorder_categories,
 )
 
 app_name = "neighborhood"
@@ -22,4 +23,5 @@ urlpatterns = [
     path("thread/<slug:thread_slug>/reply/", create_post, name="create_post"),
     path("thread/<slug:slug>/edit/", edit_thread, name="edit_thread"),
     path("post/<int:pk>/edit/", edit_post, name="edit_post"),
+    path("categories/reorder/", reorder_categories, name="reorder_categories"),
 ]

@@ -47,5 +47,5 @@ def get_latest_top_level_posts(handle=username, limit=5):
         if len(posts) >= limit:
             break
 
-    print(f"Returning {len(posts)} top-level posts")
+    # print(f"Returning {len(posts)} top-level posts")
     return posts, display_name

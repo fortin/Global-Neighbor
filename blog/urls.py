@@ -7,7 +7,13 @@ from .views import (
     blog_index,
     blog_post_detail,
     create_blog_post,
+    delete_blog_post,
     edit_blog_post,
+    edit_comment,
+    like_comment,
+    post_comment,
+    toggle_comment_like,
+    toggle_post_like,
 )
 
 app_name = "blog"
@@ -22,4 +28,13 @@ urlpatterns = [
     path("create/", create_blog_post, name="create_blog_post"),
     path("<slug:slug>/", blog_post_detail, name="blog_post_detail"),
     path("post/<slug:slug>/edit/", edit_blog_post, name="edit_blog_post"),
+    path("post/<slug:slug>/comment/", post_comment, name="post_comment"),
+    path("comment/<int:comment_id>/edit/", edit_comment, name="edit_comment"),
+    path("post/<slug:slug>/delete/", delete_blog_post, name="delete_blog_post"),
+    path("post/<int:post_id>/like/", toggle_post_like, name="toggle_post_like"),
+    path(
+        "comment/<int:comment_id>/like/",
+        toggle_comment_like,
+        name="toggle_comment_like",
+    ),
 ]

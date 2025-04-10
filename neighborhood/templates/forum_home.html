@@ -3,7 +3,15 @@
 {% block title %}Community Forum{% endblock %}
 
 {% block content %}
-<link rel="stylesheet" href="{% static 'css/forum.css' %}">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+<script>
+    const reorderUrl = "{% url 'neighborhood:reorder_categories' %}";
+    const csrfToken = "{{ csrf_token }}";
+</script>
+<script src="/static/js/forum.js"></script>
+<link rel="stylesheet" href="/static/css/forum.css">
+
 
 <div class="container">
     <div class="forum-header">
@@ -19,22 +27,19 @@
         </div>
     </div>
 
-    <div class="categories">
+    <ul class="categories" id="category-list">
         {% for category in categories %}
-            <div class="category-card">
-                <h3>
-                    <a href="{% url 'neighborhood:forum_category' category.slug %}">
-                        <i class="fas fa-folder-open"></i> {{ category.title }}
-                    </a>
-                </h3>
-                <p>{{ category.description }}</p>
-            </div>
-        {% empty %}
-            <div class="no-categories">
-                <p>No categories available.</p>
-            </div>
+            <li data-id="{{ category.id }}">
+                <div class="category-card">
+                    <h3>
+                        <a href="{% url 'neighborhood:forum_category' category.slug %}">
+                            <i class="fas fa-folder-open"></i> {{ category.title }}
+                        </a>
+                    </h3>
+                    <p>{{ category.description }}</p>
+                </div>
+            </li>
         {% endfor %}
-    </div>
+    </ul>
 </div>
-
 {% endblock %}
