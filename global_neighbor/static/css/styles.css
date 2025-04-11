@@ -431,3 +431,7 @@ label {
     margin-bottom: 0.5rem;
     color: #333;
 }
+
+.mb-4 {
+    margin-bottom: 1.5rem;
+}

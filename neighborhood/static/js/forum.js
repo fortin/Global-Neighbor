@@ -130,3 +130,13 @@ function openCategoryModal() {
 function closeCategoryModal() {
   document.getElementById("createCategoryModal").classList.add("hidden");
 }
+
+function openDeleteModal(postId) {
+  const modal = document.getElementById(`deleteModal-${postId}`);
+  if (modal) modal.classList.remove("hidden");
+}
+
+function closeDeleteModal(postId) {
+  const modal = document.getElementById(`deleteModal-${postId}`);
+  if (modal) modal.classList.add("hidden");
+}

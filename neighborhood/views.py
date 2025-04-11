@@ -196,3 +196,15 @@ def reorder_categories(request):
         return JsonResponse({"success": True})
 
     return JsonResponse({"error": "Invalid method"}, status=400)
+
+
+@login_required
+def delete_post(request, post_id):
+    post = get_object_or_404(ForumPost, id=post_id)
+    if (
+        request.user == post.author
+        or request.user.is_superuser
+        or request.user.is_moderator
+    ):
+        post.delete()
+    return redirect("neighborhood:forum_thread", slug=post.thread.slug)

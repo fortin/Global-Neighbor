@@ -4,6 +4,7 @@ from .views import (
     create_category,
     create_post,
     create_thread,
+    delete_post,
     edit_post,
     edit_thread,
     forum_category,
@@ -24,4 +25,5 @@ urlpatterns = [
     path("thread/<slug:slug>/edit/", edit_thread, name="edit_thread"),
     path("post/<int:pk>/edit/", edit_post, name="edit_post"),
     path("categories/reorder/", reorder_categories, name="reorder_categories"),
+    path("post/delete/<int:post_id>/", delete_post, name="delete_post"),
 ]

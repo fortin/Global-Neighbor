@@ -17,7 +17,7 @@
   </p>
 
   {% if request.user == thread.author or request.user.is_superuser or request.user.is_moderator %}
-    <a href="{% url 'neighborhood:edit_thread' slug=thread.slug %}" class="btn btn-secondary mt-3">
+    <a href="{% url 'neighborhood:edit_thread' slug=thread.slug %}" class="btn btn-secondary mt-3 no-underline">
       Edit Thread
     </a>
   {% endif %}
@@ -37,12 +37,34 @@
             {% endfor %}
           </p>
         {% endif %}
+        {% if request.user == post.author or request.user.is_superuser or request.user.is_moderator %}
+        <button type="button"
+                class="btn btn-danger btn-sm mt-2 mb-4 no-underline"
+                onclick="openDeleteModal({{ post.id }})">
+                <i class="fa fa-trash"></i> Delete
+        </button>
+
+        <!-- Delete Modal -->
+        <div id="deleteModal-{{ post.id }}" class="modal hidden">
+          <div class="modal-overlay" onclick="closeDeleteModal({{ post.id }})"></div>
+          <div class="modal-content fade-in">
+            <span class="close-modal" onclick="closeDeleteModal({{ post.id }})">&times;</span>
+            <h2>Confirm Deletion</h2>
+            <p>Are you sure you want to delete this post?</p>
+            <form method="post" action="{% url 'neighborhood:delete_post' post.id %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-danger">Yes, delete</button>
+              <button type="button" class="btn btn-secondary" onclick="closeDeleteModal({{ post.id }})">Cancel</button>
+            </form>
+          </div>
+        </div>
+      {% endif %}
       </div>
     {% empty %}
       <p>No posts yet.</p>
     {% endfor %}
   </div>
 
-  <a href="{% url 'neighborhood:forum_home' %}" class="btn btn-secondary mt-4">Back to Forum</a>
+  <a href="{% url 'neighborhood:forum_home' %}" class="btn btn-secondary mt-4  no-underline">Back to Forum</a>
 </div>
 {% endblock %}
