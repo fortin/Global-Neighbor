@@ -30,13 +30,15 @@
 		<li class="search-toggle">
 			<i id="search-icon" class="fas fa-search" title="Search"></i>
 			<div id="search-dropdown-container" class="search-bar">
-			  <form method="get" action="{% url 'search' %}" class="search-form">
-				<input type="text" name="q" placeholder="Search..." value="{{ request.GET.q }}">
-				<button type="submit"><i class="fas fa-search"></i></button>
-				<a href="{% url 'advanced_search' %}" class="advanced-search-link">Advanced</a>
-			  </form>
+				<form method="get" action="{% url 'search' %}" class="search-form">
+					<input type="text" name="q" placeholder="Search..." value="{{ request.GET.q }}">
+					<div class="search-actions">
+					  <button type="submit"><i class="fas fa-search"></i></button>
+					  <a href="{% url 'advanced_search' %}" class="advanced-search-link">Advanced</a>
+					</div>
+				  </form>
 			</div>
-		</li>
+		  </li>
 		{% if request.user.is_authenticated %}
 		<li>
 			<form method="post" action="{% url 'logout' %}" class="logout-form">
