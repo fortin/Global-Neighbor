@@ -4,26 +4,36 @@
 {% block title %}Create New Category{% endblock %}
 
 {% block content %}
-
 <link rel="stylesheet" href="{% static 'css/forum.css' %}">
 
 <div class="container create-category-container">
     <div class="header-section">
-        <h2><i class="fa fa-folder-plus"></i> Create New Forum Category</h2>
-        <a href="{% url 'neighborhood:forum_home' %}" class="button button-secondary"><i class="fa fa-arrow-left"></i> Back to Forum</a>
+        <h1 class="form-title">
+            <i class="fas fa-folder-plus"></i> New Forum Category
+        </h1>
+        <a href="{% url 'neighborhood:forum_home' %}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Back to Forum
+        </a>
     </div>
 
-    <form method="post" class="form-box">
+    <form method="post" class="styled-form">
         {% csrf_token %}
+
         <div class="form-group">
             {{ form.title.label_tag }}
             {{ form.title }}
         </div>
+
         <div class="form-group">
             {{ form.description.label_tag }}
             {{ form.description }}
         </div>
-        <button type="submit" class="button button-primary"><i class="fa fa-check"></i> Create Category</button>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-check"></i> Create Category
+            </button>
+        </div>
     </form>
 </div>
 {% endblock %}

@@ -6,40 +6,65 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 <script>
-    const reorderUrl = "{% url 'neighborhood:reorder_categories' %}";
-    const csrfToken = "{{ csrf_token }}";
+  const reorderUrl = "{% url 'neighborhood:reorder_categories' %}";
+  const csrfToken = "{{ csrf_token }}";
 </script>
-<script src="/static/js/forum.js"></script>
-<link rel="stylesheet" href="/static/css/forum.css">
-
+<script src="{% static 'js/forum.js' %}"></script>
+<link rel="stylesheet" href="{% static 'css/forum.css' %}">
 
 <div class="container">
-    <div class="forum-header">
-        <h1><i class="fas fa-comments"></i> Community Forum</h1>
-        <div class="forum-actions">
-            {% if request.user.is_authenticated %}
-                <a href="{% url 'neighborhood:create_thread' %}" class="btn btn-primary"><i class="fas fa-plus"></i> New Thread</a>
-            {% endif %}
+  <div class="forum-header">
+    <h1><i class="fas fa-comments"></i> Community Forum</h1>
+    <div class="forum-actions">
+      {% if request.user.is_authenticated %}
+        <a href="{% url 'neighborhood:create_thread' %}" class="btn btn-primary">
+          <i class="fas fa-plus"></i> New Thread
+        </a>
+      {% endif %}
 
-            {% if request.user.is_superuser %}
-                <a href="{% url 'neighborhood:create_category' %}" class="btn btn-secondary"><i class="fas fa-folder-plus"></i> New Category</a>
-            {% endif %}
-        </div>
+      {% if request.user.is_superuser %}
+        <button onclick="openCategoryModal()" class="btn btn-secondary">
+          <i class="fas fa-folder-plus"></i> New Category
+        </button>
+      {% endif %}
     </div>
+  </div>
 
-    <ul class="categories" id="category-list">
-        {% for category in categories %}
-            <li data-id="{{ category.id }}">
-                <div class="category-card">
-                    <h3>
-                        <a href="{% url 'neighborhood:forum_category' category.slug %}">
-                            <i class="fas fa-folder-open"></i> {{ category.title }}
-                        </a>
-                    </h3>
-                    <p>{{ category.description }}</p>
-                </div>
-            </li>
-        {% endfor %}
-    </ul>
+  <ul class="sortable-category-list" id="category-list">
+    {% for category in categories %}
+    <li data-id="{{ category.id }}">
+        <a href="{% url 'neighborhood:forum_category' category.slug %}" class="category-card-link">
+          <div class="category-card">
+            <h3><i class="fas fa-folder-open"></i> {{ category.title }}</h3>
+            <p class="category-description">{{ category.description }}</p>
+          </div>
+        </a>
+    </li>
+    {% endfor %}
+  </ul>
 </div>
+
+<!-- Modal for Creating a New Category -->
+<div id="createCategoryModal" class="modal hidden">
+  <div class="modal-overlay" onclick="closeCategoryModal()"></div>
+  <div class="modal-content fade-in">
+    <span class="close-modal" onclick="closeCategoryModal()">&times;</span>
+    <h2><i class="fa fa-folder-plus"></i> Create New Forum Category</h2>
+    <form method="post" id="createCategoryForm" action="{% url 'neighborhood:create_category' %}">
+      {% csrf_token %}
+      <div class="form-group">
+        {{ category_form.title.label_tag }}
+        {{ category_form.title }}
+      </div>
+      <div class="form-group">
+        {{ category_form.description.label_tag }}
+        {{ category_form.description }}
+      </div>
+      <button type="submit" class="btn btn-primary">
+        <i class="fa fa-check"></i> Create Category
+      </button>
+    </form>
+  </div>
+</div>
+
 {% endblock %}

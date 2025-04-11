@@ -41,3 +41,72 @@ document.addEventListener("DOMContentLoaded", () => {
       .catch(() => alert("Failed to save order."));
   }
 });
+
+
+// Optional: close when clicking outside the modal
+window.onclick = function (event) {
+  const modal = document.getElementById("createCategoryModal");
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+};
+
+document.addEventListener("DOMContentLoaded", function () {
+  const input = document.getElementById("id_content");
+  const preview = document.getElementById("markdown-preview");
+
+  function updatePreview() {
+    preview.innerHTML = marked.parse(input.value || "");
+  }
+
+  if (input && preview) {
+    input.addEventListener("input", updatePreview);
+    updatePreview();
+  }
+});
+
+function togglePreview() {
+  const textarea = document.getElementById("id_content");
+  const preview = document.getElementById("markdown-preview");
+  if (preview.classList.contains("hidden")) {
+    preview.innerHTML = marked.parse(textarea.value);
+    preview.classList.remove("hidden");
+  } else {
+    preview.classList.add("hidden");
+  }
+}
+
+// Live update as you type (optional)
+document.getElementById("id_content").addEventListener("input", function () {
+  const preview = document.getElementById("markdown-preview");
+  if (!preview.classList.contains("hidden")) {
+    preview.innerHTML = marked.parse(this.value);
+  }
+});
+
+
+function togglePreview() {
+  const textarea = document.getElementById("id_content");
+  const preview = document.getElementById("markdown-preview");
+  if (preview.classList.contains("hidden")) {
+    preview.innerHTML = marked.parse(textarea.value);
+    preview.classList.remove("hidden");
+  } else {
+    preview.classList.add("hidden");
+  }
+}
+
+document.getElementById("id_content").addEventListener("input", function () {
+  const preview = document.getElementById("markdown-preview");
+  if (!preview.classList.contains("hidden")) {
+    preview.innerHTML = marked.parse(this.value);
+  }
+});
+
+function openCategoryModal() {
+  document.getElementById("createCategoryModal").classList.remove("hidden");
+}
+
+function closeCategoryModal() {
+  document.getElementById("createCategoryModal").classList.add("hidden");
+}

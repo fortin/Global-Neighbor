@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 {% load static %}
+{% load markdownify %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -7,44 +8,8 @@
     <title>{% block title %}Global Neighbor{% endblock %}</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 	<link rel="stylesheet" href="{% static 'css/search.css' %}">
-    <link rel="icon" type="image/png" href="{% static 'images/favicon.png' %}">
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-	<script>
-		document.addEventListener("DOMContentLoaded", function () {
-			const icon = document.getElementById("search-icon");
-			const dropdown = document.getElementById("search-dropdown");
-
-			if (icon && dropdown) {
-				icon.addEventListener("click", function (event) {
-					event.stopPropagation();
-					dropdown.classList.toggle("show");
-			});
-
-			  document.addEventListener("click", function (e) {
-					if (!dropdown.contains(e.target)) {
-						dropdown.classList.remove("show");
-					}
-				});
-			}
-		});
-	</script>
-	<script>
-		document.addEventListener("DOMContentLoaded", function () {
-		  const icon = document.getElementById("search-icon");
-		  const dropdown = document.getElementById("search-dropdown-container");
-
-		  icon?.addEventListener("click", function (event) {
-			event.stopPropagation();
-			dropdown.classList.toggle("show");
-		  });
-
-		  document.addEventListener("click", function (e) {
-			if (!dropdown.contains(e.target)) {
-			  dropdown.classList.remove("show");
-			}
-		  });
-		});
-	</script>
+    <link rel="icon" type="image/png" href="{% static 'images/favicon.png' %}">
 </head>
 <body>
 
@@ -94,17 +59,10 @@
     <p>&copy; 2025 Global Neighbor. All rights reserved.</p>
 </footer>
 
+{% block extra_scripts %}
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js"></script>
+  <script src="{% static 'js/base.js' %}"></script>
+{% endblock %}
 </body>
 </html>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-      document.querySelectorAll(".reply-toggle").forEach(btn => {
-        btn.addEventListener("click", function (e) {
-          e.preventDefault();
-          const form = document.getElementById(`reply-form-${this.dataset.replyId}`);
-          form.style.display = form.style.display === "none" ? "block" : "none";
-        });
-      });
-    });
-</script>

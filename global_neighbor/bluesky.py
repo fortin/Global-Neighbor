@@ -17,7 +17,7 @@ def get_latest_bluesky_posts(limit=5):
             "limit": 10,
         },
     )
-    print(feed)
+
     posts = []
 
     for item in feed.feed:

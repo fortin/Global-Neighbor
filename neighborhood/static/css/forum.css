@@ -75,6 +75,18 @@
     line-height: 1.4;
 }
 
+.category-card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.category-card-link:hover .category-card {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+    transition: all 0.2s ease-in-out;
+}
+
 /* --- Drag Placeholder --- */
 
 .sortable-chosen {
@@ -85,6 +97,16 @@
     background-color: #f0f4ff;
     border: 2px dashed #007BFF;
     opacity: 0.6;
+}
+
+.sortable-category-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sortable-category-list li {
+    margin-bottom: 1rem;
 }
 
 /* --- No Categories --- */
@@ -124,4 +146,301 @@
 
 .btn-secondary:hover {
     background-color: #eaeaea;
+}
+
+/* --- Modal Backdrop --- */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+    animation: fadeIn 0.25s ease-in-out;
+}
+
+/* --- Modal Content Box --- */
+.modal-content {
+    background-color: #ffffff;
+    margin: 8% auto;
+    padding: 2rem;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 600px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    animation: slideIn 0.3s ease-out;
+    position: relative;
+}
+
+/* --- Close Button --- */
+.close-modal {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #888;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.close-modal:hover {
+    color: #000;
+}
+
+/* --- Form Styles Inside Modal --- */
+.modal-content form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.modal-content label {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+.modal-content input[type="text"],
+.modal-content textarea {
+    padding: 0.75rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-family: inherit;
+    width: 100%;
+}
+
+.modal-content textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+/* --- Submit Button --- */
+.modal-content .btn-primary {
+    align-self: flex-start;
+    background-color: #007BFF;
+    border: none;
+    color: white;
+    padding: 0.6rem 1.2rem;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.modal-content .btn-primary:hover {
+    background-color: #0056b3;
+}
+
+/* --- Animations --- */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideIn {
+    from {
+      transform: translateY(-20px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+/* --- New Thread Form Page --- */
+
+.form-page-container {
+    max-width: 720px;
+    margin: 4rem auto;
+    padding: 2.5rem;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+    animation: fadeIn 0.25s ease-in;
+}
+
+.form-title {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #333;
+}
+
+/* --- Styled Form Layout --- */
+  
+  .styled-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+}
+
+.styled-form .form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #444;
+}
+
+.styled-form .form-group input,
+  .styled-form .form-group textarea,
+  .styled-form .form-group select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    background: #f9f9f9;
+    font-family: inherit;
+    transition: border 0.2s ease;
+}
+
+.styled-form .form-group textarea {
+    min-height: 150px;
+    resize: vertical;
+}
+
+.styled-form .form-group input:focus,
+  .styled-form .form-group textarea:focus,
+  .styled-form .form-group select:focus {
+    border-color: #007BFF;
+    outline: none;
+    background: #fff;
+}
+
+/* --- Form Buttons --- */
+
+  .styled-form .btn {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+    border-radius: 6px;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.2s ease;
+}
+
+.styled-form .btn-primary {
+    background-color: #007BFF;
+    color: #fff;
+}
+
+.styled-form .btn-primary:hover {
+    background-color: #0056b3;
+}
+
+.styled-form .btn-secondary {
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+.styled-form .btn-secondary:hover {
+    background-color: #e0e0e0;
+}
+
+/* --- Fade In Animation --- */
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.post-content h1, .post-content h2 {
+    margin-top: 1.5rem;
+    font-weight: 600;
+}
+
+.post-content p {
+    margin: 1rem 0;
+    line-height: 1.6;
+}
+
+.post-content code {
+    background: #f4f4f4;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: monospace;
+}
+
+.post-content pre {
+    background: #f9f9f9;
+    padding: 1rem;
+    border-left: 4px solid #ccc;
+    overflow-x: auto;
+    border-radius: 6px;
+}
+
+.post-content ul {
+    padding-left: 1.5rem;
+}
+
+.post-content a {
+    color: #007bff;
+    text-decoration: underline;
+}
+
+.markdown-content {
+    line-height: 1.6;
+    font-size: 1rem;
+    color: #333;
+}
+
+.markdown-content h1,
+  .markdown-content h2,
+  .markdown-content h3 {
+    margin-top: 1rem;
+    font-weight: 600;
+}
+
+.markdown-content code {
+    background-color: #f4f4f4;
+    padding: 2px 5px;
+    border-radius: 4px;
+    font-family: monospace;
+}
+
+.markdown-content pre {
+    background: #f4f4f4;
+    padding: 0.75rem;
+    border-radius: 6px;
+    overflow-x: auto;
+}
+
+.markdown-preview {
+    border: 1px solid #ddd;
+    padding: 1rem;
+    border-radius: 6px;
+    background-color: #f9f9f9;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #333;
+}
+
+.markdown-preview h1,
+  .markdown-preview h2,
+  .markdown-preview h3 {
+    margin-top: 1rem;
+    font-weight: bold;
+}
+
+.markdown-preview pre {
+    background: #f4f4f4;
+    padding: 0.75rem;
+    border-radius: 6px;
+    overflow-x: auto;
+}
+
+.markdown-preview code {
+    background-color: #f4f4f4;
+    padding: 2px 4px;
+    border-radius: 4px;
+}
+
+.markdown-preview.hidden {
+    display: none;
 }

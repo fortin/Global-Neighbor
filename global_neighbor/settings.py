@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     "easy_thumbnails",
     "rest_framework",
     "rest_framework.authtoken",
+    "markdownify",
 ]
 
 AUTH_USER_MODEL = "global_neighbor.User"
@@ -107,6 +108,33 @@ TEMPLATES = [
         },
     },
 ]
+
+MARKDOWNIFY = {
+    "default": {
+        "WHITELIST_TAGS": [
+            "a",
+            "abbr",
+            "acronym",
+            "b",
+            "blockquote",
+            "code",
+            "em",
+            "i",
+            "li",
+            "ol",
+            "strong",
+            "ul",
+            "h1",
+            "h2",
+            "h3",
+            "p",
+            "pre",
+            "br",
+        ],
+        "WHITELIST_ATTRS": ["href", "title"],
+        "MARKDOWN_EXTENSIONS": ["fenced_code", "codehilite", "tables", "sane_lists"],
+    }
+}
 
 WSGI_APPLICATION = "global_neighbor.wsgi.application"
 # ALLOWED_HOSTS = config("ALLOWED_HOSTS", cast=Csv())
@@ -181,11 +209,8 @@ MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 # For PythonAnywhere
-STATICFILES_DIRS = [
-    os.path.join(
-        BASE_DIR, "global_neighbor/static"
-    ),  # If you have a local static folder
-]
+STATICFILES_DIRS = []
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 

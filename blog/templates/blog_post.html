@@ -1,11 +1,13 @@
 {% extends "base.html" %}
 {% load static %}
+{% load markdownify %}
 {% block title %}{{ post.title }}{% endblock %}
 
 {% block content %}
 <script src="{% static 'js/likes.js' %}"></script>
 <link rel="stylesheet" href="{% static 'css/blog.css' %}">
 <link rel="stylesheet" href="{% static 'css/comments.css' %}">
+<link rel="stylesheet" href="{% static 'css/styles.css' %}">
 
 <div class="form-page-container">
   <h1 class="form-title">{{ post.title }}</h1>
@@ -29,7 +31,7 @@
   {% endif %}
 
   <div class="post-text">
-    {{ post.content|linebreaksbr }}
+    {{ post.content|markdownify }}
   </div>
 
   {% if request.user == post.author or request.user.is_superuser or request.user.is_moderator %}
@@ -85,8 +87,20 @@
     {% if request.user.is_authenticated %}
       <form method="post" class="comment-form">
         {% csrf_token %}
-        {{ comment_form.non_field_errors }}
-        {{ comment_form.content.errors }}
+        {% if comment_form.non_field_errors %}
+        <ul class="form-errors">
+          {% for error in comment_form.non_field_errors %}
+          <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+        {% if comment_form.content.errors %}
+        <ul class="form-errors">
+          {% for error in comment_form.content.errors %}
+          <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+        {% endif %}
         {{ comment_form.content }}
         <button type="submit" class="btn btn-primary">Post Comment</button>
       </form>
@@ -101,7 +115,7 @@
             <strong>{{ comment.author }}</strong>
             <span class="comment-timestamp">· {{ comment.created|date:"M d, Y H:i" }}</span>
           </div>
-          <div class="comment-content">{{ comment.content|linebreaks }}</div>
+          <div class="comment-content">{{ comment.content|markdownify }}</div>
 
           {% if request.user.is_authenticated %}
             <button class="reply-toggle" data-reply-id="{{ comment.id }}">Reply</button>
@@ -133,7 +147,7 @@
                 <strong>{{ reply.author }}</strong>
                 <span class="comment-timestamp">· {{ reply.created|date:"M d, Y H:i" }}</span>
               </div>
-              <div class="comment-content">{{ reply.content|linebreaks }}</div>
+              <div class="comment-content">{{ reply.content|markdownify }}</div>
             </div>
           {% endfor %}
         </div>
@@ -147,27 +161,5 @@
     <a href="{% url 'blog:blog_index' %}" class="btn btn-secondary">Back to Blog</a>
   </div>
 </div>
-
-<!-- Modal + Reveal Toggle Scripts -->
-<script>
-  function confirmDeletePost() {
-    document.getElementById("deleteModal").style.display = "block";
-  }
-
-  function closeDeleteModal() {
-    document.getElementById("deleteModal").style.display = "none";
-  }
-
-  document.addEventListener("DOMContentLoaded", function () {
-    document.querySelectorAll(".reply-toggle").forEach((btn) => {
-      btn.addEventListener("click", function (e) {
-        e.preventDefault();
-        const replyId = this.dataset.replyId;
-        const form = document.getElementById(`reply-form-${replyId}`);
-        form.classList.toggle("hidden");
-      });
-    });
-  });
-</script>
 
 {% endblock %}

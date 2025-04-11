@@ -4,11 +4,13 @@
 
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/forum.css' %}">
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script src="{% static 'js/forum.js' %}"></script>
 
 <div class="form-page-container">
   <h1 class="form-title">Create a New Thread</h1>
 
-  <form method="post" class="styled-form">
+  <form method="post" class="styled-form" id="new-thread-form">
     {% csrf_token %}
 
     <div class="form-group">
@@ -24,6 +26,9 @@
     <div class="form-group">
       {{ post_form.content.label_tag }}
       {{ post_form.content }}
+      <small class="help-text">You can also use <a href="https://www.markdownguide.org/cheat-sheet/" target="_blank">Markdown</a>.</small>
+      <button type="button" class="btn btn-sm btn-secondary mt-2 ml-2" onclick="togglePreview()">Toggle Preview</button>
+      <div id="markdown-preview" class="markdown-preview hidden mt-3"></div>
     </div>
 
     <div class="form-group">

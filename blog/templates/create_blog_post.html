@@ -28,6 +28,9 @@
     <div class="form-group">
       {{ form.content.label_tag }}
       {{ form.content }}
+      <small class="help-text">You can also use <a href="https://www.markdownguide.org/cheat-sheet/" target="_blank">Markdown</a></small>
+      <button type="button" class="btn btn-sm btn-secondary mt-2 ml-2" onclick="togglePreview()">Toggle Preview</button>
+      <div id="markdown-preview" class="markdown-preview hidden mt-3"></div>
     </div>
 
     <div class="form-group">
@@ -39,4 +42,5 @@
     <a href="{% url 'blog:blog_index' %}" class="btn btn-secondary">Cancel</a>
   </form>
 </div>
+
 {% endblock %}
