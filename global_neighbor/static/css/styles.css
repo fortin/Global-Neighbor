@@ -435,3 +435,7 @@ label {
 .mb-4 {
     margin-bottom: 1.5rem;
 }
+
+.no-underline {
+    text-decoration: none !important;
+}

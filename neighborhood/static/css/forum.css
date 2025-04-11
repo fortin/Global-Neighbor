@@ -162,10 +162,6 @@
     background-color: #c82333;
 }
 
-.no-underline {
-    text-decoration: none !important;
-}
-
 .btn-danger.btn-sm {
     font-size: 0.85rem;
     padding: 0.3rem 0.6rem;

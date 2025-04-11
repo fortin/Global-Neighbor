@@ -8,8 +8,8 @@
 {% for thread in threads %}
     <div class="card mb-3">
         <div class="card-body">
-            <h5><a href="{% url 'neighborhood:forum_thread' thread.slug %}">{{ thread.title }}</a></h5>
-            <p>By {{ thread.author }} on {{ thread.created_at|date:"F j, Y" }}</p>
+            <h5><a class="no-underline" href="{% url 'neighborhood:forum_thread' thread.slug %}">{{ thread.title }}</a></h5>
+            <p>By {{ thread.author }} on {{ thread.created|date:"F j, Y" }}</p>
         </div>
     </div>
 {% empty %}
