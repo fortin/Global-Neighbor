@@ -63,6 +63,13 @@ document.addEventListener("DOMContentLoaded", function () {
     input.addEventListener("input", updatePreview);
     updatePreview();
   }
+
+  document.querySelectorAll(".clickable-card").forEach(card => {
+    card.addEventListener("click", () => {
+      const url = card.getAttribute("data-url");
+      if (url) window.location.href = url;
+    });
+  });
 });
 
 function togglePreview() {
