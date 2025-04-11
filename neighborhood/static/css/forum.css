@@ -125,3 +125,205 @@
 .btn-secondary:hover {
     background-color: #eaeaea;
 }
+
+/* --- Modal Backdrop --- */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+    animation: fadeIn 0.25s ease-in-out;
+}
+
+/* --- Modal Content Box --- */
+.modal-content {
+    background-color: #ffffff;
+    margin: 8% auto;
+    padding: 2rem;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 600px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    animation: slideIn 0.3s ease-out;
+    position: relative;
+}
+
+/* --- Close Button --- */
+.close-modal {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #888;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.close-modal:hover {
+    color: #000;
+}
+
+/* --- Form Styles Inside Modal --- */
+.modal-content form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.modal-content label {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+.modal-content input[type="text"],
+.modal-content textarea {
+    padding: 0.75rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-family: inherit;
+    width: 100%;
+}
+
+.modal-content textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+/* --- Submit Button --- */
+.modal-content .btn-primary {
+    align-self: flex-start;
+    background-color: #007BFF;
+    border: none;
+    color: white;
+    padding: 0.6rem 1.2rem;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.modal-content .btn-primary:hover {
+    background-color: #0056b3;
+}
+
+/* --- Animations --- */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideIn {
+    from {
+      transform: translateY(-20px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+/* --- New Thread Form Page --- */
+
+.form-page-container {
+    max-width: 720px;
+    margin: 4rem auto;
+    padding: 2.5rem;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+    animation: fadeIn 0.25s ease-in;
+}
+
+.form-title {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #333;
+}
+
+/* --- Styled Form Layout --- */
+  
+  .styled-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+}
+
+.styled-form .form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #444;
+}
+
+.styled-form .form-group input,
+  .styled-form .form-group textarea,
+  .styled-form .form-group select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    background: #f9f9f9;
+    font-family: inherit;
+    transition: border 0.2s ease;
+}
+
+.styled-form .form-group textarea {
+    min-height: 150px;
+    resize: vertical;
+}
+
+.styled-form .form-group input:focus,
+  .styled-form .form-group textarea:focus,
+  .styled-form .form-group select:focus {
+    border-color: #007BFF;
+    outline: none;
+    background: #fff;
+}
+
+/* --- Form Buttons --- */
+
+  .styled-form .btn {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+    border-radius: 6px;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.2s ease;
+}
+
+.styled-form .btn-primary {
+    background-color: #007BFF;
+    color: #fff;
+}
+
+.styled-form .btn-primary:hover {
+    background-color: #0056b3;
+}
+
+.styled-form .btn-secondary {
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+.styled-form .btn-secondary:hover {
+    background-color: #e0e0e0;
+}
+
+/* --- Fade In Animation --- */
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}

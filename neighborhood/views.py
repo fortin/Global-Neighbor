@@ -14,7 +14,15 @@ from .models import ForumCategory, ForumPost, Thread
 
 def forum_home(request):
     categories = ForumCategory.objects.all()
-    return render(request, "forum_home.html", {"categories": categories})
+    form = CategoryForm()
+    return render(
+        request,
+        "forum_home.html",
+        {
+            "categories": categories,
+            "category_form": form,
+        },
+    )
 
 
 def forum_category(request, slug):

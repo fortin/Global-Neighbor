@@ -22,7 +22,9 @@
             {% endif %}
 
             {% if request.user.is_superuser %}
-                <a href="{% url 'neighborhood:create_category' %}" class="btn btn-secondary"><i class="fas fa-folder-plus"></i> New Category</a>
+                <button onclick="openCategoryModal()" class="btn btn-secondary">
+                    <i class="fas fa-folder-plus"></i> New Category
+                </button>
             {% endif %}
         </div>
     </div>
@@ -42,4 +44,26 @@
         {% endfor %}
     </ul>
 </div>
+
+<!-- Modal for Creating a New Category -->
+<div id="createCategoryModal" class="modal" style="display: none;">
+    <div class="modal-content">
+      <span class="close-modal" onclick="closeCategoryModal()">&times;</span>
+      <h2><i class="fa fa-folder-plus"></i> Create New Forum Category</h2>
+      <form method="post" id="createCategoryForm" action="{% url 'neighborhood:create_category' %}">
+          {% csrf_token %}
+          <div class="form-group">
+              {{ category_form.title.label_tag }}
+              {{ category_form.title }}
+          </div>
+          <div class="form-group">
+              {{ category_form.description.label_tag }}
+              {{ category_form.description }}
+          </div>
+          <button type="submit" class="btn btn-primary">
+              <i class="fa fa-check"></i> Create Category
+          </button>
+      </form>
+    </div>
+  </div>
 {% endblock %}

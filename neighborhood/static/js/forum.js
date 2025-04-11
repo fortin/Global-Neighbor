@@ -41,3 +41,18 @@ document.addEventListener("DOMContentLoaded", () => {
       .catch(() => alert("Failed to save order."));
   }
 });
+
+function openCategoryModal() {
+  document.getElementById("createCategoryModal").style.display = "block";
+}
+function closeCategoryModal() {
+  document.getElementById("createCategoryModal").style.display = "none";
+}
+
+// Optional: close when clicking outside the modal
+window.onclick = function (event) {
+  const modal = document.getElementById("createCategoryModal");
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+};
