@@ -52,7 +52,7 @@ window.onclick = function (event) {
 };
 
 document.addEventListener("DOMContentLoaded", function () {
-  const input = document.getElementById("id_content");
+  const input = document.getElementById("id_post-content");
   const preview = document.getElementById("markdown-preview");
 
   function updatePreview() {
@@ -64,6 +64,19 @@ document.addEventListener("DOMContentLoaded", function () {
     updatePreview();
   }
 
+  // 🔧 GLOBAL toggle function
+  window.togglePreview = function () {
+
+   if (!input || !preview) return;
+
+    preview.classList.toggle("hidden");
+
+    if (!preview.classList.contains("hidden")) {
+      preview.innerHTML = marked.parse(input.value || "");
+    }
+  };
+
+  // Clickable category cards
   document.querySelectorAll(".clickable-card").forEach(card => {
     card.addEventListener("click", () => {
       const url = card.getAttribute("data-url");
