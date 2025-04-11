@@ -1,5 +1,7 @@
+{% extends "base.html" %}
 {% load static %}
 <link rel="stylesheet" href="{% static 'css/comments.css' %}">
+<script src="{% static 'js/comments.js' %}"></script>
 
 <div class="comments-container">
   <h2 class="comments-title">Comments ({{ post.comments.count }})</h2>
@@ -10,7 +12,7 @@
         <div class="comment-meta">
           <strong>{{ comment.author }}</strong> • {{ comment.created|date:"F j, Y H:i" }}
         </div>
-        <div class="comment-body">{{ comment.content }}</div>
+        <div class="comment-body">{{ comment.content|markdownify }}</div>
 
         <div class="comment-actions">
           <form method="post" action="{% url 'blog:like_comment' comment.id %}" class="inline-form">
@@ -34,7 +36,7 @@
             <div class="comment-meta">
               <strong>{{ reply.author }}</strong> • {{ reply.created|date:"F j, Y H:i" }}
             </div>
-            <div class="comment-body">{{ reply.content }}</div>
+            <div class="comment-body">{{ reply.content|markdownify }}</div>
             <div class="comment-actions">
               <form method="post" action="{% url 'blog:like_comment' reply.id %}" class="inline-form">
                 {% csrf_token %}
@@ -62,12 +64,3 @@
     <p><a href="{% url 'login' %}">Sign in</a> to leave a comment.</p>
   {% endif %}
 </div>
-
-<script>
-  document.querySelectorAll('.reply-toggle').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const target = document.getElementById(btn.dataset.target);
-      target.style.display = target.style.display === 'none' ? 'block' : 'none';
-    });
-  });
-</script>

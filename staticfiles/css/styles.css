@@ -59,8 +59,8 @@
     background-color: #fff;
     display: flex;
     flex-direction: column;
-    align-items: center;         /* center headings, icons, button */
-    text-align: center;          /* center headings, icons, button */
+    align-items: center;
+    text-align: center;
 }
 
 .card:hover {
@@ -69,7 +69,7 @@
 
 .card .post-list {
     width: 100%;
-    text-align: left;            /* left-align just the posts */
+    text-align: left;
     margin-top: 1rem;
 }
 
@@ -155,7 +155,7 @@
 .bluesky-logo {
     height: 40px;
     width: auto;
-    filter: none; /* remove grayscale */
+    filter: none;
 }
 
 .bluesky-ticker-wrapper {
@@ -186,7 +186,7 @@
     color: #333;
     min-width: max-content;
     padding-right: 1rem;
-  }
+}
 
 .ticker-text {
     line-height: 1.3;
@@ -205,14 +205,14 @@
 
 .ticker-item:hover .ticker-timestamp {
     color: #555;
-  }
+}
 
 @keyframes ticker-scroll {
     0% {
-      transform: translateX(100%);
+        transform: translateX(100%);
     }
     100% {
-      transform: translateX(-100%);
+        transform: translateX(-100%);
     }
 }
 
@@ -246,33 +246,23 @@
 }
 
 body {
-	display: flex;
-	flex-direction: column;
-	min-height: 100vh;
-	margin: 0;
-	font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+    font-family: Arial, sans-serif;
 }
 
 .navbar {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	background-color: #333;
-	padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #333;
+    padding: 1rem;
 }
 
-.navbar a {
-	color: #fff;
-	text-decoration: none;
-	margin-left: 1rem;
-}
-
-.navbar a:hover {
-	color: #ddd;
-}
-
-.navbar a,
-.logout-link {
+.navbar .nav-links a,
+.navbar .logout-link {
     color: #fff;
     text-decoration: none;
     display: flex;
@@ -286,9 +276,34 @@ body {
 }
 
 .navbar-brand {
-	font-size: 1.5rem;
-	font-weight: bold;
-	margin-left: 0;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-left: 0;
+}
+
+/* --- Navbar Branding --- */
+
+.navbar a.navbar-brand {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.navbar a.navbar-brand:visited {
+    color: #fff;
+}
+
+.navbar a.navbar-brand:hover {
+    color: #ddd;
+    text-decoration: none;
+}
+
+.navbar .brand-title {
+    font-size: 1.5rem;
+    font-weight: bold;
 }
 
 .nav-links {
@@ -307,15 +322,15 @@ body {
 }
 
 .container {
-	flex: 1;
-	padding: 2rem;
+    flex: 1;
+    padding: 2rem;
 }
 
 footer {
-	background-color: #333;
-	color: #fff;
-	text-align: center;
-	padding: 1rem;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 1rem;
 }
 
 /* --- Search --- */
@@ -341,6 +356,8 @@ footer {
     display: none;
     z-index: 1000;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    min-width: 320px;
+    width: max-content;
 }
 
 .search-dropdown.show {
@@ -352,15 +369,65 @@ footer {
     border: 1px solid #ccc;
     border-radius: 4px;
     margin-right: 0.5rem;
+    width: 100%;
+    min-width: 240px;
+    font-size: 1rem;
 }
 
 .search-form button {
     background: none;
     border: none;
     cursor: pointer;
+    color: #333;
+    font-size: 1rem;
 }
 
-.advanced-search-link {
-    margin-left: 0.5rem;
+.search-form button:hover {
+    color: #007bff;
+}
+
+.search-dropdown .advanced-search-link {
     font-size: 0.85rem;
+    margin-top: 0.5rem;
+    display: inline-block;
+    color: #007bff !important;
+    text-decoration: none;
+}
+
+.search-dropdown .advanced-search-link:hover {
+    text-decoration: underline;
+    color: #0056b3 !important;
+}
+
+.CodeMirror, .EasyMDEContainer {
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 1rem;
+}
+
+.form-errors {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1rem 0;
+    color: #b94a48;
+    font-size: 0.95rem;
+    background-color: #f9d6d5;
+    border-left: 4px solid #dc3545;
+    padding: 0.75rem 1rem;
+    border-radius: 4px;
+}
+
+.form-errors li {
+    margin-bottom: 0.5rem;
+}
+
+.form-errors li:last-child {
+    margin-bottom: 0;
+}
+
+label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #333;
 }

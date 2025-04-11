@@ -1,9 +1,11 @@
 {% extends "base.html" %}
 {% load static %}
+{% load markdownify %}
 {% block title %}{{ thread.title }} - Forum{% endblock %}
 
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/forum.css' %}">
+<script src="{% static 'js/forum.js' %}"></script>
 
 <div class="form-page-container">
   <h1 class="form-title">{{ thread.title }}</h1>
@@ -14,7 +16,7 @@
     </a> by {{ thread.author }}
   </p>
 
-  {% if request.user == thread.author or request.user.is_superuser  or request.user.is_moderator %}
+  {% if request.user == thread.author or request.user.is_superuser or request.user.is_moderator %}
     <a href="{% url 'neighborhood:edit_thread' slug=thread.slug %}" class="btn btn-secondary mt-3">
       Edit Thread
     </a>
@@ -23,7 +25,9 @@
   <div class="post-list" style="margin-top: 2rem;">
     {% for post in posts %}
       <div class="post-item">
-        <div class="post-text">{{ post.content|linebreaks }}</div>
+        <div class="post-text markdown-content">
+          {{ post.content|markdownify }}
+        </div>
         <p class="timestamp-link">Posted by {{ post.author }} on {{ post.created|date:"F j, Y" }}</p>
         {% if post.tags.exists %}
           <p class="post-tags">
