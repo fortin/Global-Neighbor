@@ -33,12 +33,10 @@
   <ul class="sortable-category-list" id="category-list">
     {% for category in categories %}
     <li data-id="{{ category.id }}">
-        <a href="{% url 'neighborhood:forum_category' category.slug %}" class="category-card-link">
-          <div class="category-card">
-            <h3><i class="fas fa-folder-open"></i> {{ category.title }}</h3>
-            <p class="category-description">{{ category.description }}</p>
-          </div>
-        </a>
+        <div class="category-card clickable-card" data-url="{% url 'neighborhood:forum_category' category.slug %}">
+          <h3><i class="fas fa-folder-open"></i> {{ category.title }}</h3>
+          <p class="category-description">{{ category.description }}</p>
+        </div>
     </li>
     {% endfor %}
   </ul>
