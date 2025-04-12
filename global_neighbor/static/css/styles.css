@@ -279,6 +279,23 @@ body {
     font-family: Arial, sans-serif;
 }
 
+.navbar {
+    background-color: #1a1a1a; /* better contrast than #333 */
+    padding: 1rem;
+}
+
+.navbar .brand-title,
+.navbar .nav-links a,
+.navbar .logout-link {
+    color: #fff;
+}
+
+.navbar .brand-title:hover,
+.navbar .nav-links a:hover,
+.navbar .logout-link:hover {
+    color: #eaeaea;
+}
+
 .navbar .nav-links a,
 .navbar .logout-link {
   color: #f1f1f1;
