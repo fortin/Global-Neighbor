@@ -5,35 +5,61 @@
 
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/forum.css' %}">
+<link rel="stylesheet" href="{% static 'css/styles.css' %}">
 
-<div class="container create-category-container">
-    <div class="header-section">
-        <h1 class="form-title">
-            <i class="fas fa-folder-plus"></i> New Forum Category
-        </h1>
-        <a href="{% url 'neighborhood:forum_home' %}" class="btn btn-secondary">
-            <i class="fas fa-arrow-left"></i> Back to Forum
-        </a>
+<div class="form-page-container" role="main" aria-labelledby="create-category-title">
+  <div class="header-section mb-4 flex justify-between items-center">
+    <h1 class="form-title" id="create-category-title">
+      <i class="fas fa-folder-plus" aria-hidden="true"></i> New Forum Category
+    </h1>
+    <a href="{% url 'neighborhood:forum_home' %}" class="btn btn-secondary no-underline">
+      <i class="fas fa-arrow-left"></i> Back to Forum
+    </a>
+  </div>
+
+  <form method="post" class="styled-form" aria-describedby="create-category-desc">
+    {% csrf_token %}
+    <p id="create-category-desc" class="sr-only">
+      Use this form to create a new discussion category in the forum.
+    </p>
+
+    {% if form.non_field_errors %}
+      <ul class="form-errors">
+        {% for error in form.non_field_errors %}
+          <li>{{ error }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+    <div class="form-group">
+      {{ form.title.label_tag }}
+      {{ form.title }}
+      {% if form.title.errors %}
+        <ul class="form-errors">
+          {% for error in form.title.errors %}
+            <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
     </div>
 
-    <form method="post" class="styled-form">
-        {% csrf_token %}
+    <div class="form-group">
+      {{ form.description.label_tag }}
+      {{ form.description }}
+      {% if form.description.errors %}
+        <ul class="form-errors">
+          {% for error in form.description.errors %}
+            <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
 
-        <div class="form-group">
-            {{ form.title.label_tag }}
-            {{ form.title }}
-        </div>
-
-        <div class="form-group">
-            {{ form.description.label_tag }}
-            {{ form.description }}
-        </div>
-
-        <div class="form-actions">
-            <button type="submit" class="btn btn-primary">
-                <i class="fas fa-check"></i> Create Category
-            </button>
-        </div>
-    </form>
+    <div class="form-actions mt-3">
+      <button type="submit" class="btn btn-primary">
+        <i class="fas fa-check"></i> Create Category
+      </button>
+    </div>
+  </form>
 </div>
 {% endblock %}

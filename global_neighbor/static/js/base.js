@@ -58,3 +58,26 @@ function confirmDeletePost() {
 function closeDeleteModal() {
     document.getElementById("deleteModal").style.display = "none";
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+    const input = document.getElementById("id_content") || document.getElementById("id_post-content");
+    const preview = document.getElementById("markdown-preview");
+
+    function updatePreview() {
+      if (input && preview) {
+        preview.innerHTML = marked.parse(input.value || "");
+      }
+    }
+
+    if (input && preview) {
+      input.addEventListener("input", updatePreview);
+      updatePreview();
+
+      window.togglePreview = function () {
+        preview.classList.toggle("hidden");
+        if (!preview.classList.contains("hidden")) {
+          updatePreview();
+        }
+      };
+    }
+});

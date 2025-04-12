@@ -3,7 +3,6 @@
 {% block title %}Community Forum{% endblock %}
 
 {% block content %}
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 <script>
   const reorderUrl = "{% url 'neighborhood:reorder_categories' %}";
@@ -12,9 +11,11 @@
 <script src="{% static 'js/forum.js' %}"></script>
 <link rel="stylesheet" href="{% static 'css/forum.css' %}">
 
-<div class="container">
+<div class="container" role="main" aria-labelledby="forum-heading">
   <div class="forum-header">
-    <h1><i class="fas fa-comments"></i> Community Forum</h1>
+    <h1 id="forum-heading">
+      <i class="fas fa-comments" aria-hidden="true"></i> Community Forum
+    </h1>
     <div class="forum-actions">
       {% if request.user.is_authenticated %}
         <a href="{% url 'neighborhood:create_thread' %}" class="btn btn-primary">
@@ -23,7 +24,7 @@
       {% endif %}
 
       {% if request.user.is_superuser %}
-        <button onclick="openCategoryModal()" class="btn btn-secondary">
+        <button onclick="openCategoryModal()" class="btn btn-secondary" aria-haspopup="dialog" aria-controls="createCategoryModal">
           <i class="fas fa-folder-plus"></i> New Category
         </button>
       {% endif %}
@@ -32,23 +33,25 @@
 
   <ul class="sortable-category-list" id="category-list">
     {% for category in categories %}
-    <li data-id="{{ category.id }}">
-        <div class="category-card clickable-card" data-url="{% url 'neighborhood:forum_category' category.slug %}">
-          <h3><i class="fas fa-folder-open"></i> {{ category.title }}</h3>
+      <li data-id="{{ category.id }}">
+        <div class="category-card clickable-card" data-url="{% url 'neighborhood:forum_category' category.slug %}" tabindex="0" role="button" aria-label="View category {{ category.title }}">
+          <h3><i class="fas fa-folder-open" aria-hidden="true"></i> {{ category.title }}</h3>
           <p class="category-description">{{ category.description }}</p>
         </div>
-    </li>
+      </li>
     {% endfor %}
   </ul>
 </div>
 
 <!-- Modal for Creating a New Category -->
-<div id="createCategoryModal" class="modal hidden">
-  <div class="modal-overlay" onclick="closeCategoryModal()"></div>
+<div id="createCategoryModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="createCategoryHeading">
+  <div class="modal-overlay" onclick="closeCategoryModal()" tabindex="-1"></div>
   <div class="modal-content fade-in">
-    <span class="close-modal" onclick="closeCategoryModal()">&times;</span>
-    <h2><i class="fa fa-folder-plus"></i> Create New Forum Category</h2>
-    <form method="post" id="createCategoryForm" action="{% url 'neighborhood:create_category' %}">
+    <span class="close-modal" onclick="closeCategoryModal()" aria-label="Close modal">&times;</span>
+    <h2 id="createCategoryHeading">
+      <i class="fa fa-folder-plus" aria-hidden="true"></i> Create New Forum Category
+    </h2>
+    <form method="post" id="createCategoryForm" action="{% url 'neighborhood:create_category' %}" class="styled-form">
       {% csrf_token %}
       <div class="form-group">
         {{ category_form.title.label_tag }}
@@ -58,11 +61,15 @@
         {{ category_form.description.label_tag }}
         {{ category_form.description }}
       </div>
-      <button type="submit" class="btn btn-primary">
-        <i class="fa fa-check"></i> Create Category
-      </button>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">
+          <i class="fa fa-check"></i> Create Category
+        </button>
+        <button type="button" class="btn btn-secondary" onclick="closeCategoryModal()">
+          <i class="fa-solid fa-xmark"></i> Cancel
+        </button>
+      </div>
     </form>
   </div>
 </div>
-
 {% endblock %}

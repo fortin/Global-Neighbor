@@ -6,12 +6,46 @@
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 
-<div class="container">
-  <h2>Register</h2>
-  <form method="post">
+<div class="form-page-container" role="main" aria-labelledby="register-title">
+  <h1 class="form-title" id="register-title">
+    <i class="fas fa-user-plus" aria-hidden="true"></i> Register
+  </h1>
+
+  <form method="post" class="styled-form" aria-describedby="register-description">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Register</button>
+    <p id="register-description" class="sr-only">
+      Fill in the form to create your Global Neighbor account.
+    </p>
+
+    {% if form.non_field_errors %}
+      <ul class="form-errors">
+        {% for error in form.non_field_errors %}
+          <li>{{ error }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+    {% for field in form.visible_fields %}
+      <div class="form-group">
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field }}
+        {% if field.help_text %}
+          <small class="help-text">{{ field.help_text }}</small>
+        {% endif %}
+        {% if field.errors %}
+          <ul class="form-errors">
+            {% for error in field.errors %}
+              <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </div>
+    {% endfor %}
+
+    <button type="submit" class="btn btn-primary">
+      <i class="fas fa-user-plus" aria-hidden="true"></i> Register
+    </button>
+    <a href="{% url 'login' %}" class="btn btn-secondary">Back to Login</a>
   </form>
 </div>
 {% endblock %}

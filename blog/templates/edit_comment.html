@@ -5,25 +5,45 @@
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/comments.css' %}">
 
-<div class="form-page-container">
-  <h1 class="form-title">Edit Your Comment</h1>
+<div class="form-page-container" role="main" aria-labelledby="edit-comment-title">
+  <h1 class="form-title" id="edit-comment-title">
+    <i class="fa-solid fa-pen-to-square" aria-hidden="true"></i> Edit Your Comment
+  </h1>
 
-  <form method="post" class="styled-form">
+  <form method="post" class="styled-form" aria-describedby="edit-comment-desc">
     {% csrf_token %}
+    <p id="edit-comment-desc" class="sr-only">Edit the content of your comment below and click update to save changes.</p>
+
+    {% if form.non_field_errors %}
+      <ul class="form-errors" role="alert">
+        {% for error in form.non_field_errors %}
+          <li>{{ error }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
 
     <div class="form-group">
-      {{ form.content.label_tag }}
+      <label for="{{ form.content.id_for_label }}">Comment</label>
       {{ form.content }}
+      {% if form.content.help_text %}
+        <small class="help-text">{{ form.content.help_text }}</small>
+      {% endif %}
       {% if form.content.errors %}
-        <div class="form-errors">
-          {{ form.content.errors }}
-        </div>
+        <ul class="form-errors">
+          {% for error in form.content.errors %}
+            <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
       {% endif %}
     </div>
 
     <div class="form-actions">
-      <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Update</button>
-      <a href="{% url 'blog:blog_post_detail' slug=comment.post.slug %}" class="btn btn-secondary">Cancel</a>
+      <button type="submit" class="btn btn-primary">
+        <i class="fa-solid fa-floppy-disk"></i> Update
+      </button>
+      <a href="{% url 'blog:blog_post_detail' slug=comment.post.slug %}" class="btn btn-secondary no-underline">
+        <i class="fa-solid fa-xmark"></i> Cancel
+      </a>
     </div>
   </form>
 </div>

@@ -12,33 +12,37 @@
     <link rel="icon" type="image/png" href="{% static 'images/favicon.png' %}">
 </head>
 <body>
+	<a href="#main-content" class="skip-link">Skip to main content</a>
 
-<nav class="navbar">
+<nav class="navbar" role="navigation" aria-label="Main Navigation">
 	<a class="navbar-brand" href="{% url 'home' %}">
 		<img src="{% static 'images/favicon.png' %}" alt="Global Neighbor Logo" class="logo">
 		<span class="brand-title">Global Neighbor</span>
 	</a>
     <ul class="nav-links">
-        <li><a href="{% url 'blog:blog_index' %}"><i class="fa-solid fa-blog"></i> Blog</a></li>
+        <li><a href="{% url 'blog:blog_index' %}"><i class="fa-solid fa-blog" aria-hidden="true"></i> <span>Blog</span></a></li>
         {% if request.user.is_authenticated and request.user.is_creator or request.user.is_superuser or request.user.is_moderator %}
-            <li><a href="{% url 'blog:create_blog_post' %}"><i class="fa-solid fa-plus"></i> New Post</a></li>
+            <li><a href="{% url 'blog:create_blog_post' %}"><i class="fa-solid fa-plus" aria-hidden="true"></i> <span>New Post</span></a></li>
         {% endif %}
-        <li><a href="{% url 'neighborhood:forum_home' %}"><i class="fa-solid fa-comments"></i> Forum</a></li>
+        <li><a href="{% url 'neighborhood:forum_home' %}"><i class="fa-solid fa-comments" aria-hidden="true"></i> <span>Forum</span></a></li>
         {% if request.user.is_authenticated and request.user.is_superuser %}
-        <li><a href="{% url 'admin:index' %}"><i class="fa-solid fa-user-cog"></i> Admin</a></li>
+        <li><a href="{% url 'admin:index' %}"><i class="fa-solid fa-user-cog" aria-hidden="true"></i> <span>Admin</span></a></li>
         {% endif %}
 		<li class="search-toggle">
-			<i id="search-icon" class="fas fa-search" title="Search"></i>
-			<div id="search-dropdown-container" class="search-bar">
+			<button id="search-icon" class="search-button" aria-label="Open search" aria-haspopup="true" aria-expanded="false">
+				<i class="fas fa-search" aria-hidden="true"></i>
+			</button>
+			<div id="search-dropdown-container" class="search-bar" role="search">
 				<form method="get" action="{% url 'search' %}" class="search-form">
-					<input type="text" name="q" placeholder="Search..." value="{{ request.GET.q }}">
+					<label for="search-input" class="visually-hidden">Search</label>
+					<input type="text" name="q" id="search-input" placeholder="Search..." value="{{ request.GET.q }}">
 					<div class="search-actions">
-					  <button type="submit"><i class="fas fa-search"></i></button>
+					  <button type="submit" aria-label="Submit search"><i class="fas fa-search" aria-hidden="true"></i></button>
 					  <a href="{% url 'advanced_search' %}" class="advanced-search-link">Advanced</a>
 					</div>
-				  </form>
+				</form>
 			</div>
-		  </li>
+		</li>
 		{% if request.user.is_authenticated %}
 		<li>
 			<form method="post" action="{% url 'logout' %}" class="logout-form">
@@ -53,9 +57,9 @@
     </ul>
 </nav>
 
-<div class="container">
+<main id="main-content" class="container" tabindex="-1">
     {% block content %}{% endblock %}
-</div>
+</main>
 
 <footer>
     <p>&copy; 2025 Global Neighbor. All rights reserved.</p>
@@ -64,6 +68,7 @@
 {% block extra_scripts %}
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.css">
   <script src="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script src="{% static 'js/base.js' %}"></script>
 {% endblock %}
 </body>

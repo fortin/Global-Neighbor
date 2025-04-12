@@ -1,17 +1,36 @@
 {% extends "base.html" %}
 {% load static %}
 {% block title %}Confirm Registration{% endblock %}
+
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 
-<h2>Enter OTP</h2>
-<p>A verification email has been sent to your email. Enter the OTP below:</p>
-<form method="post">
+<div class="form-page-container" role="main" aria-labelledby="otp-title">
+  <h1 class="form-title" id="otp-title">
+    <i class="fas fa-envelope-open-text" aria-hidden="true"></i> Confirm Registration
+  </h1>
+
+  <p class="mb-4" id="otp-description">
+    A verification email has been sent. Please enter the OTP (One-Time Password) to complete registration.
+  </p>
+
+  <form method="post" class="styled-form" aria-describedby="otp-description">
     {% csrf_token %}
-    <input type="text" name="otp" placeholder="Enter OTP" required>
-    <button type="submit">Verify</button>
-</form>
-{% if error %}
-<p style="color: red;">{{ error }}</p>
-{% endif %}
+    <div class="form-group">
+      <label for="otp">OTP</label>
+      <input type="text" name="otp" id="otp" placeholder="Enter OTP" required class="form-control">
+    </div>
+
+    {% if error %}
+      <ul class="form-errors">
+        <li>{{ error }}</li>
+      </ul>
+    {% endif %}
+
+    <button type="submit" class="btn btn-primary">Verify</button>
+    <a href="{% url 'register' %}" class="btn btn-secondary">
+        <i class="fa-solid fa-arrow-left"></i> Back to Register
+    </a>
+  </form>
+</div>
 {% endblock %}
