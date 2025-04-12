@@ -45,12 +45,15 @@
 
 <!-- Modal for Creating a New Category -->
 <div id="createCategoryModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="createCategoryHeading">
-  <div class="modal-overlay" onclick="closeCategoryModal()" tabindex="-1"></div>
-  <div class="modal-content fade-in">
-    <span class="close-modal" onclick="closeCategoryModal()" aria-label="Close modal">&times;</span>
+  <div class="modal-overlay" onclick="closeModal('createCategoryModal')" tabindex="-1"></div>
+
+  <div class="modal-content fade-in" role="document">
+    <button class="close-modal" onclick="closeModal('createCategoryModal')" aria-label="Close modal">&times;</button>
+
     <h2 id="createCategoryHeading">
       <i class="fa fa-folder-plus" aria-hidden="true"></i> Create New Forum Category
     </h2>
+
     <form method="post" id="createCategoryForm" action="{% url 'neighborhood:create_category' %}" class="styled-form">
       {% csrf_token %}
       <div class="form-group">
@@ -65,7 +68,7 @@
         <button type="submit" class="btn btn-primary">
           <i class="fa fa-check"></i> Create Category
         </button>
-        <button type="button" class="btn btn-secondary" onclick="closeCategoryModal()">
+        <button type="button" class="btn btn-secondary" onclick="closeModal('createCategoryModal')">
           <i class="fa-solid fa-xmark"></i> Cancel
         </button>
       </div>

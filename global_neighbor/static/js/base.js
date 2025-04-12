@@ -81,3 +81,85 @@ document.addEventListener("DOMContentLoaded", function () {
       };
     }
 });
+
+function togglePreview() {
+    const textarea = document.getElementById("id_content");
+    const preview = document.getElementById("markdown-preview");
+
+    if (!textarea || !preview) return;
+
+    const isHidden = preview.classList.contains("hidden");
+
+    if (isHidden) {
+      const markdownText = textarea.value;
+      const html = marked.parse(markdownText);
+      preview.innerHTML = html;
+      preview.classList.remove("hidden");
+    } else {
+      preview.classList.add("hidden");
+    }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    const textarea = document.querySelector("textarea[name='content']");
+    const preview = document.getElementById("markdown-preview");
+
+    if (textarea && preview) {
+      textarea.addEventListener("input", () => {
+        if (!preview.classList.contains("hidden")) {
+          preview.innerHTML = marked.parse(textarea.value);
+        }
+      });
+    }
+});
+
+function openModal(modalId, focusSelector = null) {
+    const modal = document.getElementById(modalId);
+    if (!modal) return;
+
+    modal.classList.remove('hidden');
+    modal.setAttribute('aria-hidden', 'false');
+
+    const focusTarget = focusSelector
+      ? modal.querySelector(focusSelector)
+      : modal.querySelector('input, button, textarea, [tabindex]:not([tabindex="-1"])');
+
+    focusTarget?.focus();
+    trapFocus(modal);
+}
+
+function closeModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (!modal) return;
+
+    modal.classList.add('hidden');
+    modal.setAttribute('aria-hidden', 'true');
+}
+
+function trapFocus(modal) {
+    const focusable = modal.querySelectorAll('a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex]:not([tabindex="-1"])');
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+
+    modal.addEventListener('keydown', function (e) {
+      if (e.key === 'Tab') {
+        if (e.shiftKey && document.activeElement === first) {
+          last.focus();
+          e.preventDefault();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          first.focus();
+          e.preventDefault();
+        }
+      }
+    });
+}
+
+document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') {
+      const openModals = document.querySelectorAll('.modal:not(.hidden)');
+      openModals.forEach(modal => {
+        modal.classList.add('hidden');
+        modal.setAttribute('aria-hidden', 'true');
+      });
+    }
+});
