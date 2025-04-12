@@ -19,7 +19,7 @@
         <i class="fas fa-blog"></i>
       </div>
       <h2 id="blog-section-title">Community Blog</h2>
-      <a class="button-link" href="{% url 'blog:blog_index' %}" aria-label="Explore Community Blog">Explore Blog</a>
+      <a class="button-link" href="{% url 'blog:blog_index' %}" aria-label="Explore Blog">Explore Blog</a>
       <div class="post-list">
         {% for post in latest_blog_posts %}
           <article class="post-item">
@@ -38,7 +38,7 @@
         <i class="fas fa-comments"></i>
       </div>
       <h2 id="forum-section-title">Community Forum</h2>
-      <a class="button-link" href="{% url 'neighborhood:forum_home' %}" aria-label="Visit Community Forum">Visit Forum</a>
+      <a class="button-link" href="{% url 'neighborhood:forum_home' %}" aria-label="Visit Forum">Visit Forum</a>
       <div class="post-list">
         {% for post in latest_forum_posts %}
           <article class="post-item">

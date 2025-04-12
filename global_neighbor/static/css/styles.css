@@ -112,7 +112,7 @@
 .button-link {
     display: inline-block;
     background-color: #0056b3;
-    color: #fff;
+    color: #ffffff;
     font-weight: 600;
     font-size: 1rem;
     padding: 0.5rem 1.1rem;
@@ -124,7 +124,7 @@
 .button-link:hover,
 .button-link:focus {
     background-color: #003f88;
-    color: #fff;
+    color: #ffffff;
     outline: 2px solid #80bdff;
     outline-offset: 2px;
 }
@@ -215,12 +215,13 @@
 }
 
 .ticker-text {
+    color: #333 !important;
     line-height: 1.3;
 }
 
 .ticker-timestamp {
     font-size: 0.75rem;
-    color: #888;
+    color: #333 !important;
     margin-top: 0.2rem;
 }
 
@@ -287,7 +288,8 @@ body {
 .navbar .brand-title,
 .navbar .nav-links a,
 .navbar .logout-link {
-    color: #fff;
+    color: #f1f1f1 !important;
+    font-weight: 600;
 }
 
 .navbar .brand-title:hover,
@@ -304,7 +306,8 @@ body {
 
 .navbar .nav-links a:hover,
 .logout-link:hover {
-  color: #dddddd;
+    color: #ffffff !important;
+    text-decoration: underline;
 }
 
 .navbar a:hover,
@@ -548,7 +551,10 @@ body {
     clip: rect(0, 0, 0, 0);
     white-space: nowrap;
     border: 0;
-}
+    color: #000 !important; /* Force color for audit tools */
+    background: #fff; /* Optional: better for certain validators */
+  }
+
 
 .skip-link {
     position: absolute;
