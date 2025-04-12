@@ -140,8 +140,12 @@ input[name="tags"] {
 
 .button-secondary,
 .styled-form .btn-secondary {
-    background-color: #f0f0f0;
-    color: #333;
+    background-color: #e0e0e0; /* slightly darker for better contrast */
+    color: #111; /* near-black for stronger contrast */
+}
+
+.styled-form .btn-secondary:hover {
+    background-color: #ccc;
 }
 
 .button:hover,
@@ -273,7 +277,7 @@ h2 i {
 
 .blog-meta {
     font-size: 0.85rem;
-    color: #666;
+    color: #444;
     margin-bottom: 1rem;
 }
 

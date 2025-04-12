@@ -4,7 +4,8 @@
 <script src="{% static 'js/comments.js' %}"></script>
 
 <div class="comments-container">
-  <h2 class="comments-title">Comments ({{ post.comments.count }})</h2>
+  <h2 class="sr-only" id="comment-section-heading">Comments</h2>
+  <div class="comments-section" role="region" aria-labelledby="comment-section-heading">
 
   {% for comment in post.comments.all %}
     {% if not comment.parent %}

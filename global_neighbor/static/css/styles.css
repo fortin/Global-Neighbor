@@ -109,19 +109,45 @@
     color: #007bff;
 }
 
+.button-link {
+    display: inline-block;
+    background-color: #0056b3;
+    color: #fff;
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 0.5rem 1.1rem;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.button-link:hover,
+.button-link:focus {
+    background-color: #003f88;
+    color: #fff;
+    outline: 2px solid #80bdff;
+    outline-offset: 2px;
+}
+
 .card a.button-link {
     display: inline-block;
     margin-top: 1rem;
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 1.1rem;
     border-radius: 5px;
     text-decoration: none;
-    background-color: #007bff;
-    color: white;
-    transition: background-color 0.3s;
+    background-color: #0056b3; /* darker blue for contrast */
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: background-color 0.3s, color 0.3s;
 }
 
-.card a.button-link:hover {
-    background-color: #0056b3;
+.card a.button-link:hover,
+.card a.button-link:focus {
+    background-color: #003f88; /* even darker on hover */
+    color: #ffffff;
+    outline: 2px solid #80bdff;
+    outline-offset: 2px;
 }
 
 .post-text {
@@ -253,21 +279,15 @@ body {
     font-family: Arial, sans-serif;
 }
 
-.navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #333;
-    padding: 1rem;
-}
-
 .navbar .nav-links a,
 .navbar .logout-link {
-    color: #fff;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
+  color: #f1f1f1;
+  font-weight: 600;
+}
+
+.navbar .nav-links a:hover,
+.logout-link:hover {
+  color: #dddddd;
 }
 
 .navbar a:hover,
@@ -279,6 +299,16 @@ body {
     font-size: 1.5rem;
     font-weight: bold;
     margin-left: 0;
+}
+
+a:focus,
+button:focus,
+input:focus,
+textarea:focus
+.category-card:focus,
+.close-modal:focus {
+    outline: 2px solid #007bff;
+    outline-offset: 2px;
 }
 
 /* --- Navbar Branding --- */
