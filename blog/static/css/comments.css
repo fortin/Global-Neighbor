@@ -28,7 +28,7 @@
 }
 
 .comment-timestamp {
-  color: #888;
+  color: #555;
   font-size: 0.8rem;
 }
 
@@ -40,6 +40,8 @@
 .reply-toggle {
   font-size: 0.85rem;
   color: #007bff;
+  outline: 2px dashed #007bff;
+  outline-offset: 2px;
   background: none;
   border: none;
   cursor: pointer;
@@ -116,12 +118,12 @@
 }
 
 .btn-secondary {
-  background-color: #6c757d;
-  color: white;
+  background-color: #495057;
+  color: #fff;
 }
 
 .btn-secondary:hover {
-  background-color: #555e65;
+  background-color: #343a40;
 }
 
 .form-page-container {

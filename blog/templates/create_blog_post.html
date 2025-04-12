@@ -1,46 +1,65 @@
 {% extends "base.html" %}
 {% load static %}
+{% load markdownify %}
 {% block title %}Create New Post{% endblock %}
 
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/blog.css' %}">
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+<script src="{% static 'js/base.js' %}"></script>
+<script src="{% static 'js/forum.js' %}"></script>
 
-<div class="form-page-container">
-  <h1 class="form-title">Create a New Blog Post</h1>
+<div class="form-page-container" role="main" aria-labelledby="create-blog-title">
+  <h1 class="form-title" id="create-blog-title">
+    <i class="fa-solid fa-pen-nib" aria-hidden="true"></i> Create a New Blog Post
+  </h1>
 
   {% if form.errors %}
-    <p style="color: red;">Please fix the errors below.</p>
+    <ul class="form-errors" role="alert">
+      <li>Please fix the errors below:</li>
+    </ul>
   {% endif %}
 
-  <form method="post" enctype="multipart/form-data" class="styled-form">
+  <form method="post" enctype="multipart/form-data" class="styled-form" aria-describedby="create-blog-description">
     {% csrf_token %}
+    <p id="create-blog-description" class="sr-only">Use the form below to publish a new blog post with optional image and tags.</p>
+
+    {% for field in form.visible_fields %}
+      <div class="form-group">
+        {{ field.label_tag }}
+        {{ field }}
+        {% if field.help_text %}
+          <small class="help-text">{{ field.help_text }}</small>
+        {% endif %}
+        {% if field.errors %}
+          <ul class="form-errors">
+            {% for error in field.errors %}
+              <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </div>
+    {% endfor %}
 
     <div class="form-group">
-      {{ form.title.label_tag }}
-      {{ form.title }}
+      <small class="help-text">
+        You can also use <a href="https://www.markdownguide.org/cheat-sheet/" target="_blank" rel="noopener noreferrer">Markdown</a>.
+      </small>
+      <button type="button" class="btn btn-sm btn-secondary mt-2 ml-2 no-underline" onclick="togglePreview()">
+        <i class="fa-solid fa-eye"></i> Toggle Preview
+      </button>
+      <div id="markdown-preview" class="markdown-preview hidden mt-3" aria-live="polite"></div>
     </div>
 
-    <div class="form-group">
-      {{ form.image.label_tag }}
-      {{ form.image }}
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">
+        <i class="fa-solid fa-upload"></i> Publish
+      </button>
+      <a href="{% url 'blog:blog_index' %}" class="btn btn-secondary no-underline">
+        <i class="fa-solid fa-xmark"></i> Cancel
+      </a>
     </div>
-
-    <div class="form-group">
-      {{ form.content.label_tag }}
-      {{ form.content }}
-      <small class="help-text">You can also use <a href="https://www.markdownguide.org/cheat-sheet/" target="_blank">Markdown</a></small>
-      <button type="button" class="btn btn-sm btn-secondary mt-2 ml-2" onclick="togglePreview()">Toggle Preview</button>
-      <div id="markdown-preview" class="markdown-preview hidden mt-3"></div>
-    </div>
-
-    <div class="form-group">
-      {{ form.tags.label_tag }}
-      {{ form.tags }}
-    </div>
-
-    <button type="submit" class="btn btn-primary">Publish</button>
-    <a href="{% url 'blog:blog_index' %}" class="btn btn-secondary">Cancel</a>
   </form>
 </div>
-
 {% endblock %}

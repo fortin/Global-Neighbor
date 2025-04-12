@@ -140,8 +140,12 @@ input[name="tags"] {
 
 .button-secondary,
 .styled-form .btn-secondary {
-    background-color: #f0f0f0;
-    color: #333;
+    background-color: #e0e0e0; /* slightly darker for better contrast */
+    color: #111; /* near-black for stronger contrast */
+}
+
+.styled-form .btn-secondary:hover {
+    background-color: #ccc;
 }
 
 .button:hover,
@@ -227,4 +231,67 @@ h2 i {
 .like-button:hover {
     text-decoration: underline;
     background-color: #f0f8ff;
+}
+
+.blog-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+.blog-card {
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+    max-width: 320px;
+    flex: 1 1 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+.blog-card:hover {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    transform: translateY(-4px);
+}
+
+.blog-card h2 {
+    font-size: 1.25rem;
+    margin-bottom: 0.6rem;
+    color: #222;
+}
+
+.blog-card h2 a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.blog-card h2 a:hover {
+    color: #007bff;
+    text-decoration: underline;
+}
+
+.blog-meta {
+    font-size: 0.85rem;
+    color: #444;
+    margin-bottom: 1rem;
+}
+
+.blog-preview {
+    flex-grow: 1;
+    font-size: 0.95rem;
+    color: #333;
+    line-height: 1.5;
+    margin-bottom: 1.2rem;
+}
+
+.no-results {
+    text-align: center;
+    color: #777;
+    font-style: italic;
+    margin-top: 2rem;
 }

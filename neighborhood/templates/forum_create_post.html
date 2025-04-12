@@ -7,30 +7,61 @@
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <script src="{% static 'js/forum.js' %}"></script>
 
-<div class="form-page-container">
-  <h1 class="form-title">Reply to Thread: {{ thread.title }}</h1>
+<div class="form-page-container" role="main" aria-labelledby="reply-title">
+  <h1 class="form-title" id="reply-title">
+    <i class="fas fa-reply" aria-hidden="true"></i> Reply to: {{ thread.title }}
+  </h1>
 
-  <form method="post" class="styled-form">
+  <form method="post" class="styled-form" aria-describedby="reply-instructions">
     {% csrf_token %}
+    <p id="reply-instructions" class="sr-only">
+      Fill in the content of your reply and optionally add tags.
+    </p>
+
+    {% if form.non_field_errors %}
+      <ul class="form-errors">
+        {% for error in form.non_field_errors %}
+          <li>{{ error }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
 
     <div class="form-group">
       {{ form.content.label_tag }}
       {{ form.content }}
-    </div>
-
-    <div class="form-group">
-      <label>Live Preview</label>
-      <div id="markdown-preview" class="markdown-preview-box"></div>
+      {% if form.content.errors %}
+        <ul class="form-errors">
+          {% for error in form.content.errors %}
+            <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+      <small class="help-text">Supports <a href="https://www.markdownguide.org/cheat-sheet/" target="_blank">Markdown</a>.</small>
+      <button type="button" class="btn btn-sm btn-secondary mt-2 ml-2" onclick="togglePreview()">
+        <i class="fa-solid fa-eye"></i> Toggle Preview
+      </button>
+      <div id="markdown-preview" class="markdown-preview hidden mt-3"></div>
     </div>
 
     <div class="form-group">
       {{ form.tags.label_tag }}
       {{ form.tags }}
+      {% if form.tags.errors %}
+        <ul class="form-errors">
+          {% for error in form.tags.errors %}
+            <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
     </div>
 
     <div class="form-actions">
-      <button type="submit" class="btn btn-primary">Post Reply</button>
-      <a href="{% url 'neighborhood:forum_thread' thread.slug %}" class="btn btn-secondary">Back to Thread</a>
+      <button type="submit" class="btn btn-primary">
+        <i class="fas fa-paper-plane"></i> Post Reply
+      </button>
+      <a href="{% url 'neighborhood:forum_thread' thread.slug %}" class="btn btn-secondary no-underline">
+        <i class="fa-solid fa-arrow-left"></i> Back to Thread
+      </a>
     </div>
   </form>
 </div>

@@ -1,18 +1,36 @@
 {% extends "base.html" %}
+{% load static %}
+
 {% block title %}{{ category.title }} - Forum{% endblock %}
 
 {% block content %}
-<h1>{{ category.title }}</h1>
-<p>Threads:</p>
+<link rel="stylesheet" href="{% static 'css/forum.css' %}">
+<link rel="stylesheet" href="{% static 'css/styles.css' %}">
 
-{% for thread in threads %}
-    <div class="card mb-3">
-        <div class="card-body">
-            <h5><a href="{% url 'neighborhood:forum_thread' thread.slug %}">{{ thread.title }}</a></h5>
-            <p>By {{ thread.author }} on {{ thread.created_at|date:"F j, Y" }}</p>
+<div class="form-page-container" role="main" aria-labelledby="category-title">
+  <h1 class="form-title" id="category-title">
+    <i class="fa-solid fa-folder-open" aria-hidden="true"></i> {{ category.title }}
+  </h1>
+
+  {% if threads %}
+    <div class="styled-list" aria-label="Thread list">
+      {% for thread in threads %}
+        <div class="card mb-3">
+          <div class="card-body">
+            <h2 class="card-title">
+              <a href="{% url 'neighborhood:forum_thread' thread.slug %}" class="no-underline">
+                {{ thread.title }}
+              </a>
+            </h2>
+            <p class="timestamp-link">By {{ thread.author }} on {{ thread.created|date:"F j, Y" }}</p>
+          </div>
         </div>
+      {% endfor %}
     </div>
-{% empty %}
-    <p>No threads in this category.</p>
-{% endfor %}
+  {% else %}
+    <p class="no-threads" style="margin-top: 2rem; color: #777;">
+      No threads in this category yet.
+    </p>
+  {% endif %}
+</div>
 {% endblock %}

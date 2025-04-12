@@ -13,13 +13,12 @@ from django.urls import reverse
 from django.utils.timezone import localtime
 from taggit.models import Tag
 
-from blog.models import BlogCategory, BlogPost
+from blog.models import BlogCategory, BlogPost, User
 from global_neighbor.bluesky import get_latest_bluesky_posts
 from neighborhood.models import ForumPost, Thread
 
 from .bluesky_utils import get_latest_top_level_posts
 from .forms import RegistrationForm
-from .models import User
 
 
 def home(request):
@@ -168,68 +167,36 @@ def search(request):
 
 
 def advanced_search(request):
-    query = request.GET.get("q", "").strip()
-    scope = request.GET.get("scope", "")
-    selected_tag = request.GET.get("tag", "")
-    selected_category = request.GET.get("category", "")
+    query = request.GET.get("q") or request.GET.get("search") or ""
+    scope = request.GET.get("scope")
+    tags = request.GET.get("tags", "")
+    category = request.GET.get("category")
 
-    blog_results = BlogPost.objects.all()
-    forum_threads = Thread.objects.all()
-    forum_posts = ForumPost.objects.all()
-    tags = Tag.objects.all()
-    categories = BlogCategory.objects.all().values_list("name", flat=True)
+    blog_results = []
+    forum_threads = []
+    forum_posts = []
 
-    def parse_query(text):
-        terms = text.split()
-        q = Q()
-        current_op = Q.__or__
+    if query.strip():
+        if not scope or scope == "all" or scope == "blog":
+            blog_results = BlogPost.objects.filter(title__icontains=query)
 
-        for term in terms:
-            if term.upper() == "AND":
-                current_op = Q.__and__
-            elif term.upper() == "OR":
-                current_op = Q.__or__
-            elif term.upper() == "NOT" or term.startswith("-"):
-                term = (
-                    term[1:]
-                    if term.startswith("-")
-                    else terms.pop(terms.index(term) + 1)
-                )
-                q &= ~Q(name__icontains=term) & ~Q(content__icontains=term)
-            else:
-                term = term[1:] if term.startswith("+") else term
-                q = current_op(q, Q(name__icontains=term) | Q(content__icontains=term))
-        return q
+        if not scope or scope == "all" or scope == "forum":
+            forum_threads = Thread.objects.filter(title__icontains=query)
+            forum_posts = ForumPost.objects.filter(content__icontains=query)
 
-    if query:
-        q_filter = parse_query(query)
+        # Optional: filter by tag or category here
+        # if tags: ...
+        # if category: ...
 
-        tag_string = request.GET.get("tags", "").strip()
-        if tag_string:
-            tag_list = [tag.strip() for tag in tag_string.split(",") if tag.strip()]
-            if tag_list:
-                if scope in ("", "blog"):
-                    blog_results = blog_results.filter(
-                        tags__name__in=tag_list
-                    ).distinct()
-                if scope in ("", "forum"):
-                    forum_posts = forum_posts.filter(tags__name__in=tag_list).distinct()
+    context = {
+        "query": query,
+        "scope": scope,
+        "blog_results": blog_results,
+        "forum_threads": forum_threads,
+        "forum_posts": forum_posts,
+    }
 
-    return render(
-        request,
-        "search/advanced_search.html",
-        {
-            "query": query,
-            "scope": scope,
-            "selected_tag": selected_tag,
-            "selected_category": selected_category,
-            "tags": tags,
-            "categories": categories,
-            "blog_results": blog_results,
-            "forum_threads": forum_threads,
-            "forum_posts": forum_posts,
-        },
-    )
+    return render(request, "search/advanced_search.html", context)
 
 
 @login_required()

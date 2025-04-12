@@ -1,48 +1,58 @@
 {% extends "base.html" %}
 {% load static %}
+{% load markdownify %}
 {% block title %}Search Results{% endblock %}
 
 {% block content %}
+<link rel="stylesheet" href="{% static 'css/search.css' %}">
 
 <h1 class="form-title">Search Results for "{{ query }}"</h1>
 
 {% if blog_results or forum_posts or forum_threads %}
-  <div class="search-results">
+<div class="search-results-grid">
+  <div class="result-column">
     {% if blog_results %}
-      <h3>Blog Posts</h3>
-      <ul class="post-list">
-        {% for post in blog_results %}
-          <li class="post-item">
-            <a href="{% url 'blog:blog_post_detail' slug=post.slug %}">{{ post.title }}</a>
-          </li>
-        {% endfor %}
-      </ul>
-    {% endif %}
-
-    {% if forum_threads %}
-      <h3>Forum Threads</h3>
-      <ul class="post-list">
-        {% for thread in forum_threads %}
-          <li class="post-item">
-            <a href="{% url 'neighborhood:forum_thread' slug=thread.slug %}">{{ thread.title }}</a>
-          </li>
-        {% endfor %}
-      </ul>
-    {% endif %}
-
-    {% if forum_posts %}
-      <h3>Forum Posts</h3>
-      <ul class="post-list">
-        {% for post in forum_posts %}
-          <li class="post-item">
-            <a href="{% url 'neighborhood:forum_thread' slug=post.thread.slug %}">
-              {{ post.content|truncatewords:10 }}
-            </a>
-          </li>
-        {% endfor %}
-      </ul>
+      <div class="result-group">
+        <h3 class="result-heading">Blog Posts</h3>
+        <div class="result-grid">
+          {% for post in blog_results %}
+            <div class="result-card">
+              <a class="result-link" href="{% url 'blog:blog_post_detail' slug=post.slug %}">
+                <div class="result-snippet">{{ post.title }}</div>
+              </a>
+              <div class="result-meta">
+                Posted by <strong>{{ post.author }}</strong>
+                on {{ post.created|date:"M d, Y H:i" }}
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    {% else %}
+      <div class="result-group empty-placeholder">No blog results.</div>
     {% endif %}
   </div>
+
+    {% if forum_posts %}
+    <div class="result-group">
+      <h3 class="result-heading">Forum Posts</h3>
+      <div class="result-grid">
+        {% for post in forum_posts %}
+          <div class="result-card">
+            <a class="result-link" href="{% url 'neighborhood:forum_thread' slug=post.thread.slug %}">
+              <div class="result-snippet">{{ post.content|markdownify|truncatewords:25 }}</div>
+            </a>
+            <div class="result-meta">
+              Posted by <strong>{{ post.author }}</strong>
+              on {{ post.created|date:"M d, Y H:i" }}
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</div>
 {% else %}
   <p>No results found.</p>
 {% endif %}

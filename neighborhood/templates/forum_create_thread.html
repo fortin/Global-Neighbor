@@ -1,43 +1,93 @@
 {% extends "base.html" %}
 {% load static %}
+{% load markdownify %}
 {% block title %}New Thread - Forum{% endblock %}
 
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/forum.css' %}">
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 <script src="{% static 'js/forum.js' %}"></script>
+<script src="{% static 'js/base.js' %}"></script>
 
-<div class="form-page-container">
-  <h1 class="form-title">Create a New Thread</h1>
+<div class="form-page-container" role="main" aria-labelledby="new-thread-title">
+  <h1 class="form-title" id="new-thread-title">
+    <i class="fas fa-comments" aria-hidden="true"></i> Create a New Thread
+  </h1>
 
-  <form method="post" class="styled-form" id="new-thread-form">
+  <form method="post" class="styled-form" id="new-thread-form" aria-describedby="thread-description">
     {% csrf_token %}
+    <p id="thread-description" class="sr-only">Start a new conversation by providing a title, category, and your opening post.</p>
+
+    {% if thread_form.non_field_errors %}
+      <ul class="form-errors">
+        {% for error in thread_form.non_field_errors %}
+          <li>{{ error }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
 
     <div class="form-group">
       {{ thread_form.title.label_tag }}
       {{ thread_form.title }}
+      {% if thread_form.title.errors %}
+        <ul class="form-errors">
+          {% for error in thread_form.title.errors %}
+            <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
     </div>
 
     <div class="form-group">
       {{ thread_form.category.label_tag }}
       {{ thread_form.category }}
+      {% if thread_form.category.errors %}
+        <ul class="form-errors">
+          {% for error in thread_form.category.errors %}
+            <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
     </div>
 
     <div class="form-group">
       {{ post_form.content.label_tag }}
       {{ post_form.content }}
-      <small class="help-text">You can also use <a href="https://www.markdownguide.org/cheat-sheet/" target="_blank">Markdown</a>.</small>
-      <button type="button" class="btn btn-sm btn-secondary mt-2 ml-2" onclick="togglePreview()">Toggle Preview</button>
+      {% if post_form.content.errors %}
+        <ul class="form-errors">
+          {% for error in post_form.content.errors %}
+            <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+      <small class="help-text">You can use <a href="https://www.markdownguide.org/cheat-sheet/" target="_blank">Markdown</a> formatting.</small>
+      <button type="button" class="btn btn-sm btn-secondary mt-2 ml-2" onclick="togglePreview()">
+        <i class="fa-solid fa-eye"></i> Toggle Preview
+      </button>
       <div id="markdown-preview" class="markdown-preview hidden mt-3"></div>
     </div>
 
     <div class="form-group">
       {{ post_form.tags.label_tag }}
       {{ post_form.tags }}
+      {% if post_form.tags.errors %}
+        <ul class="form-errors">
+          {% for error in post_form.tags.errors %}
+            <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
     </div>
 
-    <button type="submit" class="btn btn-primary">Create Thread</button>
-    <a href="{% url 'neighborhood:forum_home' %}" class="btn btn-secondary">Cancel</a>
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">
+        <i class="fa-solid fa-plus"></i> Create Thread
+      </button>
+      <a href="{% url 'neighborhood:forum_home' %}" class="btn btn-secondary no-underline">
+        <i class="fa-solid fa-xmark"></i> Cancel
+      </a>
+    </div>
   </form>
 </div>
 {% endblock %}

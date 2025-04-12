@@ -7,8 +7,8 @@
 <link rel="stylesheet" href="{% static 'css/forum.css' %}">
 <script src="{% static 'js/forum.js' %}"></script>
 
-<div class="form-page-container">
-  <h1 class="form-title">{{ thread.title }}</h1>
+<div class="form-page-container" role="main" aria-labelledby="thread-heading">
+  <h1 class="form-title" id="thread-heading">{{ thread.title }}</h1>
 
   <p class="timestamp-link">
     In <a href="{% url 'neighborhood:forum_category' thread.category.slug %}" class="bsky-handle">
@@ -17,25 +17,57 @@
   </p>
 
   {% if request.user == thread.author or request.user.is_superuser or request.user.is_moderator %}
-    <a href="{% url 'neighborhood:edit_thread' slug=thread.slug %}" class="btn btn-secondary mt-3">
-      Edit Thread
-    </a>
   {% endif %}
 
   <div class="post-list" style="margin-top: 2rem;">
     {% for post in posts %}
-      <div class="post-item">
+      <div class="post-item" style="border: 1px solid #e1e4e8; padding: 1.5rem; margin-bottom: 2rem; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); background-color: #fff;">
         <div class="post-text markdown-content">
           {{ post.content|markdownify }}
         </div>
-        <p class="timestamp-link">Posted by {{ post.author }} on {{ post.created|date:"F j, Y" }}</p>
+        <p class="timestamp-link" style="margin-top: 1rem; color: #666; font-size: 0.9rem;">
+          Posted by {{ post.author }} on {{ post.created|date:"F j, Y" }}
+        </p>
         {% if post.tags.exists %}
-          <p class="post-tags">
+          <p class="post-tags" style="margin-top: 0.5rem;">
             <strong>Tags:</strong>
             {% for tag in post.tags.all %}
-              <span class="tag">{{ tag.name }}</span>{% if not forloop.last %}, {% endif %}
+              <span class="tag" style="background-color: #eef2f7; padding: 3px 8px; border-radius: 6px; margin-right: 4px; font-size: 0.85rem;">
+                {{ tag.name }}
+              </span>
             {% endfor %}
           </p>
+        {% endif %}
+
+        {% if request.user == post.author or request.user.is_superuser or request.user.is_moderator %}
+        <div class="form-actions" style="margin-top: 1.25rem;">
+          <a href="{% url 'neighborhood:edit_thread' slug=thread.slug %}" class="btn btn-secondary mt-3 mb-4 mr-2 no-underline">
+            <i class="fa fa-edit"></i> Edit Thread
+          </a>
+          <button type="button"
+                  class="btn btn-danger btn-sm no-underline"
+                  onclick="openDeleteModal({{ post.id }})"
+                  aria-haspopup="dialog" aria-controls="deleteModal-{{ post.id }}">
+            <i class="fa fa-trash"></i> Delete
+          </button>
+        </div>
+
+        <!-- Delete Modal -->
+        <div id="deleteModal-{{ post.id }}" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="deleteHeading-{{ post.id }}">
+          <div class="modal-overlay" onclick="closeDeleteModal({{ post.id }})" tabindex="-1"></div>
+          <div class="modal-content fade-in">
+            <span class="close-modal" onclick="closeDeleteModal({{ post.id }})" aria-label="Close modal">&times;</span>
+            <h2 id="deleteHeading-{{ post.id }}">
+              <i class="fa fa-trash" aria-hidden="true"></i> Confirm Deletion
+            </h2>
+            <p>Are you sure you want to delete this post?</p>
+            <form method="post" action="{% url 'neighborhood:delete_post' post.id %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-danger">Yes, delete</button>
+              <button type="button" class="btn btn-secondary" onclick="closeDeleteModal({{ post.id }})">Cancel</button>
+            </form>
+          </div>
+        </div>
         {% endif %}
       </div>
     {% empty %}
@@ -43,6 +75,8 @@
     {% endfor %}
   </div>
 
-  <a href="{% url 'neighborhood:forum_home' %}" class="btn btn-secondary mt-4">Back to Forum</a>
+  <a href="{% url 'neighborhood:forum_home' %}" class="btn btn-secondary mt-4 no-underline">
+    <i class="fa-solid fa-arrow-left"></i> Back to Forum
+  </a>
 </div>
 {% endblock %}
