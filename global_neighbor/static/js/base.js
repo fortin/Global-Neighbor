@@ -33,23 +33,25 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Initialize EasyMDE
     setTimeout(() => {
-        document.querySelectorAll("textarea[id^='id_content']").forEach((el) => {
-            new EasyMDE({
-                element: el,
-                forceSync: true,
-                spellChecker: false,
-                status: false,
-                toolbar: [
-                    "bold", "italic", "heading", "|",
-                    "quote", "unordered-list", "ordered-list", "|",
-                    "link", "image", "|",
-                    "preview", "side-by-side", "fullscreen", "|",
-                    "guide"
-                ]
-            });
-        });
-    }, 100);
-});
+      document.querySelectorAll("textarea[id^='id_content']").forEach((el) => {
+          if (!el.classList.contains("easymde-applied")) {
+              new EasyMDE({
+                  element: el,
+                  forceSync: true,
+                  spellChecker: false,
+                  status: false,
+                  toolbar: [
+                      "bold", "italic", "heading", "|",
+                      "quote", "unordered-list", "ordered-list", "|",
+                      "link", "image", "|",
+                      "preview", "side-by-side", "fullscreen", "|",
+                      "guide"
+                  ]
+              });
+              el.classList.add("easymde-applied");
+          }
+      });
+}, 100);
 
 function confirmDeletePost() {
     document.getElementById("deleteModal").style.display = "block";
