@@ -25,7 +25,34 @@
     {% csrf_token %}
     <p id="create-blog-description" class="sr-only">Use the form below to publish a new blog post with optional image and tags.</p>
 
-    {% for field in form.visible_fields %}
+<!-- Title field -->
+<div class="form-group">
+  {{ form.title.label_tag }}
+  {{ form.title }}
+  {% if form.title.errors %}
+    <ul class="form-errors">
+      {% for error in form.title.errors %}
+        <li>{{ error }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+</div>
+
+<!-- Content field (EasyMDE will enhance this) -->
+<div class="form-group">
+  {{ form.content.label_tag }}
+  {{ form.content }}
+  {% if form.content.errors %}
+    <ul class="form-errors">
+      {% for error in form.content.errors %}
+        <li>{{ error }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+</div>
+
+  {% for field in form.visible_fields %}
+    {% if field.name != "title" and field.name != "content" %}
       <div class="form-group">
         {{ field.label_tag }}
         {{ field }}
@@ -40,7 +67,8 @@
           </ul>
         {% endif %}
       </div>
-    {% endfor %}
+    {% endif %}
+  {% endfor %}
 
     <div class="form-group">
       <small class="help-text">
