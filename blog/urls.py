@@ -12,6 +12,8 @@ from .views import (
     edit_comment,
     like_comment,
     post_comment,
+    tag_autocomplete,
+    tag_suggestions,
     toggle_comment_like,
     toggle_post_like,
 )
@@ -37,4 +39,6 @@ urlpatterns = [
         toggle_comment_like,
         name="toggle_comment_like",
     ),
+    path("tags/suggest/", tag_suggestions, name="tag_suggestions"),
+    path("api/tags/", tag_autocomplete, name="tag_autocomplete"),
 ]

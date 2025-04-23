@@ -34,7 +34,9 @@ def home(request):
             "url": reverse("blog:blog_post_detail", kwargs={"slug": post.slug}),
         }
         for post in latest_blog_posts
-    ]
+    ][
+        :2
+    ]  # limit to 2 after digest is built
 
     forum_digest = [
         {
@@ -45,7 +47,9 @@ def home(request):
             ),
         }
         for post in latest_forum_posts
-    ]
+    ][
+        :2
+    ]  # limit to 2 after digest is built
 
     context = {
         "bluesky_posts": bluesky_posts,

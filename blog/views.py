@@ -14,9 +14,10 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.utils.text import slugify
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_GET, require_POST
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from taggit.models import Tag
 
 from .forms import BlogPostForm  # You'll need to create this form
 from .forms import BlogCommentForm
@@ -229,3 +230,23 @@ def toggle_comment_like(request, comment_id):
         else:
             return redirect(comment.post.get_absolute_url())
     return HttpResponseBadRequest("Invalid request.")
+
+
+@require_GET
+def tag_suggestions(request):
+    q = request.GET.get("q", "").strip()
+    if not q:
+        return JsonResponse([], safe=False)
+
+    tags = Tag.objects.filter(name__icontains=q).values_list("name", flat=True)[:10]
+    return JsonResponse(list(tags), safe=False)
+
+
+def tag_autocomplete(request):
+    q = request.GET.get("q", "").strip()
+    suggestions = list(
+        Tag.objects.filter(name__istartswith=q)
+        .values_list("name", flat=True)
+        .distinct()
+    )[:10]
+    return JsonResponse(suggestions, safe=False)

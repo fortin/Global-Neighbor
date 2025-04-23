@@ -1,57 +1,116 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // Search toggle
-    const icon = document.getElementById("search-icon");
-    const dropdown = document.getElementById("search-dropdown-container");
-    if (icon && dropdown) {
-        icon.addEventListener("click", function (event) {
-            event.stopPropagation();
-            dropdown.classList.toggle("show");
-        });
-        document.addEventListener("click", function (e) {
-            if (!dropdown.contains(e.target)) {
-                dropdown.classList.remove("show");
-            }
-        });
-    }
+  // Search toggle
+  const icon = document.getElementById("search-icon");
+  const dropdown = document.getElementById("search-dropdown-container");
+  if (icon && dropdown) {
+    icon.addEventListener("click", function (event) {
+      event.stopPropagation();
+      dropdown.classList.toggle("show");
+    });
+    document.addEventListener("click", function (e) {
+      if (!dropdown.contains(e.target)) {
+        dropdown.classList.remove("show");
+      }
+    });
+  }
 
-    // Reply toggles
-    document.querySelectorAll(".reply-toggle").forEach((btn) => {
-        btn.addEventListener("click", function (e) {
-            e.preventDefault();
-            const replyId = this.dataset.replyId;
-            const form = document.getElementById(`reply-form-${replyId}`);
-            if (form) form.classList.toggle("hidden");
+  // Reply toggles
+  document.querySelectorAll(".reply-toggle").forEach((btn) => {
+    btn.addEventListener("click", function (e) {
+      e.preventDefault();
+      const replyId = this.dataset.replyId;
+      const form = document.getElementById(`reply-form-${replyId}`);
+      if (form) form.classList.toggle("hidden");
+    });
+  });
+
+  // Delete confirmation
+  const deleteModal = document.getElementById("deleteModal");
+  if (deleteModal) {
+    window.confirmDeletePost = () => (deleteModal.style.display = "block");
+    window.closeDeleteModal = () => (deleteModal.style.display = "none");
+  }
+
+  // EasyMDE
+  setTimeout(() => {
+    document.querySelectorAll("textarea[id^='id_content']").forEach((el) => {
+      if (!el.classList.contains("easymde-applied")) {
+        new EasyMDE({
+          element: el,
+          forceSync: true,
+          spellChecker: false,
+          status: false,
+          toolbar: [
+            "bold", "italic", "heading", "|",
+            "quote", "unordered-list", "ordered-list", "|",
+            "link", "image", "|",
+            "preview", "side-by-side", "fullscreen", "|",
+            "guide"
+          ]
         });
+        el.classList.add("easymde-applied");
+      }
+    });
+  }, 100);
+
+  // ✅ Tag Autocomplete
+  const tagInput = document.getElementById("id_tags");
+  if (tagInput) {
+    const availableTags = [
+      "community", "education", "sustainability", "art", "science",
+      "health", "technology", "politics", "climate", "philosophy"
+    ]; // Replace or load dynamically if needed
+
+    const suggestionBox = document.createElement("ul");
+    suggestionBox.className = "tag-suggestions";
+    suggestionBox.style.position = "absolute";
+    suggestionBox.style.zIndex = 1000;
+    suggestionBox.style.background = "#fff";
+    suggestionBox.style.border = "1px solid #ccc";
+    suggestionBox.style.borderRadius = "4px";
+    suggestionBox.style.padding = "0.5rem";
+    suggestionBox.style.display = "none";
+    suggestionBox.style.listStyle = "none";
+
+    tagInput.parentNode.appendChild(suggestionBox);
+
+    tagInput.addEventListener("input", function () {
+      const input = tagInput.value.split(",").pop().trim().toLowerCase();
+      suggestionBox.innerHTML = "";
+      if (!input) {
+        suggestionBox.style.display = "none";
+        return;
+      }
+
+      const matches = availableTags.filter(tag =>
+        tag.toLowerCase().startsWith(input)
+      );
+
+      matches.forEach(tag => {
+        const item = document.createElement("li");
+        item.textContent = tag;
+        item.style.cursor = "pointer";
+        item.style.padding = "0.25rem 0";
+        item.addEventListener("click", () => {
+          const parts = tagInput.value.split(",");
+          parts[parts.length - 1] = tag; // Replace last part
+          tagInput.value = parts.join(", ").replace(/\s*,\s*/g, ", ").trim() + ", ";
+          suggestionBox.style.display = "none";
+        });
+        suggestionBox.appendChild(item);
+      });
+
+      suggestionBox.style.display = matches.length ? "block" : "none";
     });
 
-    // Delete confirmation
-    const deleteModal = document.getElementById("deleteModal");
-    if (deleteModal) {
-        window.confirmDeletePost = () => (deleteModal.style.display = "block");
-        window.closeDeleteModal = () => (deleteModal.style.display = "none");
-    }
-
-    // Initialize EasyMDE
-    setTimeout(() => {
-      document.querySelectorAll("textarea[id^='id_content']").forEach((el) => {
-          if (!el.classList.contains("easymde-applied")) {
-              new EasyMDE({
-                  element: el,
-                  forceSync: true,
-                  spellChecker: false,
-                  status: false,
-                  toolbar: [
-                      "bold", "italic", "heading", "|",
-                      "quote", "unordered-list", "ordered-list", "|",
-                      "link", "image", "|",
-                      "preview", "side-by-side", "fullscreen", "|",
-                      "guide"
-                  ]
-              });
-              el.classList.add("easymde-applied");
-          }
-      });
-}, 100);
+    // Hide suggestions if clicked outside
+    document.addEventListener("click", (e) => {
+      if (!suggestionBox.contains(e.target) && e.target !== tagInput) {
+        suggestionBox.style.display = "none";
+      }
+    });
+  }
+});
 
 function confirmDeletePost() {
     document.getElementById("deleteModal").style.display = "block";

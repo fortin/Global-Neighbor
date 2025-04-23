@@ -8,7 +8,29 @@
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 <script src="{% static 'js/base.js' %}"></script>
+<script src="{% static 'js/blog.js' %}"></script>
 <script src="{% static 'js/forum.js' %}"></script>
+
+<style>
+  .autocomplete-suggestions {
+    border: 1px solid #ccc;
+    background: white;
+    position: absolute;
+    z-index: 1000;
+    max-height: 200px;
+    overflow-y: auto;
+    border-radius: 6px;
+    width: 100%;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  .autocomplete-suggestion {
+    padding: 0.5rem 0.75rem;
+    cursor: pointer;
+  }
+  .autocomplete-suggestion:hover {
+    background-color: #f0f8ff;
+  }
+</style>
 
 <div class="form-page-container" role="main" aria-labelledby="create-blog-title">
   <h1 class="form-title" id="create-blog-title">
@@ -23,52 +45,56 @@
 
   <form method="post" enctype="multipart/form-data" class="styled-form" aria-describedby="create-blog-description">
     {% csrf_token %}
-    <p id="create-blog-description" class="sr-only">Use the form below to publish a new blog post with optional image and tags.</p>
+    <p id="create-blog-description" class="sr-only">
+      Use the form below to publish a new blog post with optional image and tags.
+    </p>
 
-<!-- Title field -->
-<div class="form-group">
-  {{ form.title.label_tag }}
-  {{ form.title }}
-  {% if form.title.errors %}
-    <ul class="form-errors">
-      {% for error in form.title.errors %}
-        <li>{{ error }}</li>
-      {% endfor %}
-    </ul>
-  {% endif %}
-</div>
+    <!-- Title field -->
+    <div class="form-group">
+      {{ form.title.label_tag }}
+      {{ form.title }}
+      {% if form.title.errors %}
+        <ul class="form-errors">
+          {% for error in form.title.errors %}
+            <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
 
-<!-- Content field (EasyMDE will enhance this) -->
-<div class="form-group">
-  {{ form.content.label_tag }}
-  {{ form.content }}
-  {% if form.content.errors %}
-    <ul class="form-errors">
-      {% for error in form.content.errors %}
-        <li>{{ error }}</li>
-      {% endfor %}
-    </ul>
-  {% endif %}
-</div>
+    <!-- Content field (EasyMDE will enhance this) -->
+    <div class="form-group">
+      {{ form.content.label_tag }}
+      {{ form.content }}
+      {% if form.content.errors %}
+        <ul class="form-errors">
+          {% for error in form.content.errors %}
+            <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
 
-  {% for field in form.visible_fields %}
-    {% if field.name != "title" and field.name != "content" %}
-      <div class="form-group">
-        {{ field.label_tag }}
-        {{ field }}
-        {% if field.help_text %}
-          <small class="help-text">{{ field.help_text }}</small>
-        {% endif %}
-        {% if field.errors %}
-          <ul class="form-errors">
-            {% for error in field.errors %}
-              <li>{{ error }}</li>
-            {% endfor %}
-          </ul>
-        {% endif %}
-      </div>
-    {% endif %}
-  {% endfor %}
+    <!-- Remaining visible fields (e.g., tags) -->
+    {% for field in form.visible_fields %}
+      {% if field.name != "title" and field.name != "content" %}
+        <div class="form-group" style="position: relative;">
+          {{ field.label_tag }}
+          {{ field }}
+          <div id="tag-suggestions" class="autocomplete-suggestions hidden"></div>
+          {% if field.help_text %}
+            <small class="help-text">{{ field.help_text }}</small>
+          {% endif %}
+          {% if field.errors %}
+            <ul class="form-errors">
+              {% for error in field.errors %}
+                <li>{{ error }}</li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        </div>
+      {% endif %}
+    {% endfor %}
 
     <div class="form-group">
       <small class="help-text">
@@ -86,4 +112,61 @@
     </div>
   </form>
 </div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const tagInput = document.getElementById("id_tags");
+    const suggestionBox = document.getElementById("tag-suggestions");
+
+    if (!tagInput || !suggestionBox) return;
+
+    let allTags = [];
+
+    fetch("/api/tags/")
+      .then((res) => res.json())
+      .then((data) => {
+        allTags = data.tags || data;
+      });
+
+    tagInput.addEventListener("input", () => {
+      const inputValue = tagInput.value.split(",").pop().trim().toLowerCase();
+
+      suggestionBox.innerHTML = "";
+
+      if (!inputValue) return suggestionBox.classList.add("hidden");
+
+      const existingTags = tagInput.value
+        .split(",")
+        .map((t) => t.trim().toLowerCase())
+        .filter(Boolean);
+
+      const matches = allTags.filter(
+        (tag) => tag.toLowerCase().startsWith(inputValue) && !existingTags.includes(tag.toLowerCase())
+      );
+
+      if (!matches.length) return suggestionBox.classList.add("hidden");
+
+      suggestionBox.classList.remove("hidden");
+      matches.slice(0, 8).forEach((match) => {
+        const div = document.createElement("div");
+        div.textContent = match;
+        div.classList.add("autocomplete-suggestion");
+        div.addEventListener("mousedown", (e) => {
+          e.preventDefault();
+          const parts = tagInput.value.split(",");
+          parts[parts.length - 1] = match;
+          tagInput.value = parts.map((p) => p.trim()).filter(Boolean).join(", ") + ", ";
+          suggestionBox.classList.add("hidden");
+        });
+        suggestionBox.appendChild(div);
+      });
+    });
+
+    document.addEventListener("click", (e) => {
+      if (!suggestionBox.contains(e.target) && e.target !== tagInput) {
+        suggestionBox.classList.add("hidden");
+      }
+    });
+  });
+</script>
 {% endblock %}
