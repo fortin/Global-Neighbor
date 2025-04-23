@@ -155,8 +155,3 @@
     font-family: inherit;
     min-height: 120px;
 }
-
-.form-actions {
-    display: flex;
-    gap: 1rem;
-}

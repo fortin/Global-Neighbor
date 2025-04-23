@@ -535,6 +535,13 @@ footer {
     margin-bottom: 0;
 }
 
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    flex-wrap: wrap;
+}
+
 label {
     display: block;
     font-weight: 600;
