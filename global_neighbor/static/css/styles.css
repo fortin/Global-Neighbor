@@ -593,6 +593,48 @@ body {
     margin-right: 1rem;
 }
 
+.ml-2 {
+    margin-left: 1rem;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    font-weight: 500;
+    min-width: 120px;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    border: none;
+}
+
+.btn-primary {
+    background-color: #4285f4;
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background-color: #357ae8;
+}
+
+.btn-secondary {
+    background-color: #e0e0e0;
+    color: #111;
+}
+
+.btn-secondary:hover {
+    background-color: #ccc;
+}
+
+.no-underline {
+    text-decoration: none;
+}
+
+
 .no-underline {
     text-decoration: none !important;
 }
