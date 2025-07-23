@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}{{ document.title }}{% endblock %}
+
+{% block content %}
+<div class="document-detail-container">
+  <h1 class="page-title">{{ document.title }}</h1>
+
+  <p class="doc-meta">
+    {% if document.author %}<strong>Author:</strong> {{ document.author }}<br>{% endif %}
+    {% if document.source %}<strong>Source:</strong> {{ document.source }}<br>{% endif %}
+    <strong>Uploaded by:</strong> {{ document.uploaded_by }}<br>
+    <strong>Downloads:</strong> {{ document.download_count }}
+  </p>
+
+  <div class="document-actions" style="margin-top: 1.5rem;">
+    <a href="{% url 'download_document' document.id %}" class="btn btn-primary">
+      <i class="fa fa-download"></i> Download
+    </a>
+    {% if request.user == document.uploaded_by or request.user.is_superuser %}
+      <a href="{% url 'edit_document' document.id %}" class="btn btn-secondary">
+        <i class="fa fa-pen"></i> Edit
+      </a>
+      <a href="{% url 'delete_document' document.id %}" class="btn btn-secondary">
+        <i class="fa fa-trash"></i> Delete
+      </a>
+    {% endif %}
+  </div>
+
+  <div class="pdf-viewer">
+    <iframe src="{{ document.file.url }}" width="100%" height="700px" style="border: none;">
+      This browser does not support PDFs. Please download the PDF to view it:
+      <a href="{{ document.file.url }}">Download PDF</a>
+    </iframe>
+  </div>
+
+</div>
+{% endblock %}

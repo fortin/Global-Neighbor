@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 
-from .models import User
+from .models import Document, User
 
 
 class RegistrationForm(UserCreationForm):
@@ -17,3 +17,18 @@ class RegistrationForm(UserCreationForm):
         if commit:
             user.save()
         return user
+
+
+class DocumentUploadForm(forms.ModelForm):
+    class Meta:
+        model = Document
+        fields = ["title", "author", "source", "category", "tags", "file"]
+        widgets = {
+            "tags": forms.TextInput(attrs={"placeholder": "Comma-separated tags"}),
+        }
+
+
+class DocumentForm(forms.ModelForm):
+    class Meta:
+        model = Document
+        fields = ["title", "author", "source", "category", "tags"]

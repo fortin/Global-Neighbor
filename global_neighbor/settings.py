@@ -61,6 +61,7 @@ INSTALLED_APPS = [
 AUTH_USER_MODEL = "global_neighbor.User"
 
 MIDDLEWARE = [
+    "global_neighbor.middleware.PDFAllowIframeMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",

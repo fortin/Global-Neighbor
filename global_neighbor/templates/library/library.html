@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Library{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/library.css' %}">
+
+<div class="library-container">
+  <h1 class="page-title">Library</h1>
+
+  <div class="library-controls">
+    <input type="text" id="library-search" placeholder="Search documents..." oninput="filterDocuments()">
+    <select id="category-filter" onchange="filterDocuments()">
+      <option value="">All Categories</option>
+      {% for category in categories %}
+        <option value="{{ category.name }}">{{ category.name }}</option>
+      {% endfor %}
+    </select>
+    <input type="text" id="tag-filter" placeholder="Filter by tag..." oninput="filterDocuments()">
+
+    <div class="view-toggle">
+      <button id="list-view-btn" class="btn btn-secondary active" onclick="setLibraryView('list')">
+        <i class="fa fa-list"></i>
+      </button>
+      <button id="thumb-view-btn" class="btn btn-secondary" onclick="setLibraryView('thumbnails')">
+        <i class="fa fa-th"></i>
+      </button>
+    </div>
+  </div>
+
+  {% if request.user.role == 'creator' or request.user.is_superuser %}
+  <button type="button" class="btn btn-primary upload-btn" onclick="openUploadModal()">
+    <i class="fa-solid fa-upload"></i> Upload Document
+  </button>
+  {% endif %}
+
+<div id="document-list-container" class="document-list-view">
+  {% for doc in documents %}
+    <div class="document-card"
+         data-title="{{ doc.title|default_if_none:"Untitled Document" }}"
+         data-author="{{ doc.author|default_if_none:"" }}"
+         data-category="{{ doc.category.name|default_if_none:"" }}"
+         data-tags="{% for tag in doc.tags.all %}{{ tag.name }}{% if not forloop.last %} {% endif %}{% endfor %}">
+
+      <a href="{% url 'document_detail' doc.id %}" class="document-title">
+        <strong>{{ doc.title|default:"Untitled Document" }}</strong><br />
+        <div class="doc-author">by {{ doc.author }}</div>
+      </a>
+
+      <div class="document-meta">
+        {% if doc.author %}
+          <span class="doc-author">by {{ doc.author }}</span>
+        {% endif %}
+        {% if doc.source %}
+          <div class="doc-source">{{ doc.source }}</div>
+        {% endif %}
+      </div>
+
+      {% if doc.category %}
+        <div class="doc-category">{{ doc.category.name }}</div>
+      {% endif %}
+
+      {% if doc.tags.all %}
+        <div class="doc-tags">
+          {% for tag in doc.tags.all %}
+            <span class="tag">{{ tag.name }}</span>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      <div class="doc-actions">
+        <a href="{% url 'download_document' doc.id %}" class="action-btn" title="Download">
+          <i class="fa fa-download"></i>
+        </a>
+        {% if request.user == doc.uploaded_by or request.user.is_superuser %}
+          <a href="{% url 'edit_document' doc.id %}" class="action-btn" title="Edit metadata">
+            <i class="fa fa-pen"></i>
+          </a>
+          <a href="{% url 'delete_document' doc.id %}" class="action-btn" title="Delete">
+            <i class="fa fa-trash"></i>
+          </a>
+        {% endif %}
+      </div>
+
+    </div>
+  {% empty %}
+    <p>No documents available.</p>
+  {% endfor %}
+</div>
+</div>
+
+{% include "library/library_upload_modal.html" %}
+
+<script src="{% static 'js/library/library_upload_modal.js' %}"></script>
+<script src="{% static 'js/library/library_controls.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,31 @@
+<!-- library/category_modal.html -->
+<div id="categoryModal" class="modal hidden" role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="modal-content">
+    <h2 class="form-title">Manage Categories</h2>
+
+    <div id="category-list">
+      {% for category in categories %}
+        <div class="category-item" data-id="{{ category.id }}">
+          <span class="category-name">{{ category.name }}</span>
+          <button class="btn btn-small btn-danger" onclick="deleteCategory({{ category.id }})">
+            <i class="fa fa-trash"></i>
+          </button>
+        </div>
+      {% empty %}
+        <p>No categories found.</p>
+      {% endfor %}
+    </div>
+
+    <form id="addCategoryForm" method="POST">
+      {% csrf_token %}
+      <div class="form-group">
+        <label for="newCategoryName">New Category</label>
+        <input type="text" id="newCategoryName" name="name" placeholder="Category name" required>
+      </div>
+      <div class="modal-actions">
+        <button type="submit" class="btn btn-primary">Add Category</button>
+        <button type="button" class="btn btn-secondary" onclick="closeCategoryModal()">Close</button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,24 +1,38 @@
+import json
 import random
 import uuid
 
 from decouple import config
 from django.conf import settings
 from django.contrib.auth import login
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import send_mail
 from django.db.models import Q
+from django.http import FileResponse, Http404, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
+from django.utils.text import slugify
 from django.utils.timezone import localtime
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
 from taggit.models import Tag
 
 from blog.models import BlogCategory, BlogPost, User
 from global_neighbor.bluesky import get_latest_bluesky_posts
+from global_neighbor.models import Document, DocumentCategory
 from neighborhood.models import ForumPost, Thread
 
 from .bluesky_utils import get_latest_top_level_posts
-from .forms import RegistrationForm
+from .forms import DocumentForm, DocumentUploadForm, RegistrationForm
+
+
+def is_creator(user):
+    return user.is_authenticated and user.role == "creator"
+
+
+def is_neighbor(user):
+    return user.is_authenticated and user.role == "neighbor"
 
 
 def home(request):
@@ -237,3 +251,127 @@ def search_results(request):
             "forum_posts": forum_posts,
         },
     )
+
+
+@login_required
+@user_passes_test(lambda u: u.role == "creator" or u.is_superuser)
+def upload_document(request):
+    if request.method != "POST":
+        return JsonResponse({"error": "Invalid request"}, status=400)
+
+    uploaded_file = request.FILES.get("file")  # ✅ Ensure input name="file"
+    if not uploaded_file:
+        return JsonResponse({"error": "No file uploaded"}, status=400)
+
+    title = request.POST.get("title", "").strip() or "Untitled Document"
+    author = request.POST.get("author", "").strip()
+    source = request.POST.get("source", "").strip()
+    category_id = request.POST.get("category")
+    tag_string = request.POST.get("tags", "")
+
+    # Process category if applicable
+    category = None
+    if category_id:
+        from .models import DocumentCategory  # adjust import as needed
+
+        try:
+            category = DocumentCategory.objects.get(id=category_id)
+        except DocumentCategory.DoesNotExist:
+            pass  # silently fail or handle as needed
+
+    # Create document entry
+    document = Document.objects.create(
+        title=title,
+        author=author,
+        source=source,
+        file=uploaded_file,
+        uploaded_by=request.user,
+        category=category,
+    )
+
+    # Handle tags
+    if tag_string:
+        tag_names = [t.strip() for t in tag_string.split(",") if t.strip()]
+        document.tags.set(*tag_names)
+
+    return JsonResponse({"status": "ok", "document_id": document.id})
+
+
+def library(request):
+    documents = Document.objects.all()
+    categories = DocumentCategory.objects.all()
+
+    context = {
+        "documents": documents,
+        "categories": categories,
+    }
+    return render(request, "library/library.html", context)
+
+
+@login_required
+@user_passes_test(is_neighbor)
+def download_document(request, document_id):
+    document = get_object_or_404(Document, id=document_id)
+    document.download_count += 1
+    document.save(update_fields=["download_count"])
+    try:
+        return FileResponse(
+            document.file.open("rb"), as_attachment=True, filename=document.file.name
+        )
+    except FileNotFoundError:
+        raise Http404("Document not found.")
+
+
+def document_detail(request, pk):
+    doc = get_object_or_404(Document, pk=pk)
+    return render(request, "library/document_detail.html", {"document": doc})
+
+
+def edit_document(request, pk):
+    doc = get_object_or_404(Document, pk=pk)
+
+    if request.method == "POST":
+        form = DocumentForm(request.POST, instance=doc)
+        if form.is_valid():
+            form.save()
+            return redirect("library")  # Redirect to Library after saving
+    else:
+        form = DocumentForm(instance=doc)
+
+    return render(
+        request, "library/edit_document.html", {"form": form, "document": doc}
+    )
+
+
+@login_required
+@user_passes_test(lambda u: u.role == "creator" or u.is_superuser)
+def delete_document(request, pk):
+    document = get_object_or_404(Document, pk=pk)
+
+    if request.method == "POST":
+        document.delete()
+        return redirect("library")  # Redirect back to Library page
+
+    # Optional: Show a confirmation page
+    return render(request, "library/confirm_delete.html", {"document": document})
+
+
+@require_POST
+@user_passes_test(lambda u: u.is_superuser)
+def add_category(request):
+    data = json.loads(request.body)
+    name = data.get("name")
+    if name:
+        DocumentCategory.objects.create(name=name)
+        return JsonResponse({"status": "ok"})
+    return JsonResponse({"error": "Name required"}, status=400)
+
+
+@require_POST
+@user_passes_test(lambda u: u.is_superuser)
+def delete_category(request, pk):
+    try:
+        DocumentCategory.objects.get(pk=pk).delete()
+        return JsonResponse({"status": "ok"})
+    except DocumentCategory.DoesNotExist:
+        return JsonResponse({"error": "Not found"}, status=404)

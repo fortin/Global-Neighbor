@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 	<link rel="stylesheet" href="{% static 'css/search.css' %}">
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-    <link rel="icon" type="image/png" href="{% static 'images/favicon.png' %}">
+    <link rel="icon" type="image/png" href="{% static 'images/favicon.png' %}?v=2">
 </head>
 <body>
 	<a href="#main-content" class="skip-link">Skip to main content</a>
@@ -22,9 +22,10 @@
     <ul class="nav-links">
         <li><a href="{% url 'blog:blog_index' %}"><i class="fa-solid fa-blog" aria-hidden="true"></i> <span>Blog</span></a></li>
         {% if request.user.is_authenticated and request.user.is_creator or request.user.is_superuser or request.user.is_moderator %}
-            <li><a href="{% url 'blog:create_blog_post' %}"><i class="fa-solid fa-plus" aria-hidden="true"></i> <span>New Post</span></a></li>
+		<li><a href="{% url 'blog:create_blog_post' %}"><i class="fa-solid fa-plus" aria-hidden="true"></i> <span>New Post</span></a></li>
         {% endif %}
         <li><a href="{% url 'neighborhood:forum_home' %}"><i class="fa-solid fa-comments" aria-hidden="true"></i> <span>Forum</span></a></li>
+		<li><a href="{% url 'library' %}"><i class="fa-solid fa-book-open-reader" aria-hidden="true"></i> <span>Library</span></a></li>
         {% if request.user.is_authenticated and request.user.is_superuser %}
         <li><a href="{% url 'admin:index' %}"><i class="fa-solid fa-user-cog" aria-hidden="true"></i> <span>Admin</span></a></li>
         {% endif %}

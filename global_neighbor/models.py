@@ -4,6 +4,7 @@ import uuid
 from django.contrib.auth.models import AbstractUser, Group, Permission
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from taggit.managers import TaggableManager
 
 
 class User(AbstractUser):
@@ -57,3 +58,28 @@ class User(AbstractUser):
             self.verification_token = uuid.uuid4()  # ✅ Proper UUID
 
         self.save()
+
+
+class DocumentCategory(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+
+    def __str__(self):
+        return self.name
+
+
+class Document(models.Model):
+    title = models.CharField(max_length=255)
+    author = models.CharField(max_length=255, blank=True)
+    source = models.CharField(max_length=255, blank=True)
+    category = models.ForeignKey(
+        DocumentCategory, on_delete=models.SET_NULL, null=True, blank=True
+    )
+    tags = TaggableManager(blank=True)
+
+    file = models.FileField(upload_to="documents/")
+    uploaded_by = models.ForeignKey("global_neighbor.User", on_delete=models.CASCADE)
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+    download_count = models.PositiveIntegerField(default=0)
+
+    def __str__(self):
+        return self.title

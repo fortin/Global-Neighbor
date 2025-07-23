@@ -437,6 +437,19 @@ footer {
     position: relative;
 }
 
+.search-toggle button:focus {
+    outline: none !important;
+    box-shadow: none !important;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-appearance: none;                 /* Disable native styling */
+    appearance: none;
+}
+
+.search-toggle button:hover {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
 #search-icon {
     background: none;
     border: none;
@@ -445,6 +458,14 @@ footer {
     cursor: pointer;
     padding: 0.5rem;
     display: inline-block;
+}
+
+#search-icon i:focus {
+    outline: none !important;
+}
+
+#search-icon:focus-visible {
+    outline: none !important;
 }
 
 #search-icon:hover {
@@ -507,6 +528,28 @@ footer {
 .search-dropdown .advanced-search-link:hover {
     text-decoration: underline;
     color: #0056b3 !important;
+}
+
+button#search-icon {
+    outline: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+}
+
+button#search-icon:focus-visible,
+button#search-icon:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+button#search-icon::-moz-focus-inner {  /* For Firefox */
+    border: 0;
+}
+
+button#search-icon::-webkit-focus-ring-color {  /* Safari-specific */
+    outline: none;
 }
 
 .CodeMirror, .EasyMDEContainer {
