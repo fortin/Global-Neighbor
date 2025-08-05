@@ -39,6 +39,7 @@ def home(request):
     bluesky_posts, bsky_display_name = get_latest_top_level_posts()
     latest_blog_posts = BlogPost.objects.order_by("-created")[:5]
     latest_forum_posts = ForumPost.objects.order_by("-created")[:5]
+    latest_documents = Document.objects.order_by("-uploaded_at")[:2]
     bsky_handle = config("BLUESKY_USERNAME")
 
     blog_digest = [
@@ -69,6 +70,7 @@ def home(request):
         "bluesky_posts": bluesky_posts,
         "latest_blog_posts": blog_digest,
         "latest_forum_posts": forum_digest,
+        "latest_documents": latest_documents,
         "bsky_handle": bsky_handle,
         "bsky_name": bsky_display_name,
     }
@@ -292,7 +294,7 @@ def upload_document(request):
     # Handle tags
     if tag_string:
         tag_names = [t.strip() for t in tag_string.split(",") if t.strip()]
-        document.tags.set(*tag_names)
+        document.tags.set(tag_names)
 
     return JsonResponse({"status": "ok", "document_id": document.id})
 

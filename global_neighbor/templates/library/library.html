@@ -20,11 +20,11 @@
     <input type="text" id="tag-filter" placeholder="Filter by tag..." oninput="filterDocuments()">
 
     <div class="view-toggle">
-      <button id="list-view-btn" class="btn btn-secondary active" onclick="setLibraryView('list')">
-        <i class="fa fa-list"></i>
-      </button>
-      <button id="thumb-view-btn" class="btn btn-secondary" onclick="setLibraryView('thumbnails')">
+      <button id="thumb-view-btn" class="btn btn-secondary active" onclick="setLibraryView('thumbnails')">
         <i class="fa fa-th"></i>
+      </button>
+      <button id="list-view-btn" class="btn btn-secondary" onclick="setLibraryView('list')">
+        <i class="fa fa-list"></i>
       </button>
     </div>
   </div>
@@ -35,55 +35,49 @@
   </button>
   {% endif %}
 
-<div id="document-list-container" class="document-list-view">
+<div id="document-list-container" class="thumbnail-view" style="margin-top: 1rem;">
   {% for doc in documents %}
-    <div class="document-card"
-         data-title="{{ doc.title|default_if_none:"Untitled Document" }}"
-         data-author="{{ doc.author|default_if_none:"" }}"
-         data-category="{{ doc.category.name|default_if_none:"" }}"
-         data-tags="{% for tag in doc.tags.all %}{{ tag.name }}{% if not forloop.last %} {% endif %}{% endfor %}">
+  <div class="document-card"
+      data-title="{{ doc.title|default_if_none:"Untitled Document" }}"
+      data-author="{{ doc.author|default_if_none:"" }}"
+      data-category="{{ doc.category.name|default_if_none:"" }}"
+      data-tags="{% for tag in doc.tags.all %}{{ tag.name }}{% if not forloop.last %} {% endif %}{% endfor %}">
 
+    <div class="card-header">
       <a href="{% url 'document_detail' doc.id %}" class="document-title">
-        <strong>{{ doc.title|default:"Untitled Document" }}</strong><br />
-        <div class="doc-author">by {{ doc.author }}</div>
+        <strong>{{ doc.title|default:"Untitled Document" }}</strong>
       </a>
-
-      <div class="document-meta">
-        {% if doc.author %}
-          <span class="doc-author">by {{ doc.author }}</span>
-        {% endif %}
-        {% if doc.source %}
-          <div class="doc-source">{{ doc.source }}</div>
-        {% endif %}
-      </div>
-
-      {% if doc.category %}
-        <div class="doc-category">{{ doc.category.name }}</div>
+      {% if doc.author %}
+        <div class="doc-author">by {{ doc.author }}</div>
       {% endif %}
-
-      {% if doc.tags.all %}
-        <div class="doc-tags">
-          {% for tag in doc.tags.all %}
-            <span class="tag">{{ tag.name }}</span>
-          {% endfor %}
-        </div>
-      {% endif %}
-
-      <div class="doc-actions">
-        <a href="{% url 'download_document' doc.id %}" class="action-btn" title="Download">
-          <i class="fa fa-download"></i>
-        </a>
-        {% if request.user == doc.uploaded_by or request.user.is_superuser %}
-          <a href="{% url 'edit_document' doc.id %}" class="action-btn" title="Edit metadata">
-            <i class="fa fa-pen"></i>
-          </a>
-          <a href="{% url 'delete_document' doc.id %}" class="action-btn" title="Delete">
-            <i class="fa fa-trash"></i>
-          </a>
-        {% endif %}
-      </div>
-
     </div>
+
+    {% if doc.category %}
+      <div class="doc-category">{{ doc.category.name }}</div>
+    {% endif %}
+
+    {% if doc.tags.all %}
+      <div class="doc-tags">
+        {% for tag in doc.tags.all %}
+          <span class="tag">{{ tag.name }}</span>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <div class="doc-actions">
+      <a href="{% url 'download_document' doc.id %}" class="action-btn" title="Download">
+        <i class="fa fa-download"></i>
+      </a>
+      {% if request.user == doc.uploaded_by or request.user.is_superuser %}
+        <a href="{% url 'edit_document' doc.id %}" class="action-btn" title="Edit metadata">
+          <i class="fa fa-pen"></i>
+        </a>
+        <a href="{% url 'delete_document' doc.id %}" class="action-btn" title="Delete">
+          <i class="fa fa-trash"></i>
+        </a>
+      {% endif %}
+    </div>
+  </div>
   {% empty %}
     <p>No documents available.</p>
   {% endfor %}

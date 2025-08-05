@@ -3,7 +3,7 @@
   <div class="modal-content">
     <h2 class="form-title">Upload Document</h2>
 
-    <form id="uploadForm" method="POST" enctype="multipart/form-data" action="{% url 'upload_document' %}" class="styled-form">
+    <form id="uploadForm" method="POST" enctype="multipart/form-data" action="{% url 'upload_document' %}" class="styled-form" novalidate>
       {% csrf_token %}
 
       <div class="form-group">

@@ -51,6 +51,31 @@
       </div>
       <p>Engage in discussions and share knowledge.</p>
     </div>
+    <div class="card" role="region" aria-labelledby="library-section-title">
+      <div class="card-icon" aria-hidden="true">
+        <i class="fas fa-book"></i>
+      </div>
+      <h2 id="library-section-title">Library</h2>
+      <a class="button-link" href="{% url 'library' %}" aria-label="Browse Library">Browse Library</a>
+
+      <div class="post-list">
+        {% for doc in latest_documents %}
+          <article class="post-item doc-item">
+            <a href="{% url 'document_detail' doc.id %}" class="doc-title-link">
+              <strong>{{ doc.title }}</strong>{% if doc.author %} by {{ doc.author }}{% endif %}
+            </a>
+            <a href="{% url 'download_document' doc.id %}" class="download-btn" title="Download">
+              <i class="fa fa-download"></i>
+            </a>
+            <div class="doc-date">
+              <time datetime="{{ doc.uploaded_at|date:'c' }}">{{ doc.uploaded_at|date:"M d, Y" }}</time>
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+
+      <p>Access the latest shared resources.</p>
+    </div>
   </section>
 
   <section aria-labelledby="ticker-title" class="bluesky-ticker-container">
