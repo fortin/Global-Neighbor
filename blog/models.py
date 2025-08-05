@@ -4,7 +4,7 @@ from django.db import models
 from django.utils import timezone
 from django.utils.text import slugify
 from django.utils.timezone import now
-from models_extensions.models import ActivatorModel, TimeStampedModel
+from models_extensions.models import TimeStampedModel
 from taggit.managers import TaggableManager
 
 from global_neighbor.scripts.utils import generate_unique_slug
@@ -40,7 +40,7 @@ class BlogPost(TimeStampedModel):
         return self.title
 
 
-class BlogComment(models.Model):
+class BlogComment(TimeStampedModel):
     post = models.ForeignKey(
         "BlogPost", on_delete=models.CASCADE, related_name="comments"
     )

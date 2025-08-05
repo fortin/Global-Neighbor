@@ -17,3 +17,8 @@ class CustomUserAdmin(UserAdmin):
 @admin.register(Document)
 class DocumentAdmin(admin.ModelAdmin):
     list_display = ("title", "author", "category")
+
+
+@admin.register(DocumentCategory)
+class DocumentCategoryAdmin(admin.ModelAdmin):
+    list_display = ("name",)

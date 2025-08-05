@@ -46,9 +46,9 @@ INSTALLED_APPS = [
     "blog",
     "neighborhood",
     "taggit",
+    "treebeard",
     "cms",
     "menus",
-    "treebeard",
     "sekizai",
     "djangocms_text_ckeditor",
     "filer",
@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework.authtoken",
     "markdownify",
+    "models_extensions",
 ]
 
 AUTH_USER_MODEL = "global_neighbor.User"

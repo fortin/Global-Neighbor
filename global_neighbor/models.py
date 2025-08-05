@@ -4,6 +4,7 @@ import uuid
 from django.contrib.auth.models import AbstractUser, Group, Permission
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from models_extensions.models import TimeStampedModel
 from taggit.managers import TaggableManager
 
 
@@ -60,14 +61,14 @@ class User(AbstractUser):
         self.save()
 
 
-class DocumentCategory(models.Model):
+class DocumentCategory(TimeStampedModel):
     name = models.CharField(max_length=100, unique=True)
 
     def __str__(self):
         return self.name
 
 
-class Document(models.Model):
+class Document(TimeStampedModel):
     title = models.CharField(max_length=255)
     author = models.CharField(max_length=255, blank=True)
     source = models.CharField(max_length=255, blank=True)
