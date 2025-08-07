@@ -75,10 +75,10 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "global_neighbor.urls"
 
-# MIGRATION_MODULES = {
-#     "cms": None,
-#     "menus": None,
-# }
+MIGRATION_MODULES = {
+    "cms": None,
+    "menus": None,
+}
 
 CMS_PERMISSION = False
 
