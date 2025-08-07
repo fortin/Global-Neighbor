@@ -145,19 +145,20 @@ MARKDOWNIFY = {
 }
 
 WSGI_APPLICATION = "global_neighbor.wsgi.application"
-# ALLOWED_HOSTS = config("ALLOWED_HOSTS", cast=Csv())
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-if DEBUG is True:
-    db_engine = "django.db.backends.postgresql"
-    options = {}
-else:
-    db_engine = "django.db.backends.mysql"
-    options: dict[str, str] = {
-        "charset": "utf8mb4",
-    }
 
+db_engine = config("DB_ENGINE")
+options = {}
+
+if db_engine == "django.db.backends.mysql":
+    options = {
+        "charset": "utf8mb4",
+        "init_command": "SET sql_mode='STRICT_TRANS_TABLES'",
+    }
+elif db_engine == "django.db.backends.postgresql":
+    options = {"options": "-c search_path=public,content"}
 
 DATABASES = {
     "default": {
@@ -171,12 +172,6 @@ DATABASES = {
     }
 }
 
-if DATABASES["default"]["ENGINE"] == "django.db.backends.postgresql":
-    DATABASES["default"]["OPTIONS"] = {"options": "-c search_path=public,content"}
-elif DATABASES["default"]["ENGINE"] == "django.db.backends.mysql":
-    DATABASES["default"]["OPTIONS"] = {
-        "init_command": "SET sql_mode='STRICT_TRANS_TABLES'"
-    }
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
