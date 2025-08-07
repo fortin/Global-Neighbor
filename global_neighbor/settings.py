@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     "filer",
     "easy_thumbnails",
     "global_neighbor.apps.GlobalNeighborConfig",
+    "global_neighbor",
     "blog",
     "neighborhood",
     "cms",
