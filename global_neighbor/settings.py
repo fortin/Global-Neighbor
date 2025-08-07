@@ -168,9 +168,11 @@ DATABASES = {
         "HOST": config("DATABASE_HOST"),
         "PORT": config("DATABASE_PORT"),
         "CONN_MAX_AGE": 60,  # Reuse connections for 60 seconds
-        "OPTIONS": {"options": "-c search_path=public"},
     }
 }
+
+if DATABASES["default"]["ENGINE"] == "django.db.backends.postgresql":
+    DATABASES["default"]["OPTIONS"] = {"options": "-c search_path=public,content"}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
