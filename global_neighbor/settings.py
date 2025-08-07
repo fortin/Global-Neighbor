@@ -42,17 +42,16 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.sites",
     "django_extensions",
+    "treebeard",
+    "menus",
+    "sekizai",
+    "filer",
+    "easy_thumbnails",
     "global_neighbor.apps.GlobalNeighborConfig",
     "blog",
     "neighborhood",
-    "taggit",
-    "treebeard",
     "cms",
-    "menus",
-    "sekizai",
-    "djangocms_text_ckeditor",
-    "filer",
-    "easy_thumbnails",
+    "taggit",
     "rest_framework",
     "rest_framework.authtoken",
     "markdownify",
@@ -75,6 +74,13 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = "global_neighbor.urls"
+
+# MIGRATION_MODULES = {
+#     "cms": None,
+#     "menus": None,
+# }
+
+CMS_PERMISSION = False
 
 # LOGGING = {
 #     "version": 1,
@@ -162,7 +168,7 @@ DATABASES = {
         "HOST": config("DATABASE_HOST"),
         "PORT": config("DATABASE_PORT"),
         "CONN_MAX_AGE": 60,  # Reuse connections for 60 seconds
-        "OPTIONS": options,
+        "OPTIONS": {"options": "-c search_path=public"},
     }
 }
 
