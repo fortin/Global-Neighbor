@@ -14,8 +14,6 @@ cssselect2==0.8.0
 decorator==5.2.1
 Django==5.1.7
 django-admin-sortable2==2.2.8
-django-classy-tags==4.1.0
-django-cms==4.1.4
 django-extensions==3.2.3
 django-extensions-models==1.0
 django-filer==3.3.1
@@ -23,10 +21,7 @@ django-formtools==2.5.1
 django-markdownify==0.9.5
 django-modelcluster==6.4
 django-polymorphic==3.1.0
-django-sekizai==4.1.0
 django-taggit==6.1.0
-django-treebeard==4.7.1
-djangocms-admin-style==3.3.1
 djangocms-text-ckeditor==5.1.6
 djangorestframework==3.15.2
 dnspython==2.7.0
@@ -46,6 +41,7 @@ lxml==5.3.1
 Markdown==3.8.2
 MarkupSafe==3.0.2
 matplotlib-inline==0.1.7
+mysqlclient
 packaging==24.2
 parso==0.8.4
 pexpect==4.9.0
