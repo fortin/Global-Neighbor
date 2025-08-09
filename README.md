@@ -22,6 +22,7 @@ BLUESKY_USERNAME=your-bluesky-username
 BLUESKY_PASSWORD=your-bluesky-password
 
 # database configuration
+DB_ENGINE=django.db.backends.postgresql  # or `mysql`
 DATABASE_PASSWORD=your-database-password
 DATABASE_USER=your-database-owner
 DATABASE_NAME=your-database-name
