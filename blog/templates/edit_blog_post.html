@@ -7,6 +7,8 @@
 <link rel="stylesheet" href="{% static 'css/blog.css' %}">
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+<script src="{% static 'js/base.js' %}"></script>
+<script src="{% static 'js/blog.js' %}"></script>
 <script src="{% static 'js/forum.js' %}"></script>
 
 <div class="form-page-container" role="main" aria-labelledby="edit-post-title">
@@ -40,33 +42,60 @@
 
   <form method="post" class="styled-form" aria-describedby="edit-blog-description">
     {% csrf_token %}
-    <p id="edit-blog-description" class="sr-only">Edit your blog post content, categories, and tags below.</p>
+    <p id="edit-blog-description" class="sr-only">
+      Edit your blog post content, categories, and tags below.
+    </p>
 
+    <!-- Title field -->
+    <div class="form-group">
+      {{ form.title.label_tag }}
+      {{ form.title }}
+      {% if form.title.errors %}
+        <ul class="form-errors">
+          {% for error in form.title.errors %}
+            <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
+
+    <!-- Content field (EasyMDE will enhance this) -->
+    <div class="form-group">
+      {{ form.content.label_tag }}
+      {{ form.content }}
+      {% if form.content.errors %}
+        <ul class="form-errors">
+          {% for error in form.content.errors %}
+            <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
+
+    <!-- Remaining fields (e.g., tags, categories) -->
     {% for field in form.visible_fields %}
-      <div class="form-group">
-        {{ field.label_tag }}
-        {{ field }}
-        {% if field.help_text %}
-          <small class="help-text">{{ field.help_text }}</small>
-        {% endif %}
-        {% if field.errors %}
-          <ul class="form-errors">
-            {% for error in field.errors %}
-              <li>{{ error }}</li>
-            {% endfor %}
-          </ul>
-        {% endif %}
-      </div>
+      {% if field.name != "title" and field.name != "content" %}
+        <div class="form-group">
+          {{ field.label_tag }}
+          {{ field }}
+          {% if field.help_text %}
+            <small class="help-text">{{ field.help_text }}</small>
+          {% endif %}
+          {% if field.errors %}
+            <ul class="form-errors">
+              {% for error in field.errors %}
+                <li>{{ error }}</li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        </div>
+      {% endif %}
     {% endfor %}
 
     <div class="form-group">
       <small class="help-text">
         You can also use <a href="https://www.markdownguide.org/cheat-sheet/" target="_blank" rel="noopener noreferrer">Markdown</a>.
       </small>
-      <button type="button" class="btn btn-sm btn-secondary mt-2 ml-2 no-underline" onclick="togglePreview()">
-        <i class="fa-solid fa-eye"></i> Toggle Preview
-      </button>
-      <div id="markdown-preview" class="markdown-preview hidden mt-3" aria-live="polite"></div>
     </div>
 
     <div class="form-actions">

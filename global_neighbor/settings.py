@@ -42,25 +42,22 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.sites",
     "django_extensions",
+    "filer",
+    "easy_thumbnails",
     "global_neighbor.apps.GlobalNeighborConfig",
     "blog",
     "neighborhood",
     "taggit",
-    "cms",
-    "menus",
-    "treebeard",
-    "sekizai",
-    "djangocms_text_ckeditor",
-    "filer",
-    "easy_thumbnails",
     "rest_framework",
     "rest_framework.authtoken",
     "markdownify",
+    "models_extensions",
 ]
 
 AUTH_USER_MODEL = "global_neighbor.User"
 
 MIDDLEWARE = [
+    "global_neighbor.middleware.PDFAllowIframeMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -73,6 +70,13 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = "global_neighbor.urls"
+
+MIGRATION_MODULES = {
+    "cms": None,
+    "menus": None,
+}
+
+CMS_PERMISSION = False
 
 # LOGGING = {
 #     "version": 1,
@@ -137,19 +141,20 @@ MARKDOWNIFY = {
 }
 
 WSGI_APPLICATION = "global_neighbor.wsgi.application"
-# ALLOWED_HOSTS = config("ALLOWED_HOSTS", cast=Csv())
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-if DEBUG is True:
-    db_engine = "django.db.backends.postgresql"
-    options = {}
-else:
-    db_engine = "django.db.backends.mysql"
-    options: dict[str, str] = {
-        "charset": "utf8mb4",
-    }
 
+db_engine = config("DB_ENGINE")
+options = {}
+
+if db_engine == "django.db.backends.mysql":
+    options = {
+        "charset": "utf8mb4",
+        "init_command": "SET sql_mode='STRICT_TRANS_TABLES'",
+    }
+elif db_engine == "django.db.backends.postgresql":
+    options = {"options": "-c search_path=public,content"}
 
 DATABASES = {
     "default": {
@@ -160,9 +165,9 @@ DATABASES = {
         "HOST": config("DATABASE_HOST"),
         "PORT": config("DATABASE_PORT"),
         "CONN_MAX_AGE": 60,  # Reuse connections for 60 seconds
-        "OPTIONS": options,
     }
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators

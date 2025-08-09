@@ -39,10 +39,14 @@
       </div>
     {% endfor %}
 
-    <button type="submit" class="btn btn-primary">
-      <i class="fa-solid fa-right-to-bracket"></i> Log In
-    </button>
-    <a href="{% url 'register' %}" class="btn btn-secondary">Register</a>
+    <div class="form-actions mt-3">
+      <button type="submit" class="btn btn-primary">
+        <i class="fa-solid fa-right-to-bracket"></i>&nbsp;&nbsp;Log In
+      </button>
+      <a href="/register/" class="btn btn-secondary no-underline">
+        <i class="fa-solid fa-user-plus"></i>&nbsp;&nbsp;Register
+      </a>
+    </div>
   </form>
 </div>
 {% endblock %}

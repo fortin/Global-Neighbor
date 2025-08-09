@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Upload Document{% endblock %}
+{% block content %}
+<h1>Upload Document</h1>
+
+<form method="post" enctype="multipart/form-data" class="styled-form">
+  {% csrf_token %}
+  {{ form.non_field_errors }}
+  {% for field in form %}
+    <div class="form-group">
+      {{ field.label_tag }}
+      {{ field }}
+      {% if field.help_text %}
+        <small>{{ field.help_text }}</small>
+      {% endif %}
+      {{ field.errors }}
+    </div>
+  {% endfor %}
+  <button type="submit" class="btn btn-primary">Upload</button>
+  <a href="{% url 'library' %}" class="btn btn-secondary">Cancel</a>
+</form>
+{% endblock %}

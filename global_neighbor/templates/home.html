@@ -19,7 +19,7 @@
         <i class="fas fa-blog"></i>
       </div>
       <h2 id="blog-section-title">Community Blog</h2>
-      <a class="button-link" href="{% url 'blog:blog_index' %}" aria-label="Explore Community Blog">Explore Blog</a>
+      <a class="button-link" href="{% url 'blog:blog_index' %}" aria-label="Explore Blog">Explore Blog</a>
       <div class="post-list">
         {% for post in latest_blog_posts %}
           <article class="post-item">
@@ -38,7 +38,7 @@
         <i class="fas fa-comments"></i>
       </div>
       <h2 id="forum-section-title">Community Forum</h2>
-      <a class="button-link" href="{% url 'neighborhood:forum_home' %}" aria-label="Visit Community Forum">Visit Forum</a>
+      <a class="button-link" href="{% url 'neighborhood:forum_home' %}" aria-label="Visit Forum">Visit Forum</a>
       <div class="post-list">
         {% for post in latest_forum_posts %}
           <article class="post-item">
@@ -50,6 +50,31 @@
         {% endfor %}
       </div>
       <p>Engage in discussions and share knowledge.</p>
+    </div>
+    <div class="card" role="region" aria-labelledby="library-section-title">
+      <div class="card-icon" aria-hidden="true">
+        <i class="fas fa-book"></i>
+      </div>
+      <h2 id="library-section-title">Library</h2>
+      <a class="button-link" href="{% url 'library' %}" aria-label="Browse Library">Browse Library</a>
+
+      <div class="post-list">
+        {% for doc in latest_documents %}
+          <article class="post-item doc-item">
+            <a href="{% url 'document_detail' doc.id %}" class="doc-title-link">
+              <strong>{{ doc.title }}</strong>{% if doc.author %} by {{ doc.author }}{% endif %}
+            </a>
+            <a href="{% url 'download_document' doc.id %}" class="download-btn" title="Download">
+              <i class="fa fa-download"></i>
+            </a>
+            <div class="doc-date">
+              <time datetime="{{ doc.uploaded_at|date:'c' }}">{{ doc.uploaded_at|date:"M d, Y" }}</time>
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+
+      <p>Access the latest shared resources.</p>
     </div>
   </section>
 

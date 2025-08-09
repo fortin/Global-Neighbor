@@ -54,9 +54,9 @@
 
 .container.create-category-container,
 .form-page-container {
-    max-width: 700px;
+    max-width: 700px !important; /* or 100% for full width */
     margin: 3rem auto;
-    padding: 2rem;
+    padding: 2.5rem 3rem;
     background: #fff;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.05);
@@ -75,6 +75,10 @@
 .form-box {
     display: flex;
     flex-direction: column;
+}
+
+.form-group, .field-wrapper, .form-row {
+    position: relative !important;
 }
 
 .styled-form .form-group,
@@ -294,4 +298,33 @@ h2 i {
     color: #777;
     font-style: italic;
     margin-top: 2rem;
+}
+
+.autocomplete-list {
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background: white;
+    margin-top: 0.25rem;
+    max-height: 180px;
+    overflow-y: auto;
+    list-style: none;
+    padding: 0;
+    position: absolute;
+    width: 100%;
+    z-index: 1000;
+}
+
+.autocomplete-list li {
+    padding: 0.5rem 0.75rem;
+    cursor: pointer;
+}
+
+.autocomplete-list li:hover,
+.autocomplete-list li[aria-selected="true"] {
+    background: #f0f0f0;
+}
+
+#tag-suggestions .suggestion-item.active {
+    background-color: #007bff;
+    color: white;
 }

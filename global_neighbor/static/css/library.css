@@ -1,0 +1,245 @@
+/* --- Modal Styles --- */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5);
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.modal.active {
+  display: flex;
+}
+
+.modal-content {
+  background: white;
+  padding: 2rem;
+  border-radius: 10px;
+  max-width: 500px;
+  width: 90%;
+}
+
+.modal.hidden {
+  display: none;
+}
+
+/* --- Upload Styles --- */
+.upload-box {
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  padding: 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  margin-bottom: 1.5rem;
+}
+
+.upload-box.dragover {
+  border-color: #007BFF;
+}
+
+.styled-form input[type="text"],
+.styled-form select {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+/* --- Buttons --- */
+.btn {
+  display: inline-block;
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  font-size: 1rem;
+  text-align: center;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background-color: #007BFF;
+  color: white;
+}
+
+.btn-secondary {
+  background-color: #e0e0e0;
+  color: #333;
+}
+
+/* --- Controls Bar --- */
+.library-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  align-items: center;
+}
+
+.library-controls input,
+.library-controls select {
+  padding: 0.4rem 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.95rem;
+}
+
+.view-toggle button {
+  font-size: 1rem;
+}
+
+.view-toggle button.active {
+  background-color: #007bff;
+  color: white;
+}
+
+/* --- Document Layouts --- */
+.document-list-view {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.thumbnail-view {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1.5rem;
+}
+
+/* --- Document Card --- */
+.document-card {
+  border: 1px solid #e5e5e5;
+  min-height: 180px;
+  padding: 1.25rem;
+  border-radius: 10px;
+  background: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: 100%;
+  width: 100%;
+  position: relative;
+  transition: box-shadow 0.2s ease;
+}
+
+.document-card:hover {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.document-title {
+  font-weight: bold;
+  text-decoration: none;
+  color: #333;
+  margin-bottom: 0.25rem;
+}
+
+.document-title:hover {
+  text-decoration: underline;
+}
+
+.doc-author {
+  font-size: 0.9rem;
+  color: #555;
+  margin-bottom: 0.25rem;
+}
+
+.doc-category {
+  font-size: 0.85rem;
+  color: #888;
+  margin-top: 0.5rem;
+}
+
+.doc-tags {
+  margin-top: 0.5rem;
+}
+
+.tag {
+  background: #eee;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  margin-right: 0.2rem;
+  color: #555;
+}
+
+/* --- Action Buttons --- */
+.doc-actions {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: auto;  /* Push to bottom of card */
+  padding-top: 0.75rem;
+  /* border-top: 1px solid #eee;  Optional visual divider */
+  opacity: 0;
+  width: 100%;
+  transition: opacity 0.2s;
+  text-align: center;
+}
+
+.document-card:hover .doc-actions {
+  opacity: 1;
+}
+
+.action-btn {
+  background: none;
+  border: none;
+  display:flex;
+  cursor: pointer;
+  font-size: 1.1rem;
+  color: #555;
+}
+
+.action-btn:hover {
+  color: #007bff;
+}
+
+/* --- Thumbnail View Adjustments --- */
+.thumbnail-view .document-card {
+  align-items: flex-start;
+  text-align: left;
+  min-width: 220px;         /* wider grid cards */
+  min-height: 220px;        /* taller grid cards */
+  padding: 1.25rem;
+  font-size: 1rem;
+}
+
+.thumbnail-view .document-meta,
+.thumbnail-view .doc-category,
+.thumbnail-view .doc-tags {
+  display: block;
+}
+
+.thumbnail-view .document-card::before {
+  display: none;  /* Remove PDF icon placeholder */
+}
+
+.thumbnail-view .doc-actions {
+  opacity: 0;
+  justify-content: center;
+  transition: opacity 0.2s ease;
+}
+
+.thumbnail-view .document-card:hover .doc-actions {
+  opacity: 1;
+}
+
+/* --- Category Select --- */
+.category-select-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* --- PDF Viewer --- */
+.pdf-viewer {
+  margin-top: 2rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}

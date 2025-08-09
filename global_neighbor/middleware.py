@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.http import HttpResponseForbidden, JsonResponse
+from django.utils.deprecation import MiddlewareMixin
 
 
 class BlockPostingMiddleware:
@@ -24,3 +25,13 @@ class AJAXLoginRequiredMiddleware:
         ):
             return JsonResponse({"error": "Unauthorized"}, status=401)
         return self.get_response(request)
+
+
+class PDFAllowIframeMiddleware(MiddlewareMixin):
+    def process_response(self, request, response):
+        if request.path.startswith("/media/documents/") and request.path.endswith(
+            ".pdf"
+        ):
+            # Remove the X-Frame-Options header, if present
+            response.headers.pop("X-Frame-Options", None)
+        return response

@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Edit {{ document.title }}{% endblock %}
+
+{% block content %}
+<div class="form-page-container">
+  <h1 class="form-title">
+    <i class="fa fa-pen" aria-hidden="true"></i>
+    Edit "{{ document.title|default:'Untitled Document' }}"
+  </h1>
+
+  <form method="post" class="styled-form">
+    {% csrf_token %}
+
+    {% if form.non_field_errors %}
+      <ul class="form-errors">
+        {% for error in form.non_field_errors %}
+          <li>{{ error }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+    {% for field in form.visible_fields %}
+      <div class="form-group">
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+
+        {% if field.name == 'category' %}
+          <div class="category-select-wrapper">
+            {{ field }}
+            {% if request.user.is_superuser %}
+              <button type="button"
+                      class="btn btn-secondary btn-small"
+                      onclick="openCategoryModal()"
+                      title="Manage categories">
+                <i class="fa fa-cog"></i>
+              </button>
+            {% endif %}
+          </div>
+        {% else %}
+          {{ field }}
+        {% endif %}
+
+        {% if field.help_text %}
+          <small class="help-text">{{ field.help_text }}</small>
+        {% endif %}
+
+        {% if field.errors %}
+          <ul class="form-errors">
+            {% for error in field.errors %}
+              <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </div>
+    {% endfor %}
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">
+        <i class="fa fa-save"></i> Save Changes
+      </button>
+      <a href="{% url 'library' %}" class="btn btn-secondary">
+        Cancel
+      </a>
+    </div>
+  </form>
+</div>
+
+<!-- Include the category modal -->
+{% include "library/category_modal.html" %}
+<script src="{% static '/js/library/category_modal.js' %}"></script>
+{% endblock %}

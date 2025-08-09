@@ -1,6 +1,6 @@
 # Global Neighbor
 
-A CMS (currently, a blog with comments, forum, and a Bluesky ticker on the homepage) for use by communities. WCAG-compliant for accessibility.
+A CMS (currently, a blog with comments, forum, a document library, and a Bluesky ticker on the homepage) for use by communities. WCAG-compliant for accessibility.
 
 You'll need an `.env` file in the root directory, containing the following:
 
@@ -22,6 +22,7 @@ BLUESKY_USERNAME=your-bluesky-username
 BLUESKY_PASSWORD=your-bluesky-password
 
 # database configuration
+DB_ENGINE=django.db.backends.postgresql  # or `mysql`
 DATABASE_PASSWORD=your-database-password
 DATABASE_USER=your-database-owner
 DATABASE_NAME=your-database-name

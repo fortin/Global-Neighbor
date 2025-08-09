@@ -5,13 +5,23 @@ from django.contrib.auth import views as auth_views
 from django.urls import include, path
 
 from global_neighbor.views import (
+    add_category,
     advanced_search,
     confirm_registration,
+    delete_category,
+    delete_document,
+    document_detail,
+    download_document,
+    edit_document,
     home,
+    library,
     register,
     search,
+    upload_document,
     verify_email,
 )
+
+app_name = "global_neighbor"
 
 urlpatterns = [
     path("", home, name="home"),
@@ -28,4 +38,23 @@ urlpatterns = [
     path("verify/<uuid:token>/", verify_email, name="verify_email"),
     path("search/", search, name="search"),
     path("search/advanced/", advanced_search, name="advanced_search"),
+    path("library/", library, name="library"),
+    path("library/upload/", upload_document, name="upload_document"),
+    path(
+        "library/download/<int:document_id>/",
+        download_document,
+        name="download_document",
+    ),
+    path("library/document/<int:pk>/", document_detail, name="document_detail"),
+    path("library/document/<int:pk>/edit/", edit_document, name="edit_document"),
+    path("library/document/<int:pk>/delete/", delete_document, name="delete_document"),
+    path("library/categories/add/", add_category, name="add_category"),
+    path(
+        "library/categories" "/delete/<int:pk>/",
+        delete_category,
+        name="delete_category",
+    ),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

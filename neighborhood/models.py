@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils.text import slugify
-from models_extensions.models import ActivatorModel, TimeStampedModel
+from models_extensions.models import TimeStampedModel
 from taggit.managers import TaggableManager
 
 from global_neighbor.scripts.utils import generate_unique_slug

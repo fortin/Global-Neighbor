@@ -7,14 +7,23 @@ from .models import BlogComment, BlogPost
 class BlogPostForm(forms.ModelForm):
     class Meta:
         model = BlogPost
-        fields = [
-            "title",
-            "content",
-            "tags",
-        ]
+        fields = ["title", "content", "tags"]
+
         widgets = {
-            "tags": TagWidget(attrs={"placeholder": "Comma-separated tags"}),
+            "tags": TagWidget(
+                attrs={
+                    "id": "id_tags",
+                    "placeholder": "Comma-separated tags",
+                    "autocomplete": "off",
+                }
+            ),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.fields.get("tags"):
+            self.fields["tags"].initial = ""
+            self.fields["tags"].widget.attrs["placeholder"] = "Comma-separated tags"
 
 
 class BlogCommentForm(forms.ModelForm):
