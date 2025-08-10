@@ -303,11 +303,16 @@ body {
     /* font-weight: 600; */
 }
 
-.navbar .brand-title:hover,
+/* .navbar .brand-title:hover,
 .navbar .nav-links a:hover,
 .navbar .logout-link:hover {
     text-decoration: underline;
     color: #ffffff !important;
+} */
+
+/* Remove underline on hover for navbar links */
+.navbar a:hover {
+    text-decoration: none !important;
 }
 
 .navbar .nav-links a,
