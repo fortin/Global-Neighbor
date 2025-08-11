@@ -302,11 +302,13 @@ body {
 .navbar .logout-link {
     color: #f1f1f1 !important;
     text-decoration: none;
-    /* font-weight: 600; */
+    font-size: 1.2rem;   /* >= 18.66px */
+    font-weight: 700;    /* bold */
 }
 
 /* Remove underline on hover for all navbar links */
-.navbar a:hover {
+.navbar a:hover,
+.logout-link:hover {
     text-decoration: none !important;
 }
 
