@@ -349,6 +349,17 @@ body {
     background: rgba(255,255,255,.12); /* subtle on dark navbar */
 }
 
+@media (max-width: 480px) {
+  .navbar .nav-links a,
+  .navbar .logout-link {
+    padding: .2rem .4rem;
+    border-radius: .375rem;
+    background: rgba(255,255,255,.10); /* barely-there on dark navbar */
+  }
+  /* Don’t add visual weight to brand/title */
+  .navbar .navbar-brand { background: transparent; padding: 0; }
+}
+
 .logout-link {
     margin-left: 1rem;
 }
