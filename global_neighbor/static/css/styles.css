@@ -668,3 +668,17 @@ body {
 .tag-suggestions li:hover {
     background-color: #f0f0f0;
 }
+
+/* === Utility: link pills for AA contrast on light backgrounds without darkening text === */
+.link-pill {
+    padding: .2rem .5rem;
+    border-radius: .375rem;
+    background: rgba(0,0,0,.06); /* subtle gray behind colored text */
+}
+
+@media (prefers-color-scheme: dark) {
+  .link-pill { background: rgba(255,255,255,.14); }
+}
+
+/* Utility: never underline on hover */
+.no-underline-hover:hover { text-decoration: none !important; }
