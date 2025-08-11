@@ -14,7 +14,7 @@
   </div>
 
   <section aria-labelledby="blog-section-title" class="card-container">
-    <div class="card" role="region" aria-labelledby="blog-section-title">
+    <div class="card"> <!-- removed role="region" + aria-labelledby -->
       <div class="card-icon" aria-hidden="true">
         <i class="fas fa-blog"></i>
       </div>
@@ -82,7 +82,7 @@
     <a href="https://bsky.app/profile/{{ bsky_handle }}" class="bsky-handle">
       <img src="{% static 'images/bluesky-logo.svg' %}" alt="Visit Global Neighbor on Bluesky" class="bluesky-logo" />
     </a>
-    <div class="bluesky-ticker-wrapper" role="region" aria-labelledby="ticker-title">
+    <div class="bluesky-ticker-wrapper">
       <h2 id="ticker-title" class="sr-only">Latest Bluesky Posts</h2>
       <div class="bluesky-ticker-track">
         {% for post in bluesky_posts %}
