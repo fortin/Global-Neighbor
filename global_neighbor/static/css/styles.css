@@ -329,6 +329,11 @@ body {
   align-items: center;
 }
 
+.navbar .nav-links a > span {
+  font-size: inherit;
+  font-weight: inherit;
+}
+
 .navbar a:hover,
 .logout-link:hover {
     color: #ddd;
