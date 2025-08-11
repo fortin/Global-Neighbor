@@ -1,3 +1,4 @@
+/* === GLOBAL / RESET === */
 .logout-link {
     background: none;
     border: none;
@@ -14,9 +15,10 @@
     text-decoration: none;
 }
 
+/* Do not underline on hover; keep subtle color change */
 .logout-link:hover {
     color: #ffffff;
-    text-decoration: underline;
+    text-decoration: none; /* changed from underline */
 }
 
 .logout-form {
