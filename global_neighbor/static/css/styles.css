@@ -305,22 +305,19 @@ body {
     /* font-weight: 600; */
 }
 
-/* .navbar .brand-title:hover,
-.navbar .nav-links a:hover,
-.navbar .logout-link:hover {
-    text-decoration: underline;
-    color: #ffffff !important;
-} */
-
-/* Remove underline on hover for navbar links */
+/* Remove underline on hover for all navbar links */
 .navbar a:hover {
     text-decoration: none !important;
 }
 
+/* === WCAG-friendly nav sizing ===
+   Promote nav links to "large text" (>=18.66px bold) so AA ratio can be 3:1
+   without visually heavy colors. */
 .navbar .nav-links a,
 .navbar .logout-link {
   color: #f1f1f1;
-  font-weight: 600;
+  font-weight: 600;              /* qualifies for large text with size bump */
+  font-size: 1.125rem;           /* ~18px; increase a touch from 1rem */
 }
 
 .navbar .nav-links a,
@@ -333,6 +330,16 @@ body {
 .navbar a:hover,
 .logout-link:hover {
     color: #ddd;
+}
+
+/* Active/current nav item that may be rendered as <span> (e.g., "Library").
+   Give it a subtle pill so text/background contrast passes AA without darkening text. */
+.navbar .nav-links .active,
+.navbar .nav-links .current,
+.navbar .nav-links span[aria-current="page"] {
+    padding: .2rem .5rem;
+    border-radius: .375rem;
+    background: rgba(255,255,255,.12); /* subtle on dark navbar */
 }
 
 .logout-link {
