@@ -38,14 +38,14 @@
 <div id="document-list-container" class="thumbnail-view" style="margin-top: 1rem;">
   {% for doc in documents %}
   <div class="document-card"
-      data-title="{{ doc.title|default_if_none:"Untitled Document" }}"
-      data-author="{{ doc.author|default_if_none:"" }}"
-      data-category="{{ doc.category.name|default_if_none:"" }}"
+      data-title="{{ doc.title|default_if_none:'Untitled Document' }}"
+      data-author="{{ doc.author|default_if_none:'' }}"
+      data-category="{{ doc.category.name|default_if_none:'' }}"
       data-tags="{% for tag in doc.tags.all %}{{ tag.name }}{% if not forloop.last %} {% endif %}{% endfor %}">
 
     <div class="card-header">
       <a href="{% url 'document_detail' doc.id %}" class="document-title">
-        <strong>{{ doc.title|default:"Untitled Document" }}</strong>
+        <strong>{{ doc.title|default:'Untitled Document' }}</strong>
       </a>
       {% if doc.author %}
         <div class="doc-author">by {{ doc.author }}</div>
