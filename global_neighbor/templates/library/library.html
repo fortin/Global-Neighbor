@@ -6,9 +6,7 @@
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/library.css' %}">
 
-{# Figure out the correct login URL name at render time #}
 {% url 'login' as login_url %}
-{% if not login_url %}{% url 'account_login' as login_url %}{% endif %}
 
 <div class="library-container">
   <h1 class="page-title">Library</h1>
