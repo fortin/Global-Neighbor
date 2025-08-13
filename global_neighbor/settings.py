@@ -20,6 +20,7 @@ BLUESKY_PASSWORD = config("BLUESKY_PASSWORD")
 DEBUG = config("DEBUG", cast=bool)
 
 ALLOWED_HOSTS = config("ALLOWED_HOSTS", cast=Csv())
+LOGIN_URL = "login"
 LOGIN_REDIRECT_URL = "home"
 LOGOUT_REDIRECT_URL = "home"
 EMAIL_FILE_PATH = config("EMAIL_FILE_PATH")
