@@ -687,6 +687,30 @@ body {
     background-color: #f0f0f0;
 }
 
+/* Tag chips (used on document detail page) */
+.tag-chip {
+  display: inline-block;
+  padding: .15rem .5rem;
+  margin: 0 .35rem .35rem 0;
+  border-radius: 999px;
+  background: rgba(0,0,0,.06);
+  font-size: .875rem;
+  text-decoration: none;
+  color: #333;
+  line-height: 1.8;
+  border: 1px solid rgba(0,0,0,.08);
+}
+
+.tag-chip:hover {
+  text-decoration: none;
+  background: rgba(0,0,0,.10);
+}
+
+.tag-chip:focus-visible {
+  outline: 2px solid #80bdff;
+  outline-offset: 2px;
+}
+
 /* === Utility: link pills for AA contrast on light backgrounds without darkening text === */
 .link-pill {
     padding: .2rem .5rem;

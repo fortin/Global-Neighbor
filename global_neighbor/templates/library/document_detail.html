@@ -44,6 +44,19 @@
     {% endif %}
   </div>
 
+  {% if document.tags.all %}
+    <div class="doc-tags-row" style="margin: 1rem 0;">
+      <strong>Tags:</strong>
+      <span class="doc-tags">
+        {% for tag in document.tags.all %}
+          <a class="tag-chip" href="{% url 'library' %}?tag={{ tag.name|urlencode }}" aria-label="Filter library by tag {{ tag.name }}">
+          {{ tag.name }}
+          </a>&nbsp;
+        {% endfor %}
+      </span>
+    </div>
+  {% endif %}
+
   <div class="pdf-viewer">
     <iframe src="{% url 'serve_document' document.id %}" width="100%" height="700" style="border: none;">
       This browser does not support PDFs. Please download the PDF to view it:
@@ -51,13 +64,5 @@
     </iframe>
   </div>
 
-  {# Tags shown on detail page only #}
-  {% if document.tags.all %}
-    <div class="doc-tags" style="margin-top:1rem;">
-      {% for tag in document.tags.all %}
-        <span class="tag">{{ tag.name }}</span>
-      {% endfor %}
-    </div>
-  {% endif %}
 </div>
 {% endblock %}
