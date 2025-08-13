@@ -32,14 +32,15 @@
   </div>
 
   {% if request.user.role == 'creator' or request.user.is_superuser %}
-  <button type="button" class="btn btn-primary upload-btn" onclick="openUploadModal()">
-    <i class="fa-solid fa-upload"></i> Upload Document
-  </button>
+    <button type="button" class="btn btn-primary upload-btn" onclick="openUploadModal()">
+      <i class="fa-solid fa-upload"></i> Upload Document
+    </button>
   {% endif %}
 
   <div id="document-list-container" class="thumbnail-view" style="margin-top: 1rem;">
     {% for doc in documents %}
       {% url 'document_detail' doc.id as doc_detail_url %}
+
       <div class="document-card"
            data-title="{{ doc.title|default_if_none:'Untitled Document' }}"
            data-author="{{ doc.author|default_if_none:'' }}"
