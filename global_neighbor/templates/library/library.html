@@ -56,19 +56,22 @@
       <div class="doc-category">{{ doc.category.name }}</div>
     {% endif %}
 
-    {% if doc.tags.all %}
-      <div class="doc-tags">
-        {% for tag in doc.tags.all %}
-          <span class="tag">{{ tag.name }}</span>
-        {% endfor %}
-      </div>
-    {% endif %}
+    {# REMOVED visible tag chips from the card #}
+    {# <div class="doc-tags"> ... </div> #}
 
     <div class="doc-actions">
-      <a href="{% url 'download_document' doc.id %}" class="action-btn" title="Download">
-        <i class="fa fa-download"></i>
-      </a>
-      {% if request.user == doc.uploaded_by or request.user.is_superuser %}
+      {# Download: neighbor+ or superuser #}
+      {% if request.user.is_authenticated and request.user.is_superuser or request.user.is_neighbor or request.user.is_creator or request.user.is_moderator %}
+        <a href="{% url 'download_document' doc.id %}" class="action-btn" title="Download">
+          <i class="fa fa-download"></i>
+        </a>
+      {% else %}
+        {# Optional: show a login affordance if you like #}
+        {# <a href="{% url 'login' %}" class="action-btn" title="Log in to download"><i class="fa fa-sign-in-alt"></i></a> #}
+      {% endif %}
+
+      {# Edit/Delete: uploader or superuser #}
+      {% if request.user.is_authenticated and request.user == doc.uploaded_by or request.user.is_superuser %}
         <a href="{% url 'edit_document' doc.id %}" class="action-btn" title="Edit metadata">
           <i class="fa fa-pen"></i>
         </a>
