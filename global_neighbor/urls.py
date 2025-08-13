@@ -21,6 +21,8 @@ from global_neighbor.views import (
     verify_email,
 )
 
+from .views import serve_document
+
 app_name = "global_neighbor"
 
 urlpatterns = [
@@ -54,6 +56,7 @@ urlpatterns = [
         delete_category,
         name="delete_category",
     ),
+    path("files/<int:pk>/", serve_document, name="serve_document"),
 ]
 
 if settings.DEBUG:
