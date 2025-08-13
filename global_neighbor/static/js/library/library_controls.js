@@ -29,6 +29,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const tag = params.get("tag");
+    if (tag) {
+      const tagInput = document.getElementById("tag-filter");
+      if (tagInput) {
+        tagInput.value = tag;
+        if (typeof filterDocuments === "function") {
+          filterDocuments();
+        }
+      }
+    }
+  } catch (_) {}
+
   // --- Filter Documents ---
   window.filterDocuments = () => {
     const keyword = searchInput.value.toLowerCase();
