@@ -1,4 +1,5 @@
 import json
+import os
 import random
 import uuid
 
@@ -12,6 +13,7 @@ from django.db.models import Q
 from django.http import FileResponse, Http404, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
+from django.utils._os import safe_join
 from django.utils.text import slugify
 from django.utils.timezone import localtime
 from django.views.decorators.csrf import csrf_exempt
@@ -343,6 +345,23 @@ def edit_document(request, pk):
     return render(
         request, "library/edit_document.html", {"form": form, "document": doc}
     )
+
+
+@login_required
+@user_passes_test(
+    lambda u: u.role == "neighbor" or u.role == "creator" or u.is_superuser
+)
+def serve_document(request, pk):
+    doc = Document.objects.get(pk=pk)
+    rel_path = doc.file.name  # e.g. "documents/xxx.pdf"
+    abs_path = safe_join(settings.MEDIA_ROOT, rel_path)
+    if not os.path.exists(abs_path):
+        raise Http404("File not found")
+    resp = FileResponse(open(abs_path, "rb"), content_type="application/pdf")
+    # allow embedding on your own site
+    resp.headers.pop("X-Frame-Options", None)
+    resp.headers["Content-Security-Policy"] = "frame-ancestors 'self'"
+    return resp
 
 
 @login_required
