@@ -18,29 +18,29 @@
   </p>
 
   <div class="document-actions" style="margin-top: 1.5rem; margin-bottom: 1.5rem;">
-    {# Download: neighbor/creator/moderator OR superuser (must be authenticated) #}
-    {% if request.user.is_authenticated and request.user.is_superuser
-          or request.user.is_authenticated and request.user.role == 'neighbor'
-          or request.user.is_authenticated and request.user.role == 'creator'
-          or request.user.is_authenticated and request.user.role == 'moderator' %}
-      <a href="{% url 'download_document' document.id %}" class="btn btn-primary">
-        <i class="fa fa-download"></i> Download
-      </a>
-    {% elif not request.user.is_authenticated %}
+    {# Download: neighbor/creator/moderator OR superuser #}
+    {% if request.user.is_authenticated %}
+      {% if request.user.is_superuser or request.user.role == 'neighbor' or request.user.role == 'creator' or request.user.role == 'moderator' %}
+        <a href="{% url 'download_document' document.id %}" class="btn btn-primary">
+          <i class="fa fa-download"></i> Download
+        </a>
+      {% endif %}
+    {% else %}
       <a href="{{ login_url }}?next={{ request.path|urlencode }}" class="btn btn-secondary">
         <i class="fa fa-sign-in-alt"></i> Log in to download
       </a>
     {% endif %}
 
-    {# Edit/Delete: uploader OR superuser (must be authenticated) #}
-    {% if request.user.is_authenticated and request.user == document.uploaded_by
-          or request.user.is_authenticated and request.user.is_superuser %}
-      <a href="{% url 'edit_document' document.id %}" class="btn btn-secondary">
-        <i class="fa fa-pen"></i> Edit
-      </a>
-      <a href="{% url 'delete_document' document.id %}" class="btn btn-secondary">
-        <i class="fa fa-trash"></i> Delete
-      </a>
+    {# Edit/Delete: uploader OR superuser #}
+    {% if request.user.is_authenticated %}
+      {% if request.user == document.uploaded_by or request.user.is_superuser %}
+        <a href="{% url 'edit_document' document.id %}" class="btn btn-secondary">
+          <i class="fa fa-pen"></i> Edit
+        </a>
+        <a href="{% url 'delete_document' document.id %}" class="btn btn-secondary">
+          <i class="fa fa-trash"></i> Delete
+        </a>
+      {% endif %}
     {% endif %}
   </div>
 
