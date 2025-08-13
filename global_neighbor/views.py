@@ -331,6 +331,8 @@ def document_detail(request, pk):
     return render(request, "library/document_detail.html", {"document": doc})
 
 
+@login_required
+@user_passes_test(lambda u: u.role == "creator" or u.is_superuser)
 def edit_document(request, pk):
     doc = get_object_or_404(Document, pk=pk)
 
