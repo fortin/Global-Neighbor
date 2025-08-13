@@ -13,10 +13,24 @@
   </p>
 
   <div class="document-actions" style="margin-top: 1.5rem; margin-bottom: 1.5rem;">
-    <a href="{% url 'download_document' document.id %}" class="btn btn-primary">
-      <i class="fa fa-download"></i> Download
-    </a>
-    {% if request.user == document.uploaded_by or request.user.is_superuser %}
+    {# Download: neighbor/creator/moderator OR superuser (must be authenticated) #}
+    {% if request.user.is_authenticated and request.user.is_superuser
+          or request.user.is_authenticated and request.user.role == 'neighbor'
+          or request.user.is_authenticated and request.user.role == 'creator'
+          or request.user.is_authenticated and request.user.role == 'moderator' %}
+      <a href="{% url 'download_document' document.id %}" class="btn btn-primary">
+        <i class="fa fa-download"></i> Download
+      </a>
+    {% else %}
+      {# Optional: show a login button if not allowed #}
+      <a href="{% url 'login' %}?next={{ request.path|urlencode }}" class="btn btn-secondary">
+        <i class="fa fa-sign-in-alt"></i> Log in to download
+      </a>
+    {% endif %}
+
+    {# Edit/Delete: uploader OR superuser (must be authenticated) #}
+    {% if request.user.is_authenticated and request.user == document.uploaded_by
+          or request.user.is_authenticated and request.user.is_superuser %}
       <a href="{% url 'edit_document' document.id %}" class="btn btn-secondary">
         <i class="fa fa-pen"></i> Edit
       </a>

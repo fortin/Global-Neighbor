@@ -35,56 +35,63 @@
   </button>
   {% endif %}
 
-<div id="document-list-container" class="thumbnail-view" style="margin-top: 1rem;">
-  {% for doc in documents %}
-  <div class="document-card"
-      data-title="{{ doc.title|default_if_none:'Untitled Document' }}"
-      data-author="{{ doc.author|default_if_none:'' }}"
-      data-category="{{ doc.category.name|default_if_none:'' }}"
-      data-tags="{% for tag in doc.tags.all %}{{ tag.name }}{% if not forloop.last %} {% endif %}{% endfor %}">
+  <div id="document-list-container" class="thumbnail-view" style="margin-top: 1rem;">
+    {% for doc in documents %}
+      {% url 'document_detail' doc.id as doc_detail_url %}
+      <div class="document-card"
+           data-title="{{ doc.title|default_if_none:'Untitled Document' }}"
+           data-author="{{ doc.author|default_if_none:'' }}"
+           data-category="{{ doc.category.name|default_if_none:'' }}"
+           data-tags="{% for tag in doc.tags.all %}{{ tag.name }}{% if not forloop.last %} {% endif %}{% endfor %}">
 
-    <div class="card-header">
-      <a href="{% url 'document_detail' doc.id %}" class="document-title">
-        <strong>{{ doc.title|default:'Untitled Document' }}</strong>
-      </a>
-      {% if doc.author %}
-        <div class="doc-author">by {{ doc.author }}</div>
-      {% endif %}
-    </div>
+        <div class="card-header">
+          {% if request.user.is_authenticated %}
+            <a href="{{ doc_detail_url }}" class="document-title">
+              <strong>{{ doc.title|default:'Untitled Document' }}</strong>
+            </a>
+          {% else %}
+            <a href="{% url 'login' %}?next={{ doc_detail_url|urlencode }}" class="document-title">
+              <strong>{{ doc.title|default:'Untitled Document' }}</strong>
+            </a>
+          {% endif %}
+          {% if doc.author %}
+            <div class="doc-author">by {{ doc.author }}</div>
+          {% endif %}
+        </div>
 
-    {% if doc.category %}
-      <div class="doc-category">{{ doc.category.name }}</div>
-    {% endif %}
+        {% if doc.category %}
+          <div class="doc-category">{{ doc.category.name }}</div>
+        {% endif %}
 
-    {# REMOVED visible tag chips from the card #}
-    {# <div class="doc-tags"> ... </div> #}
+        {# Tags removed from cards (kept in data-tags for filtering) #}
 
-    <div class="doc-actions">
-      {# Download: neighbor+ or superuser #}
-      {% if request.user.is_authenticated and request.user.is_superuser or request.user.is_neighbor or request.user.is_creator or request.user.is_moderator %}
-        <a href="{% url 'download_document' doc.id %}" class="action-btn" title="Download">
-          <i class="fa fa-download"></i>
-        </a>
-      {% else %}
-        {# Optional: show a login affordance if you like #}
-        {# <a href="{% url 'login' %}" class="action-btn" title="Log in to download"><i class="fa fa-sign-in-alt"></i></a> #}
-      {% endif %}
+        <div class="doc-actions">
+          {# Download: neighbor/creator/moderator OR superuser (must be authenticated) #}
+          {% if request.user.is_authenticated and request.user.is_superuser
+                or request.user.is_authenticated and request.user.role == 'neighbor'
+                or request.user.is_authenticated and request.user.role == 'creator'
+                or request.user.is_authenticated and request.user.role == 'moderator' %}
+            <a href="{% url 'download_document' doc.id %}" class="action-btn" title="Download">
+              <i class="fa fa-download"></i>
+            </a>
+          {% endif %}
 
-      {# Edit/Delete: uploader or superuser #}
-      {% if request.user.is_authenticated and request.user == doc.uploaded_by or request.user.is_superuser %}
-        <a href="{% url 'edit_document' doc.id %}" class="action-btn" title="Edit metadata">
-          <i class="fa fa-pen"></i>
-        </a>
-        <a href="{% url 'delete_document' doc.id %}" class="action-btn" title="Delete">
-          <i class="fa fa-trash"></i>
-        </a>
-      {% endif %}
-    </div>
+          {# Edit/Delete: uploader OR superuser (must be authenticated) #}
+          {% if request.user.is_authenticated and request.user == doc.uploaded_by
+                or request.user.is_authenticated and request.user.is_superuser %}
+            <a href="{% url 'edit_document' doc.id %}" class="action-btn" title="Edit metadata">
+              <i class="fa fa-pen"></i>
+            </a>
+            <a href="{% url 'delete_document' doc.id %}" class="action-btn" title="Delete">
+              <i class="fa fa-trash"></i>
+            </a>
+          {% endif %}
+        </div>
+      </div>
+    {% empty %}
+      <p>No documents available.</p>
+    {% endfor %}
   </div>
-  {% empty %}
-    <p>No documents available.</p>
-  {% endfor %}
-</div>
 </div>
 
 {% include "library/library_upload_modal.html" %}
