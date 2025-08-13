@@ -6,6 +6,10 @@
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/library.css' %}">
 
+{# Figure out the correct login URL name at render time #}
+{% url 'login' as login_url %}
+{% if not login_url %}{% url 'account_login' as login_url %}{% endif %}
+
 <div class="library-container">
   <h1 class="page-title">Library</h1>
 
@@ -50,7 +54,7 @@
               <strong>{{ doc.title|default:'Untitled Document' }}</strong>
             </a>
           {% else %}
-            <a href="{% url 'login' %}?next={{ doc_detail_url|urlencode }}" class="document-title">
+            <a href="{{ login_url }}?next={{ doc_detail_url|urlencode }}" class="document-title">
               <strong>{{ doc.title|default:'Untitled Document' }}</strong>
             </a>
           {% endif %}
