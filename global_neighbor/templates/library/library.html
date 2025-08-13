@@ -70,24 +70,24 @@
 
         <div class="doc-actions">
           {# Download: neighbor/creator/moderator OR superuser (must be authenticated) #}
-          {% if request.user.is_authenticated and request.user.is_superuser
-                or request.user.is_authenticated and request.user.role == 'neighbor'
-                or request.user.is_authenticated and request.user.role == 'creator'
-                or request.user.is_authenticated and request.user.role == 'moderator' %}
-            <a href="{% url 'download_document' doc.id %}" class="action-btn" title="Download">
-              <i class="fa fa-download"></i>
-            </a>
+          {% if request.user.is_authenticated %}
+            {% if request.user.is_superuser or request.user.role == 'neighbor' or request.user.role == 'creator' or request.user.role == 'moderator' %}
+              <a href="{% url 'download_document' doc.id %}" class="action-btn" title="Download">
+                <i class="fa fa-download"></i>
+              </a>
+            {% endif %}
           {% endif %}
 
           {# Edit/Delete: uploader OR superuser (must be authenticated) #}
-          {% if request.user.is_authenticated and request.user == doc.uploaded_by
-                or request.user.is_authenticated and request.user.is_superuser %}
-            <a href="{% url 'edit_document' doc.id %}" class="action-btn" title="Edit metadata">
-              <i class="fa fa-pen"></i>
-            </a>
-            <a href="{% url 'delete_document' doc.id %}" class="action-btn" title="Delete">
-              <i class="fa fa-trash"></i>
-            </a>
+          {% if request.user.is_authenticated %}
+            {% if request.user == doc.uploaded_by or request.user.is_superuser %}
+              <a href="{% url 'edit_document' doc.id %}" class="action-btn" title="Edit metadata">
+                <i class="fa fa-pen"></i>
+              </a>
+              <a href="{% url 'delete_document' doc.id %}" class="action-btn" title="Delete">
+                <i class="fa fa-trash"></i>
+              </a>
+            {% endif %}
           {% endif %}
         </div>
       </div>
