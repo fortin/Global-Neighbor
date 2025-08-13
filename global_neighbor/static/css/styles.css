@@ -302,11 +302,13 @@ body {
 .navbar .logout-link {
     color: #f1f1f1 !important;
     text-decoration: none;
-    /* font-weight: 600; */
+    font-size: 1.2rem;   /* >= 18.66px */
+    font-weight: 700;    /* bold */
 }
 
 /* Remove underline on hover for all navbar links */
-.navbar a:hover {
+.navbar a:hover,
+.logout-link:hover {
     text-decoration: none !important;
 }
 
@@ -327,6 +329,11 @@ body {
   align-items: center;
 }
 
+.navbar .nav-links a > span {
+  font-size: inherit;
+  font-weight: inherit;
+}
+
 .navbar a:hover,
 .logout-link:hover {
     color: #ddd;
@@ -340,6 +347,17 @@ body {
     padding: .2rem .5rem;
     border-radius: .375rem;
     background: rgba(255,255,255,.12); /* subtle on dark navbar */
+}
+
+@media (max-width: 480px) {
+  .navbar .nav-links a,
+  .navbar .logout-link {
+    padding: .2rem .4rem;
+    border-radius: .375rem;
+    background: rgba(255,255,255,.10); /* barely-there on dark navbar */
+  }
+  /* Don’t add visual weight to brand/title */
+  .navbar .navbar-brand { background: transparent; padding: 0; }
 }
 
 .logout-link {
@@ -373,14 +391,14 @@ outline: none;
     display: flex;
     align-items: center;
     gap: 0.6rem;
-    color: #fff;
+    color: #f1f1f1;
     font-weight: bold;
     font-size: 1.5rem;
     text-decoration: none;
 }
 
 .navbar a.navbar-brand {
-    color: #fff;
+    color: #f1f1f1;
     text-decoration: none;
     font-weight: bold;
     display: flex;
