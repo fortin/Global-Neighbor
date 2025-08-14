@@ -13,7 +13,6 @@
   <p class="doc-meta">
     {% if document.author %}<strong>Author:</strong> {{ document.author }}<br>{% endif %}
     {% if document.source %}<strong>Source:</strong> {{ document.source }}<br>{% endif %}
-    <strong>Uploaded by:</strong> {{ document.uploaded_by }}<br>
     <strong>Downloads:</strong> {{ document.download_count }}
   </p>
 
@@ -51,7 +50,7 @@
         {% for tag in document.tags.all %}
           <a class="tag-chip" href="{% url 'library' %}?tag={{ tag.name|urlencode }}" aria-label="Filter library by tag {{ tag.name }}">
           {{ tag.name }}
-          </a>&nbsp;
+          </a>
         {% endfor %}
       </span>
     </div>
