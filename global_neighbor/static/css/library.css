@@ -271,11 +271,31 @@
   font-size: 0.9rem;
   color: #666;
   line-height: 1.4;
-  max-height: 3.6em;
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
+  max-height: 4.2em; /* Increased from 3.6em to accommodate 3 lines */
+  overflow-y: auto; /* Changed from hidden to auto for scrolling */
+  overflow-x: hidden; /* Prevent horizontal scrolling */
+  display: block; /* Changed from -webkit-box to block for better scrolling */
+  padding-right: 4px; /* Add some padding for the scrollbar */
+  scrollbar-width: thin; /* Thin scrollbar for Firefox */
+  scrollbar-color: #ccc transparent; /* Light scrollbar colors */
+}
+
+/* Custom scrollbar styling for WebKit browsers (Chrome, Safari, Edge) */
+.doc-description::-webkit-scrollbar {
+  width: 4px;
+}
+
+.doc-description::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.doc-description::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 2px;
+}
+
+.doc-description::-webkit-scrollbar-thumb:hover {
+  background: #999;
 }
 
 /* Document card separator */
