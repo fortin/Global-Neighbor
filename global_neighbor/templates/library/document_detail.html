@@ -56,7 +56,7 @@
       <span class="doc-tags">
         {% for tag in document.tags.all %}
           <a class="tag-chip" href="{% url 'library' %}?tag={{ tag.name|urlencode }}" aria-label="Filter library by tag {{ tag.name }}">
-          {{ tag.name }}
+            {{ tag.name }}
           </a>
         {% endfor %}
       </span>

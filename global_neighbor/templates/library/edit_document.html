@@ -74,7 +74,7 @@
 
     <div class="form-group">
       <label for="id_tags">Tags</label>
-      <input type="text" name="tags" id="id_tags" value="{{ form.tags.value|default:'' }}" placeholder="Comma-separated tags">
+      <input type="text" name="tags" id="id_tags" value="{% for tag in document.tags.all %}{{ tag.name }}{% if not forloop.last %}, {% endif %}{% endfor %}" placeholder="Comma-separated tags">
     </div>
 
     <div class="form-actions">
