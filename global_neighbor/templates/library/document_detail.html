@@ -16,6 +16,13 @@
     <strong>Downloads:</strong> {{ document.download_count }}
   </p>
 
+  {% if document.description %}
+    <div class="document-description">
+      <h3>Description</h3>
+      <p>{{ document.description|linebreaks }}</p>
+    </div>
+  {% endif %}
+
   <div class="document-actions" style="margin-top: 1.5rem; margin-bottom: 1.5rem;">
     {# Download: neighbor/creator/moderator OR superuser #}
     {% if request.user.is_authenticated %}

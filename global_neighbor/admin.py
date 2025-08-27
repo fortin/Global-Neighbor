@@ -16,7 +16,10 @@ class CustomUserAdmin(UserAdmin):
 
 @admin.register(Document)
 class DocumentAdmin(admin.ModelAdmin):
-    list_display = ("title", "author", "category")
+    list_display = ("title", "author", "category", "description")
+    list_filter = ("category", "uploaded_by")
+    search_fields = ("title", "author", "description")
+    readonly_fields = ("uploaded_by", "uploaded_at", "download_count")
 
 
 @admin.register(DocumentCategory)

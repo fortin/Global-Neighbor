@@ -243,3 +243,325 @@
   overflow: hidden;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
+
+/* --- Document Description Styles --- */
+.document-description {
+  margin: 1.5rem 0;
+  padding: 1.5rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border-left: 4px solid #007BFF;
+}
+
+.document-description h3 {
+  margin: 0 0 1rem 0;
+  color: #333;
+  font-size: 1.1rem;
+}
+
+.document-description p {
+  margin: 0;
+  line-height: 1.6;
+  color: #555;
+}
+
+/* Description in document cards */
+.doc-description {
+  margin: 0.5rem 0;
+  font-size: 0.9rem;
+  color: #666;
+  line-height: 1.4;
+  max-height: 3.6em;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+/* Description input wrapper */
+.description-input-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.description-input-wrapper textarea {
+  width: 100% !important;
+  padding: 0.75rem;
+  margin-bottom: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-family: inherit;
+  resize: vertical;
+  min-height: 80px;
+  box-sizing: border-box;
+  display: block;
+}
+
+.description-input-wrapper label {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.description-input-wrapper .help-text {
+  display: block;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+  color: #666;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  clear: both;
+}
+
+.description-toggle-btn {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  padding: 0.3rem 0.6rem;
+  font-size: 0.8rem;
+  background: #6c757d;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.description-toggle-btn:hover {
+  background: #5a6268;
+}
+
+/* Description modal specific styles */
+.description-modal-content {
+  max-width: 600px;
+  width: 90%;
+}
+
+.description-modal-content textarea {
+  font-family: inherit;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .description-toggle-btn {
+    position: static;
+    margin-top: 0.5rem;
+    width: 100%;
+  }
+  
+  .description-modal-content {
+    width: 95%;
+    margin: 1rem;
+  }
+}
+
+/* Override any conflicting styles */
+.styled-form .description-input-wrapper textarea {
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 100% !important;
+  float: none !important;
+  display: block !important;
+}
+
+.styled-form .description-input-wrapper .help-text {
+  display: block !important;
+  float: none !important;
+  clear: both !important;
+  width: 100% !important;
+}
+
+/* Force description field styling */
+#id_description {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 100% !important;
+  display: block !important;
+  float: none !important;
+  box-sizing: border-box !important;
+}
+
+.description-input-wrapper #id_description {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 100% !important;
+  display: block !important;
+  float: none !important;
+  box-sizing: border-box !important;
+}
+
+/* Maximum specificity override for browser defaults */
+html body .description-input-wrapper #id_description {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 100% !important;
+  float: none !important;
+  box-sizing: border-box !important;
+}
+
+/* Override any inline display issues */
+textarea[name="description"] {
+  display: block !important;
+  width: 100% !important;
+  float: none !important;
+}
+
+/* Override browser defaults for textarea */
+textarea {
+  display: block !important;
+}
+
+/* Maximum specificity override for browser defaults */
+html body .description-input-wrapper #id_description {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 100% !important;
+  float: none !important;
+  box-sizing: border-box !important;
+}
+
+/* Even more specific override */
+html body div.description-input-wrapper textarea#id_description {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 100% !important;
+  float: none !important;
+  box-sizing: border-box !important;
+}
+
+/* Force help text to display below */
+.description-input-wrapper .help-text {
+  display: block !important;
+  clear: both !important;
+  width: 100% !important;
+  float: none !important;
+  margin-top: 0.5rem !important;
+  margin-bottom: 1rem !important;
+}
+
+/* Ensure wrapper has proper positioning */
+.description-input-wrapper {
+  position: relative !important;
+  width: 100% !important;
+  display: block !important;
+}
+
+/* Form spacing and styling */
+.styled-form .form-group {
+  margin-bottom: 1.5rem;
+}
+
+.styled-form .form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #333;
+}
+
+.styled-form .form-group input,
+.styled-form .form-group textarea,
+.styled-form .form-group select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-family: inherit;
+  box-sizing: border-box;
+  display: block;
+}
+
+.styled-form .form-group textarea {
+  resize: none;
+  min-height: 80px;
+}
+
+/* Specific styling for edit document page */
+.edit-document-form .description-input-wrapper textarea {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 100% !important;
+  display: block !important;
+  float: none !important;
+  box-sizing: border-box !important;
+  resize: none !important;
+}
+
+.edit-document-form .description-input-wrapper .help-text {
+  display: block !important;
+  clear: both !important;
+  width: 100% !important;
+  float: none !important;
+  margin-top: 0.5rem !important;
+  margin-bottom: 1rem !important;
+}
+
+/* Even more aggressive overrides for edit document page */
+.edit-document-form #id_description {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 100% !important;
+  display: block !important;
+  float: none !important;
+  box-sizing: border-box !important;
+  resize: none !important;
+  margin: 0 !important;
+  padding: 0.75rem !important;
+  border: 1px solid #ccc !important;
+  border-radius: 6px !important;
+  font-size: 1rem !important;
+  font-family: inherit !important;
+}
+
+.edit-document-form .description-input-wrapper {
+  position: relative !important;
+  width: 100% !important;
+  display: block !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.edit-document-form .description-input-wrapper .help-text {
+  display: block !important;
+  clear: both !important;
+  width: 100% !important;
+  float: none !important;
+  margin-top: 0.5rem !important;
+  margin-bottom: 1rem !important;
+  color: #666 !important;
+  font-size: 0.9rem !important;
+  line-height: 1.4 !important;
+}
+
+.edit-document-form .description-toggle-btn {
+  position: absolute !important;
+  top: 0.5rem !important;
+  right: 0.5rem !important;
+  padding: 0.3rem 0.6rem !important;
+  font-size: 0.8rem !important;
+  background: #6c757d !important;
+  color: white !important;
+  border: none !important;
+  border-radius: 4px !important;
+  cursor: pointer !important;
+  z-index: 10 !important;
+}
+
+/* Form actions styling */
+.form-actions {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #eee;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.form-actions .btn {
+  min-width: 120px;
+}

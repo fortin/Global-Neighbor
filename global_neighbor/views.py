@@ -270,6 +270,7 @@ def upload_document(request):
     title = request.POST.get("title", "").strip() or "Untitled Document"
     author = request.POST.get("author", "").strip()
     source = request.POST.get("source", "").strip()
+    description = request.POST.get("description", "").strip()
     category_id = request.POST.get("category")
     tag_string = request.POST.get("tags", "")
 
@@ -288,6 +289,7 @@ def upload_document(request):
         title=title,
         author=author,
         source=source,
+        description=description,
         file=uploaded_file,
         uploaded_by=request.user,
         category=category,

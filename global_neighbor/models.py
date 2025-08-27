@@ -72,6 +72,9 @@ class Document(TimeStampedModel):
     title = models.CharField(max_length=255)
     author = models.CharField(max_length=255, blank=True)
     source = models.CharField(max_length=255, blank=True)
+    description = models.TextField(
+        blank=True, help_text="A brief description of the document"
+    )
     category = models.ForeignKey(
         DocumentCategory, on_delete=models.SET_NULL, null=True, blank=True
     )

@@ -3,6 +3,10 @@
 
 {% block title %}Edit {{ document.title }}{% endblock %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/library.css' %}">
+{% endblock %}
+
 {% block content %}
 <div class="form-page-container">
   <h1 class="form-title">
@@ -10,7 +14,7 @@
     Edit "{{ document.title|default:'Untitled Document' }}"
   </h1>
 
-  <form method="post" class="styled-form">
+  <form method="post" class="styled-form edit-document-form">
     {% csrf_token %}
 
     {% if form.non_field_errors %}
@@ -21,39 +25,57 @@
       </ul>
     {% endif %}
 
-    {% for field in form.visible_fields %}
-      <div class="form-group">
-        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+    <div class="form-group">
+      <label for="id_title">Title</label>
+      <input type="text" name="title" id="id_title" value="{{ form.title.value|default:'' }}" placeholder="Document title" required>
+    </div>
 
-        {% if field.name == 'category' %}
-          <div class="category-select-wrapper">
-            {{ field }}
-            {% if request.user.is_superuser %}
-              <button type="button"
-                      class="btn btn-secondary btn-small"
-                      onclick="openCategoryModal()"
-                      title="Manage categories">
-                <i class="fa fa-cog"></i>
-              </button>
-            {% endif %}
-          </div>
-        {% else %}
-          {{ field }}
-        {% endif %}
+    <div class="form-group">
+      <label for="id_author">Author</label>
+      <input type="text" name="author" id="id_author" value="{{ form.author.value|default:'' }}" placeholder="Author">
+    </div>
 
-        {% if field.help_text %}
-          <small class="help-text">{{ field.help_text }}</small>
-        {% endif %}
+    <div class="form-group">
+      <label for="id_source">Source (optional)</label>
+      <input type="text" name="source" id="id_source" value="{{ form.source.value|default:'' }}" placeholder="Source / credit">
+    </div>
 
-        {% if field.errors %}
-          <ul class="form-errors">
-            {% for error in field.errors %}
-              <li>{{ error }}</li>
-            {% endfor %}
-          </ul>
+    <div class="form-group">
+      <label for="id_description">Description</label>
+      <div class="description-input-wrapper" style="position: relative; width: 100%; display: block;">
+        <textarea 
+          name="description" 
+          id="id_description" 
+          placeholder="Enter document description..." 
+          rows="3"
+          style="width: 100%; display: block; box-sizing: border-box; resize: none;"
+        >{{ form.description.value|default:'' }}</textarea>
+        <div class="help-text" style="display: block; clear: both; width: 100%; margin-top: 0.5rem; margin-bottom: 1rem;">A brief description of the document</div>
+        <button type="button" class="btn btn-secondary description-toggle-btn" onclick="toggleDescriptionModal()" style="position: absolute; top: 0.5rem; right: 0.5rem;">
+          <i class="fa fa-expand"></i> Full Editor
+        </button>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="id_category">Category</label>
+      <div class="category-select-wrapper">
+        {{ form.category }}
+        {% if request.user.is_superuser %}
+        <button type="button"
+                class="btn btn-secondary"
+                onclick="openCategoryModal()"
+                title="Manage categories">
+            <i class="fa fa-cog"></i>
+        </button>
         {% endif %}
       </div>
-    {% endfor %}
+    </div>
+
+    <div class="form-group">
+      <label for="id_tags">Tags</label>
+      <input type="text" name="tags" id="id_tags" value="{{ form.tags.value|default:'' }}" placeholder="Comma-separated tags">
+    </div>
 
     <div class="form-actions">
       <button type="submit" class="btn btn-primary">
@@ -69,4 +91,68 @@
 <!-- Include the category modal -->
 {% include "library/category_modal.html" %}
 <script src="{% static '/js/library/category_modal.js' %}"></script>
+
+<!-- Description Editor Modal -->
+<div id="descriptionModal" class="modal hidden" role="dialog" aria-modal="true">
+  <div class="modal-content description-modal-content">
+    <h2 class="form-title">Edit Description</h2>
+    
+    <div class="form-group">
+      <label for="descriptionModalTextarea">Document Description</label>
+      <textarea 
+        id="descriptionModalTextarea" 
+        name="description" 
+        placeholder="Enter a detailed description of the document..."
+        rows="12"
+      >{{ form.description.value|default:'' }}</textarea>
+    </div>
+
+    <div class="modal-actions">
+      <button type="button" class="btn btn-primary" onclick="saveDescription()">Save Description</button>
+      <button type="button" class="btn btn-secondary" onclick="closeDescriptionModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<script src="{% static 'js/library/library_upload_modal.js' %}"></script>
+
+<script>
+// Force description field styling on page load
+document.addEventListener('DOMContentLoaded', function() {
+  console.log('Edit document page loaded, forcing description styling');
+  
+  const descriptionTextarea = document.getElementById('id_description');
+  const helpText = document.querySelector('.description-input-wrapper .help-text');
+  const wrapper = document.querySelector('.description-input-wrapper');
+  
+  if (descriptionTextarea) {
+    console.log('Applying styles to description textarea');
+    descriptionTextarea.style.setProperty('width', '100%', 'important');
+    descriptionTextarea.style.setProperty('display', 'block', 'important');
+    descriptionTextarea.style.setProperty('box-sizing', 'border-box', 'important');
+    descriptionTextarea.style.setProperty('resize', 'none', 'important');
+    descriptionTextarea.style.setProperty('float', 'none', 'important');
+    descriptionTextarea.style.setProperty('max-width', '100%', 'important');
+    descriptionTextarea.style.setProperty('min-width', '100%', 'important');
+  }
+  
+  if (helpText) {
+    console.log('Applying styles to help text');
+    helpText.style.setProperty('display', 'block', 'important');
+    helpText.style.setProperty('margin-top', '0.5rem', 'important');
+    helpText.style.setProperty('margin-bottom', '1rem', 'important');
+    helpText.style.setProperty('clear', 'both', 'important');
+    helpText.style.setProperty('width', '100%', 'important');
+    helpText.style.setProperty('float', 'none', 'important');
+  }
+  
+  if (wrapper) {
+    console.log('Applying styles to wrapper');
+    wrapper.style.setProperty('position', 'relative', 'important');
+    wrapper.style.setProperty('width', '100%', 'important');
+    wrapper.style.setProperty('display', 'block', 'important');
+  }
+});
+</script>
+
 {% endblock %}

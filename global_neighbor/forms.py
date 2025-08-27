@@ -22,7 +22,15 @@ class RegistrationForm(UserCreationForm):
 class DocumentUploadForm(forms.ModelForm):
     class Meta:
         model = Document
-        fields = ["title", "author", "source", "category", "tags", "file"]
+        fields = [
+            "title",
+            "author",
+            "source",
+            "description",
+            "category",
+            "tags",
+            "file",
+        ]
         widgets = {
             "tags": forms.TextInput(attrs={"placeholder": "Comma-separated tags"}),
         }
@@ -31,4 +39,4 @@ class DocumentUploadForm(forms.ModelForm):
 class DocumentForm(forms.ModelForm):
     class Meta:
         model = Document
-        fields = ["title", "author", "source", "category", "tags"]
+        fields = ["title", "author", "source", "description", "category", "tags"]

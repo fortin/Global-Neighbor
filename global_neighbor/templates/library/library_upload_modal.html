@@ -29,6 +29,22 @@
       </div>
 
       <div class="form-group">
+        <label for="id_description">Description</label>
+        <div class="description-input-wrapper">
+          <textarea 
+            name="description" 
+            id="id_description" 
+            placeholder="Enter document description..." 
+            rows="3"
+          ></textarea>
+          <div class="help-text">A brief description of the document</div>
+          <button type="button" class="btn btn-secondary description-toggle-btn" onclick="toggleDescriptionModal()">
+            <i class="fa fa-expand"></i> Full Editor
+          </button>
+        </div>
+      </div>
+
+      <div class="form-group">
       <label for="id_category">Category</label>
       <div class="category-select-wrapper">
           {{ form.category }}
@@ -54,6 +70,29 @@
       </div>
     </form>
 
+  </div>
+</div>
+
+<!-- Description Editor Modal -->
+<div id="descriptionModal" class="modal hidden" role="dialog" aria-modal="true">
+  <div class="modal-content description-modal-content">
+    <h2 class="form-title">Edit Description</h2>
+    
+    <div class="form-group">
+      <label for="descriptionModalTextarea">Document Description</label>
+      <textarea 
+        id="descriptionModalTextarea" 
+        name="description" 
+        placeholder="Enter a detailed description of the document..."
+        rows="12"
+        style="resize: vertical; width: 100%; font-family: inherit;"
+      ></textarea>
+    </div>
+
+    <div class="modal-actions">
+      <button type="button" class="btn btn-primary" onclick="saveDescription()">Save Description</button>
+      <button type="button" class="btn btn-secondary" onclick="closeDescriptionModal()">Cancel</button>
+    </div>
   </div>
 </div>
 

@@ -66,6 +66,12 @@
           <div class="doc-category">{{ doc.category.name }}</div>
         {% endif %}
 
+        {% if doc.description %}
+          <div class="doc-description">
+            {{ doc.description|truncatewords:15 }}
+          </div>
+        {% endif %}
+
         {# tags intentionally hidden on cards; still available via data-tags #}
 
         <div class="doc-actions">
