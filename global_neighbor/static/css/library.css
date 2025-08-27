@@ -278,6 +278,33 @@
   -webkit-box-orient: vertical;
 }
 
+/* Document card separator */
+.doc-separator {
+  height: 2px;
+  background: #ccc;
+  margin: 0.4rem 0;
+  opacity: 0.6;
+  width: 100%;
+  display: block;
+  min-height: 2px;
+  border: none;
+  outline: none;
+}
+
+/* Improve spacing in document cards */
+.document-card .card-header {
+  margin-bottom: 0.3rem;
+}
+
+.document-card .doc-author {
+  margin-top: 0.2rem;
+  margin-bottom: 0.3rem;
+}
+
+.document-card .doc-category {
+  margin-bottom: 0.3rem;
+}
+
 /* Description input wrapper */
 .description-input-wrapper {
   position: relative;
